@@ -139,11 +139,25 @@ export default function CataloguePage() {
   return (
     <div className="min-h-screen bg-[#0f0f1a] text-white px-8 py-10">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-2">Explore Knowledge</h1>
-        <p className="text-gray-400 text-sm">
-          More than 1,000 courses to build your skills designed for the future
-          of industry and technology.
-        </p>
+        <div className="flex items-start justify-between flex-wrap gap-4 mb-2">
+          <div>
+            <h1 className="text-4xl font-bold">Explore Knowledge</h1>
+            <p className="text-gray-400 text-sm mt-2">
+              More than 1,000 courses to build your skills designed for the future
+              of industry and technology.
+            </p>
+          </div>
+          <div className="flex gap-6 text-center">
+            <div className="bg-[#1a1a2e] px-5 py-3 rounded-xl">
+              <p className="text-xl font-bold text-purple-400">{MOCK_COURSES.length}</p>
+              <p className="text-gray-400 text-xs mt-1">Total Courses</p>
+            </div>
+            <div className="bg-[#1a1a2e] px-5 py-3 rounded-xl">
+              <p className="text-xl font-bold text-purple-400">1,234</p>
+              <p className="text-gray-400 text-xs mt-1">Available</p>
+            </div>
+          </div>
+        </div>
         <div className="mt-6 relative w-full max-w-md">
           <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
             🔍
@@ -179,9 +193,22 @@ export default function CataloguePage() {
               course.category === activeFilter ||
               course.level === activeFilter.toUpperCase();
             return matchSearch && matchFilter;
-          }).map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
+          }).length === 0 ? (
+            <p className="col-span-3 text-center text-gray-500 py-20">
+              Aucun cours trouvé.
+            </p>
+          ) : (
+            MOCK_COURSES.filter((course) => {
+              const matchSearch = course.title.toLowerCase().includes(search.toLowerCase());
+              const matchFilter =
+                activeFilter === "All Courses" ||
+                course.category === activeFilter ||
+                course.level === activeFilter.toUpperCase();
+              return matchSearch && matchFilter;
+            }).map((course) => (
+              <CourseCard key={course.id} course={course} />
+            ))
+          )}
         </div>
       </div>
     </div>
