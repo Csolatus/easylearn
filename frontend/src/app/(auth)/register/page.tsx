@@ -6,9 +6,27 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+
+  const validate = () => {
+    const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
+    if (!email) newErrors.email = "L'email est requis";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email invalide";
+    if (!password) newErrors.password = "Le mot de passe est requis";
+    else if (password.length < 6) newErrors.password = "Minimum 6 caractères";
+    if (!confirmPassword) newErrors.confirmPassword = "Veuillez confirmer le mot de passe";
+    else if (password !== confirmPassword) newErrors.confirmPassword = "Les mots de passe ne correspondent pas";
+    return newErrors;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
   };
 
   return (
@@ -33,6 +51,7 @@ export default function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
               className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="password" className="text-sm font-medium text-gray-700">
@@ -46,6 +65,7 @@ export default function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
@@ -59,6 +79,7 @@ export default function RegisterPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword}</p>}
           </div>
           <button
             type="submit"
