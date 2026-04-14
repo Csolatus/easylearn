@@ -48,6 +48,81 @@ function CourseCard({ course }: { course: Course }) {
   );
 }
 
+const MOCK_COURSES: Course[] = [
+  {
+    id: 1,
+    title: "Advanced Modern JavaScript & Patterns",
+    description: "Master advanced JavaScript patterns, closures, prototypes and modern ES2024 features.",
+    instructor: "Marc Dupont",
+    level: "ADVANCED",
+    rating: 4.8,
+    lessons: 42,
+    duration: "18h",
+    enrolled: 1240,
+    category: "Web Development",
+  },
+  {
+    id: 2,
+    title: "Neural Networks from Ground Zero",
+    description: "Build and train neural networks from scratch using Python and NumPy.",
+    instructor: "Sarah Connor",
+    level: "INTERMEDIATE",
+    rating: 4.6,
+    lessons: 38,
+    duration: "14h",
+    enrolled: 980,
+    category: "AI & ML",
+  },
+  {
+    id: 3,
+    title: "Visual Storytelling with Big Data",
+    description: "Transform complex datasets into compelling visual narratives.",
+    instructor: "Jean Miller",
+    level: "INTERMEDIATE",
+    rating: 4.7,
+    lessons: 27,
+    duration: "10h",
+    enrolled: 760,
+    category: "Data Science",
+  },
+  {
+    id: 4,
+    title: "Kubernetes for Cloud Native Apps",
+    description: "Deploy and manage containerized applications at scale with Kubernetes.",
+    instructor: "Thomas Lee",
+    level: "ADVANCED",
+    rating: 4.9,
+    lessons: 35,
+    duration: "16h",
+    enrolled: 540,
+    category: "Web Development",
+  },
+  {
+    id: 5,
+    title: "Introduction to Python",
+    description: "Learn Python from scratch with hands-on projects and exercises.",
+    instructor: "Alice Martin",
+    level: "BEGINNER",
+    rating: 4.5,
+    lessons: 30,
+    duration: "12h",
+    enrolled: 3200,
+    category: "Data Science",
+  },
+  {
+    id: 6,
+    title: "Machine Learning Fundamentals",
+    description: "Understand the core concepts of machine learning algorithms and applications.",
+    instructor: "David Chen",
+    level: "BEGINNER",
+    rating: 4.4,
+    lessons: 24,
+    duration: "9h",
+    enrolled: 2100,
+    category: "AI & ML",
+  },
+];
+
 export default function CataloguePage() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Courses");
@@ -94,6 +169,18 @@ export default function CataloguePage() {
             >
               {filter}
             </button>
+          ))}
+        </div>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {MOCK_COURSES.filter((course) => {
+            const matchSearch = course.title.toLowerCase().includes(search.toLowerCase());
+            const matchFilter =
+              activeFilter === "All Courses" ||
+              course.category === activeFilter ||
+              course.level === activeFilter.toUpperCase();
+            return matchSearch && matchFilter;
+          }).map((course) => (
+            <CourseCard key={course.id} course={course} />
           ))}
         </div>
       </div>
