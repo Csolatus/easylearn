@@ -5,9 +5,25 @@ import { useState } from "react";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+
+  const validate = () => {
+    const newErrors: { email?: string; password?: string } = {};
+    if (!email) newErrors.email = "L'email est requis";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email invalide";
+    if (!password) newErrors.password = "Le mot de passe est requis";
+    else if (password.length < 6) newErrors.password = "Minimum 6 caractères";
+    return newErrors;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
   };
 
   return (
@@ -32,6 +48,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
           </div>
           <div className="flex flex-col gap-1">
             <label htmlFor="password" className="text-sm font-medium text-gray-700">
@@ -45,6 +62,7 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
           </div>
           <button
             type="submit"
