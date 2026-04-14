@@ -8,6 +8,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const validate = () => {
     const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
@@ -28,6 +29,7 @@ export default function RegisterPage() {
       return;
     }
     setErrors({});
+    setApiError(null);
     setIsLoading(true);
     try {
       // TODO: remplacer par l'endpoint réel du backend
@@ -40,7 +42,7 @@ export default function RegisterPage() {
       const data = await res.json();
       console.log("Register success", data);
     } catch (err) {
-      console.error(err);
+      setApiError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +57,11 @@ export default function RegisterPage() {
         <p className="text-center text-gray-500 text-sm mb-6">
           Rejoignez EasyLearn dès maintenant
         </p>
+        {apiError && (
+          <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm text-center">
+            {apiError}
+          </div>
+        )}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1">
             <label htmlFor="email" className="text-sm font-medium text-gray-700">
