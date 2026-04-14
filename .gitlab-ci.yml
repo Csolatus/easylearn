@@ -1,0 +1,19 @@
+stages:
+  - test
+  - build
+  - deploy
+
+job_test:
+  stage: test
+  script:
+    - npm install 
+    - npm test
+  only:
+    - merge_requests
+
+job_deploy_dev:
+  stage: deploy
+  script:
+    - echo "Déploiement sur le serveur de dev"
+  only:
+    - dev
