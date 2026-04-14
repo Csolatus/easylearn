@@ -2,6 +2,52 @@
 
 import { useState } from "react";
 
+type Course = {
+  id: number;
+  title: string;
+  description: string;
+  instructor: string;
+  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+  rating: number;
+  lessons: number;
+  duration: string;
+  enrolled: number;
+  category: string;
+};
+
+function CourseCard({ course }: { course: Course }) {
+  const levelColors = {
+    BEGINNER: "bg-green-500",
+    INTERMEDIATE: "bg-yellow-500",
+    ADVANCED: "bg-red-500",
+  };
+
+  return (
+    <div className="bg-[#1a1a2e] rounded-2xl overflow-hidden hover:ring-2 hover:ring-purple-500 transition-all">
+      <div className="h-36 bg-gradient-to-br from-purple-900 to-blue-900" />
+      <div className="p-4 flex flex-col gap-2">
+        <span className={`text-xs font-bold px-2 py-1 rounded-full w-fit ${levelColors[course.level]}`}>
+          {course.level}
+        </span>
+        <h3 className="font-semibold text-white text-sm leading-snug">{course.title}</h3>
+        <p className="text-gray-400 text-xs line-clamp-2">{course.description}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs">
+            {course.instructor[0]}
+          </div>
+          <span className="text-gray-400 text-xs">{course.instructor}</span>
+          <span className="ml-auto text-yellow-400 text-xs">★ {course.rating}</span>
+        </div>
+        <div className="flex items-center gap-3 text-gray-500 text-xs mt-1">
+          <span>📚 {course.lessons} leçons</span>
+          <span>⏱ {course.duration}</span>
+          <span>👥 {course.enrolled}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CataloguePage() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All Courses");
