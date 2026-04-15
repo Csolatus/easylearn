@@ -43,6 +43,14 @@ const KPI_CARDS = [
   },
 ];
 
+const RECENT_SCHOOLS = [
+  { name: "École Polytechnique", admin: "admin@polytechnique.fr", eleves: 1240, statut: "Actif" },
+  { name: "EFREI Paris", admin: "admin@efrei.fr", eleves: 980, statut: "Actif" },
+  { name: "Sciences Po", admin: "admin@sciencespo.fr", eleves: 760, statut: "Actif" },
+  { name: "HEC Paris", admin: "admin@hec.fr", eleves: 620, statut: "Suspendu" },
+  { name: "CentraleSupélec", admin: "admin@centralesupelec.fr", eleves: 540, statut: "Actif" },
+];
+
 export default function SuperAdminDashboardPage() {
   return (
     <div className="px-6 py-8 space-y-8">
@@ -77,6 +85,61 @@ export default function SuperAdminDashboardPage() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Recent Schools Table */}
+      <div className="rounded-2xl border border-white/5 dark:border-gray-200 bg-[#111118] dark:bg-white overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 dark:border-gray-100">
+          <h2 className="text-sm font-semibold text-white dark:text-gray-900">Écoles récentes</h2>
+          <a
+            href="/super_admin/ecoles"
+            className="text-xs text-red-400 hover:text-red-300 transition-colors font-medium"
+          >
+            Voir tout →
+          </a>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/5 dark:border-gray-100">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">École</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Admin</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Élèves</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 dark:divide-gray-100">
+              {RECENT_SCHOOLS.map((school) => (
+                <tr key={school.name} className="hover:bg-white/5 dark:hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-sm">
+                        🏛️
+                      </div>
+                      <span className="font-medium text-white dark:text-gray-900">{school.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-gray-400 dark:text-gray-500">{school.admin}</td>
+                  <td className="px-6 py-4 text-gray-300 dark:text-gray-700 font-medium">
+                    {school.eleves.toLocaleString()}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                        school.statut === "Actif"
+                          ? "bg-green-500/10 text-green-400 dark:text-green-600"
+                          : "bg-red-500/10 text-red-400 dark:text-red-600"
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${school.statut === "Actif" ? "bg-green-400" : "bg-red-400"}`} />
+                      {school.statut}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
