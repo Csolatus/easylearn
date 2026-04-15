@@ -48,7 +48,15 @@ export default function LoginPage() {
     <div className="min-h-screen flex flex-col bg-[#0a0a0f] dark:bg-[#0a0a0f]">
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md bg-[#111118] border border-white/8 rounded-2xl p-8 shadow-2xl">
-          <p>{apiError}</p>
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-lg shadow-indigo-500/30">
+              🎓
+            </div>
+            <h1 className="text-2xl font-bold text-white mb-1">Welcome Back</h1>
+            <p className="text-gray-400 text-sm text-center">
+              Accédez à votre espace EasyLearn
+            </p>
+          </div>
         </div>
       </div>
     </div>
