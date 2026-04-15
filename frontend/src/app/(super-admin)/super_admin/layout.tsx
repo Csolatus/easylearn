@@ -4,11 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { label: "Dashboard", href: "/school_admin/dashboard", icon: "⊞" },
-  { label: "Professeurs", href: "/school_admin/professeurs", icon: "🧑‍🏫" },
-  { label: "Élèves", href: "/school_admin/eleves", icon: "🎓" },
-  { label: "Catalogue", href: "/school_admin/catalogue", icon: "📖" },
-  { label: "Paramètres", href: "/school_admin/parametres", icon: "⚙️" },
+  { label: "Dashboard", href: "/super_admin/dashboard", icon: "⊞" },
+  { label: "Écoles", href: "/super_admin/ecoles", icon: "🏛️" },
 ];
 
 function Sidebar() {
@@ -17,12 +14,12 @@ function Sidebar() {
   return (
     <aside className="hidden md:flex flex-col w-56 min-h-screen bg-[#0d0d1a] dark:bg-white dark:border-gray-200 px-4 py-6 border-r border-white/5 sticky top-0 self-start overflow-y-auto">
       <div className="flex items-center gap-2 mb-10 px-2">
-        <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center text-sm font-bold text-white">
+        <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-sm font-bold text-white">
           E
         </div>
         <div>
           <p className="text-sm font-semibold text-white dark:text-gray-900">EasyLearn</p>
-          <p className="text-xs text-gray-500">Admin Portal</p>
+          <p className="text-xs text-gray-500">Super Admin</p>
         </div>
       </div>
       <nav className="flex flex-col gap-1 flex-1">
@@ -32,7 +29,7 @@ function Sidebar() {
             href={item.href}
             className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors ${
               pathname === item.href
-                ? "bg-orange-600 text-white font-medium"
+                ? "bg-red-600 text-white font-medium"
                 : "text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100"
             }`}
           >
@@ -42,7 +39,7 @@ function Sidebar() {
         ))}
       </nav>
       <div className="flex flex-col gap-1 mt-4">
-        <Link href="/school_admin/help" className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors">
+        <Link href="/super_admin/help" className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors">
           <span>❓</span> Help
         </Link>
       </div>
@@ -55,12 +52,12 @@ function BottomNav() {
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#0d0d1a] dark:bg-white dark:border-gray-200 border-t border-white/5 flex justify-around items-center py-3 z-50">
-      {navItems.slice(0, 4).map((item) => (
+      {navItems.map((item) => (
         <Link
           key={item.href}
           href={item.href}
           className={`flex flex-col items-center gap-1 text-xs transition-colors ${
-            pathname === item.href ? "text-orange-400" : "text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-gray-900"
+            pathname === item.href ? "text-red-400" : "text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-gray-900"
           }`}
         >
           <span className="text-lg">{item.icon}</span>
@@ -79,23 +76,23 @@ function Navbar() {
         <input
           type="text"
           placeholder="Rechercher..."
-          className="w-full bg-[#1a1a2e] dark:bg-gray-100 text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="w-full bg-[#1a1a2e] dark:bg-gray-100 text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
         />
       </div>
       <div className="flex items-center gap-4">
         <button className="relative text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 transition-colors">
           🔔
-          <span className="absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
         </button>
-        <div className="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center text-sm font-bold text-white">
-          A
+        <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-sm font-bold text-white">
+          S
         </div>
       </div>
     </header>
   );
 }
 
-export default function AdminLayout({
+export default function SuperAdminLayout({
   children,
 }: {
   children: React.ReactNode;
