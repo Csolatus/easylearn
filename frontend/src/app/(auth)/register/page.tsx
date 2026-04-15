@@ -6,6 +6,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState<"student" | "teacher">("student");
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -36,7 +37,7 @@ export default function RegisterPage() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, role }),
       });
       if (!res.ok) throw new Error("Erreur lors de la création du compte");
       const data = await res.json();
@@ -62,6 +63,30 @@ export default function RegisterPage() {
             {apiError}
           </div>
         )}
+        <div className="flex gap-3 mb-2">
+          <button
+            type="button"
+            onClick={() => setRole("student")}
+            className={`flex-1 py-3 rounded-xl text-sm font-medium transition-colors border ${
+              role === "student"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white dark:bg-white/5 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-blue-400"
+            }`}
+          >
+            🎓 Élève
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole("teacher")}
+            className={`flex-1 py-3 rounded-xl text-sm font-medium transition-colors border ${
+              role === "teacher"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white dark:bg-white/5 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/10 hover:border-blue-400"
+            }`}
+          >
+            🧑‍🏫 Professeur
+          </button>
+        </div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1">
             <label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
