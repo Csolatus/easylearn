@@ -36,6 +36,11 @@ export default function CoursPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Web Development");
+  const [lessons, setLessons] = useState<string[]>([""]);
+
+  const addLesson = () => setLessons((prev) => [...prev, ""]);
+  const updateLesson = (i: number, val: string) => setLessons((prev) => prev.map((l, idx) => idx === i ? val : l));
+  const removeLesson = (i: number) => setLessons((prev) => prev.filter((_, idx) => idx !== i));
 
   const CATEGORIES = ["Web Development", "Data Science", "AI & ML", "Design", "DevOps"];
 
@@ -128,13 +133,44 @@ export default function CoursPage() {
               </div>
             )}
 
+            {wizardStep === 2 && (
+              <div className="px-6 py-5 flex flex-col gap-4">
+                <p className="text-xs text-gray-400 dark:text-gray-500">Ajoutez les leçons de votre cours. Vous pourrez les éditer ensuite.</p>
+                <div className="flex flex-col gap-2 max-h-56 overflow-y-auto">
+                  {lessons.map((lesson, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 w-5 shrink-0">{i + 1}.</span>
+                      <input
+                        value={lesson}
+                        onChange={(e) => updateLesson(i, e.target.value)}
+                        placeholder={`Titre de la leçon ${i + 1}`}
+                        className="flex-1 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+                      />
+                      {lessons.length > 1 && (
+                        <button onClick={() => removeLesson(i)} className="text-gray-500 hover:text-red-400 transition-colors text-sm shrink-0">✕</button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={addLesson}
+                  className="self-start text-xs text-green-400 hover:text-green-300 transition-colors font-medium"
+                >
+                  + Ajouter une leçon
+                </button>
+              </div>
+            )}
+
             <div className="px-6 py-4 border-t border-white/10 dark:border-gray-200 flex justify-between">
-              <button onClick={() => setShowWizard(false)} className="text-sm text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors">
-                Annuler
+              <button
+                onClick={() => wizardStep === 1 ? setShowWizard(false) : setWizardStep(wizardStep - 1)}
+                className="text-sm text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors"
+              >
+                {wizardStep === 1 ? "Annuler" : "← Retour"}
               </button>
               <button
-                onClick={() => setWizardStep(2)}
-                disabled={!title}
+                onClick={() => setWizardStep(wizardStep + 1)}
+                disabled={wizardStep === 1 && !title}
                 className="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors"
               >
                 Suivant →
