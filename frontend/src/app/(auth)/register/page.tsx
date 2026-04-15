@@ -52,6 +52,15 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0a0f]">
+      <div className="flex items-center justify-between px-8 py-4 border-b border-white/5">
+        <span className="text-white font-bold text-sm">EasyLearn</span>
+        <div className="flex items-center gap-1 text-sm text-gray-400">
+          <span>Déjà inscrit ?</span>
+          <a href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+            Se connecter
+          </a>
+        </div>
+      </div>
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md bg-[#111118] border border-white/8 rounded-2xl p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
@@ -186,6 +195,16 @@ export default function RegisterPage() {
           </form>
         </div>
       </div>
+      <footer className="py-6 flex flex-col items-center gap-3">
+        <div className="flex items-center gap-6 text-xs text-gray-600">
+          <a href="#" className="hover:text-gray-400 transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-gray-400 transition-colors">Need help?</a>
+          <a href="#" className="hover:text-gray-400 transition-colors">Legal notice</a>
+        </div>
+        <p className="text-xs text-gray-700">
+          © 2024 EasyLearn. All rights reserved.
+        </p>
+      </footer>
     </div>
   );
 }
