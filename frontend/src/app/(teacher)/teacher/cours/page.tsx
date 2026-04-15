@@ -31,6 +31,13 @@ const TABS = [
 
 export default function CoursPage() {
   const [activeTab, setActiveTab] = useState("all");
+  const [showWizard, setShowWizard] = useState(false);
+  const [wizardStep, setWizardStep] = useState(1);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("Web Development");
+
+  const CATEGORIES = ["Web Development", "Data Science", "AI & ML", "Design", "DevOps"];
 
   const filtered = MOCK_COURSES.filter((c) =>
     activeTab === "all" ? true : c.status === activeTab
@@ -45,7 +52,10 @@ export default function CoursPage() {
             Gérez et créez vos cours
           </p>
         </div>
-        <button className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
+        <button
+          onClick={() => { setShowWizard(true); setWizardStep(1); }}
+          className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors"
+        >
           + Nouveau cours
         </button>
       </div>
@@ -65,6 +75,75 @@ export default function CoursPage() {
           </button>
         ))}
       </div>
+      {showWizard && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-[#111118] dark:bg-white rounded-2xl border border-white/10 dark:border-gray-300 shadow-2xl">
+            <div className="px-6 py-5 border-b border-white/10 dark:border-gray-200 flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-semibold text-white dark:text-gray-900">Nouveau cours</h2>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Étape {wizardStep} sur 3</p>
+              </div>
+              <button onClick={() => setShowWizard(false)} className="text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors text-lg">✕</button>
+            </div>
+
+            <div className="px-6 py-2 flex gap-2">
+              {[1, 2, 3].map((s) => (
+                <div key={s} className={`h-1 flex-1 rounded-full transition-colors ${s <= wizardStep ? "bg-green-500" : "bg-white/10 dark:bg-gray-200"}`} />
+              ))}
+            </div>
+
+            {wizardStep === 1 && (
+              <div className="px-6 py-5 flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Titre du cours</label>
+                  <input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="ex: Introduction à React"
+                    className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Description</label>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Décrivez votre cours..."
+                    rows={3}
+                    className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500 resize-none"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Catégorie</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c} className="bg-[#111118] dark:bg-white">{c}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+
+            <div className="px-6 py-4 border-t border-white/10 dark:border-gray-200 flex justify-between">
+              <button onClick={() => setShowWizard(false)} className="text-sm text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors">
+                Annuler
+              </button>
+              <button
+                onClick={() => setWizardStep(2)}
+                disabled={!title}
+                className="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors"
+              >
+                Suivant →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {filtered.length === 0 ? (
         <p className="text-center text-sm text-gray-500 py-16">Aucun cours trouvé.</p>
       ) : (
