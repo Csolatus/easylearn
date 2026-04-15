@@ -23,22 +23,22 @@ function CourseCard({ course }: { course: Course }) {
   };
 
   return (
-    <div className="bg-[#1a1a2e] rounded-2xl overflow-hidden hover:ring-2 hover:ring-purple-500 transition-all">
-      <div className="h-36 bg-gradient-to-br from-purple-900 to-blue-900" />
+    <div className="bg-[#1a1a2e] dark:bg-white rounded-2xl overflow-hidden hover:ring-2 hover:ring-purple-500 transition-all">
+      <div className="h-36 bg-gradient-to-br from-purple-900 to-blue-900 dark:from-purple-200 dark:to-blue-200" />
       <div className="p-4 flex flex-col gap-2">
         <span className={`text-xs font-bold px-2 py-1 rounded-full w-fit ${levelColors[course.level]}`}>
           {course.level}
         </span>
-        <h3 className="font-semibold text-white text-sm leading-snug">{course.title}</h3>
-        <p className="text-gray-400 text-xs line-clamp-2">{course.description}</p>
+        <h3 className="font-semibold text-white dark:text-gray-900 text-sm leading-snug">{course.title}</h3>
+        <p className="text-gray-400 dark:text-gray-500 text-xs line-clamp-2">{course.description}</p>
         <div className="flex items-center gap-2 mt-1">
-          <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs">
+          <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs text-white">
             {course.instructor[0]}
           </div>
-          <span className="text-gray-400 text-xs">{course.instructor}</span>
+          <span className="text-gray-400 dark:text-gray-500 text-xs">{course.instructor}</span>
           <span className="ml-auto text-yellow-400 text-xs">★ {course.rating}</span>
         </div>
-        <div className="flex items-center gap-3 text-gray-500 text-xs mt-1">
+        <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400 text-xs mt-1">
           <span>📚 {course.lessons} leçons</span>
           <span>⏱ {course.duration}</span>
           <span>👥 {course.enrolled}</span>
@@ -137,7 +137,7 @@ export default function CataloguePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] text-white px-8 py-10">
+    <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 text-white dark:text-gray-900 px-8 py-10">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-start justify-between flex-wrap gap-4 mb-2">
           <div>
@@ -148,13 +148,13 @@ export default function CataloguePage() {
             </p>
           </div>
           <div className="flex gap-6 text-center">
-            <div className="bg-[#1a1a2e] px-5 py-3 rounded-xl">
+            <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm px-5 py-3 rounded-xl">
               <p className="text-xl font-bold text-purple-400">{MOCK_COURSES.length}</p>
-              <p className="text-gray-400 text-xs mt-1">Total Courses</p>
+              <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">Total Courses</p>
             </div>
-            <div className="bg-[#1a1a2e] px-5 py-3 rounded-xl">
+            <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm px-5 py-3 rounded-xl">
               <p className="text-xl font-bold text-purple-400">1,234</p>
-              <p className="text-gray-400 text-xs mt-1">Available</p>
+              <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">Available</p>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ export default function CataloguePage() {
             placeholder="Search courses..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#1a1a2e] text-white placeholder-gray-500 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full bg-[#1a1a2e] dark:bg-white dark:text-gray-900 dark:shadow-sm text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
         <div className="mt-6 flex flex-wrap gap-2">
@@ -178,7 +178,7 @@ export default function CataloguePage() {
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 activeFilter === filter
                   ? "bg-purple-600 text-white"
-                  : "bg-[#1a1a2e] text-gray-400 hover:text-white"
+                  : "bg-[#1a1a2e] dark:bg-gray-200 text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-gray-900"
               }`}
             >
               {filter}
