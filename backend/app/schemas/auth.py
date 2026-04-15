@@ -6,6 +6,8 @@ from pydantic import BaseModel, EmailStr, field_validator
 class Role(str, Enum):
     student = "student"
     teacher = "teacher"
+    school_admin = "school_admin"
+    super_admin = "super_admin"
 
 
 class RegisterRequest(BaseModel):
