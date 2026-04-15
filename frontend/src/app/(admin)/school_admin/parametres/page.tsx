@@ -8,6 +8,16 @@ export default function ParametresPage() {
   const [website, setWebsite] = useState("https://www.efrei.fr");
   const [address, setAddress] = useState("30-32 Avenue de la République, 94800 Villejuif");
   const [logo, setLogo] = useState<string | null>(null);
+  const [accentColor, setAccentColor] = useState("#ea580c");
+
+  const PRESET_COLORS = [
+    { label: "Orange", value: "#ea580c" },
+    { label: "Bleu", value: "#2563eb" },
+    { label: "Violet", value: "#7c3aed" },
+    { label: "Vert", value: "#16a34a" },
+    { label: "Rouge", value: "#dc2626" },
+    { label: "Rose", value: "#db2777" },
+  ];
 
   return (
     <div className="px-6 py-8 space-y-8">
@@ -96,6 +106,48 @@ export default function ParametresPage() {
               )}
             </div>
           </div>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
+        <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50">
+          <h2 className="text-sm font-semibold text-white dark:text-gray-900">Couleur d&apos;accent</h2>
+        </div>
+        <div className="px-6 py-6 flex flex-col gap-5">
+          <div className="flex items-center gap-4">
+            <div
+              className="w-12 h-12 rounded-xl border-2 border-white/10 dark:border-gray-300 shrink-0"
+              style={{ backgroundColor: accentColor }}
+            />
+            <div>
+              <p className="text-sm font-medium text-white dark:text-gray-900">Couleur sélectionnée</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{accentColor}</p>
+            </div>
+            <input
+              type="color"
+              value={accentColor}
+              onChange={(e) => setAccentColor(e.target.value)}
+              className="ml-auto w-10 h-10 rounded-lg cursor-pointer border border-white/10 dark:border-gray-300 bg-transparent"
+            />
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {PRESET_COLORS.map((color) => (
+              <button
+                key={color.value}
+                onClick={() => setAccentColor(color.value)}
+                title={color.label}
+                className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${
+                  accentColor === color.value ? "border-white dark:border-gray-900 scale-110" : "border-transparent"
+                }`}
+                style={{ backgroundColor: color.value }}
+              />
+            ))}
+          </div>
+          <button
+            className="self-start px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
+            style={{ backgroundColor: accentColor }}
+          >
+            Sauvegarder les paramètres
+          </button>
         </div>
       </div>
     </div>
