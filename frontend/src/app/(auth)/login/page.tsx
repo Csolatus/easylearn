@@ -134,27 +134,6 @@ export default function LoginPage() {
               {isLoading ? "Connexion..." : "Sign In →"}
             </button>
 
-            <div className="flex items-center gap-3 my-1">
-              <div className="flex-1 h-px bg-white/10 dark:bg-gray-200" />
-              <span className="text-xs text-gray-500 tracking-widest uppercase">Or continue with</span>
-              <div className="flex-1 h-px bg-white/10 dark:bg-gray-200" />
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                type="button"
-                className="flex-1 flex items-center justify-center gap-2 bg-white/5 dark:bg-gray-100 hover:bg-white/10 dark:hover:bg-gray-200 border border-white/10 dark:border-gray-200 text-white dark:text-gray-700 text-sm font-medium py-3 rounded-xl transition-colors"
-              >
-                <span>G</span> Google
-              </button>
-              <button
-                type="button"
-                className="flex-1 flex items-center justify-center gap-2 bg-white/5 dark:bg-gray-100 hover:bg-white/10 dark:hover:bg-gray-200 border border-white/10 dark:border-gray-200 text-white dark:text-gray-700 text-sm font-medium py-3 rounded-xl transition-colors"
-              >
-                <span>🐙</span> GitHub
-              </button>
-            </div>
-
             <p className="text-center text-sm text-gray-500 mt-2">
               Pas de compte ?{" "}
               <a href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
