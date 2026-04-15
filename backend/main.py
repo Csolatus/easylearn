@@ -8,7 +8,6 @@ app.include_router(school.router)
 app.include_router(classroom.router)
 app.include_router(course.router)
 
-
 @app.get("/health")
 async def health():
     return {"status": "ok"}
