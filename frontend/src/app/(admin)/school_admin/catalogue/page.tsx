@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function AdminCataloguePage() {
   const [isRestricted, setIsRestricted] = useState(false);
+  const [search, setSearch] = useState("");
 
   return (
     <div className="px-6 py-8 space-y-8">
@@ -38,6 +39,17 @@ export default function AdminCataloguePage() {
             }`}
           />
         </button>
+      </div>
+
+      <div className="relative w-full max-w-sm">
+        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">🔍</span>
+        <input
+          type="text"
+          placeholder="Rechercher un cours..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full bg-[#111118] dark:bg-white border border-white/5 dark:border-gray-200 text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+        />
       </div>
     </div>
   );
