@@ -1,0 +1,73 @@
+export type NavItem = {
+  label: string;
+  href: string;
+  icon: string;
+};
+
+export type RoleNavConfig = {
+  portalLabel: string;
+  accent: string;
+  accentHover: string;
+  accentText: string;
+  accentDot: string;
+  navItems: NavItem[];
+  ctaLabel?: string;
+  ctaHref?: string;
+};
+
+export const NAV_CONFIG: Record<string, RoleNavConfig> = {
+  student: {
+    portalLabel: "Student Portal",
+    accent: "bg-purple-600",
+    accentHover: "hover:bg-purple-700",
+    accentText: "text-purple-400",
+    accentDot: "bg-purple-500",
+    navItems: [
+      { label: "Dashboard", href: "/student/dashboard", icon: "⊞" },
+      { label: "Courses", href: "/student/catalogue", icon: "📖" },
+      { label: "AI Lab", href: "/student/ai-lab", icon: "🤖" },
+      { label: "Profile", href: "/student/profil", icon: "👤" },
+    ],
+    ctaLabel: "Start Learning",
+  },
+  teacher: {
+    portalLabel: "Teacher Portal",
+    accent: "bg-green-600",
+    accentHover: "hover:bg-green-700",
+    accentText: "text-green-400",
+    accentDot: "bg-green-500",
+    navItems: [
+      { label: "Dashboard", href: "/teacher/dashboard", icon: "⊞" },
+      { label: "Classes", href: "/teacher/classes", icon: "🏫" },
+      { label: "Cours", href: "/teacher/cours", icon: "📖" },
+      { label: "Stats", href: "/teacher/stats", icon: "📊" },
+    ],
+    ctaLabel: "Nouveau cours",
+    ctaHref: "/teacher/cours",
+  },
+  school_admin: {
+    portalLabel: "Admin Portal",
+    accent: "bg-orange-600",
+    accentHover: "hover:bg-orange-700",
+    accentText: "text-orange-400",
+    accentDot: "bg-orange-500",
+    navItems: [
+      { label: "Dashboard", href: "/school_admin/dashboard", icon: "⊞" },
+      { label: "Professeurs", href: "/school_admin/professeurs", icon: "🧑‍🏫" },
+      { label: "Élèves", href: "/school_admin/eleves", icon: "🎓" },
+      { label: "Catalogue", href: "/school_admin/catalogue", icon: "📖" },
+      { label: "Paramètres", href: "/school_admin/parametres", icon: "⚙️" },
+    ],
+  },
+  super_admin: {
+    portalLabel: "Super Admin",
+    accent: "bg-red-600",
+    accentHover: "hover:bg-red-700",
+    accentText: "text-red-400",
+    accentDot: "bg-red-500",
+    navItems: [
+      { label: "Dashboard", href: "/super_admin/dashboard", icon: "⊞" },
+      { label: "Écoles", href: "/super_admin/ecoles", icon: "🏛️" },
+    ],
+  },
+};
