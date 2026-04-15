@@ -41,6 +41,14 @@ export default function LessonEditorPage() {
   const [mdContent, setMdContent] = useState(MARKDOWN_PLACEHOLDER);
   const [codeContent, setCodeContent] = useState(CODE_PLACEHOLDER);
   const [saved, setSaved] = useState(false);
+  const [questions, setQuestions] = useState([
+    { question: "Qu'est-ce qu'une closure en JavaScript ?", options: ["Une fonction", "Une fonction qui capture son environnement", "Un objet", "Une classe"], answer: 1 },
+  ]);
+
+  const addQuestion = () => setQuestions((prev) => [...prev, { question: "", options: ["", "", "", ""], answer: 0 }]);
+  const updateQuestion = (i: number, val: string) => setQuestions((prev) => prev.map((q, idx) => idx === i ? { ...q, question: val } : q));
+  const updateOption = (qi: number, oi: number, val: string) => setQuestions((prev) => prev.map((q, idx) => idx === qi ? { ...q, options: q.options.map((o, oidx) => oidx === oi ? val : o) } : q));
+  const setAnswer = (qi: number, oi: number) => setQuestions((prev) => prev.map((q, idx) => idx === qi ? { ...q, answer: oi } : q));
 
   const handleSave = () => {
     setSaved(true);
@@ -96,6 +104,49 @@ export default function LessonEditorPage() {
             <div className="h-96 overflow-y-auto p-5 text-sm text-gray-300 dark:text-gray-700 prose prose-invert dark:prose max-w-none">
               <pre className="whitespace-pre-wrap font-sans text-sm">{mdContent}</pre>
             </div>
+          </div>
+        )}
+
+        {activeTab === "quiz" && (
+          <div className="p-5 flex flex-col gap-6">
+            {questions.map((q, qi) => (
+              <div key={qi} className="flex flex-col gap-3 rounded-xl border border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 p-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-gray-500">Q{qi + 1}</span>
+                  <input
+                    value={q.question}
+                    onChange={(e) => updateQuestion(qi, e.target.value)}
+                    placeholder="Écrivez votre question..."
+                    className="flex-1 bg-white/5 dark:bg-white border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+                  />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {q.options.map((option, oi) => (
+                    <div key={oi} className="flex items-center gap-2">
+                      <button
+                        onClick={() => setAnswer(qi, oi)}
+                        className={`w-5 h-5 rounded-full border-2 shrink-0 transition-colors ${
+                          q.answer === oi ? "border-green-500 bg-green-500" : "border-white/20 dark:border-gray-400"
+                        }`}
+                      />
+                      <input
+                        value={option}
+                        onChange={(e) => updateOption(qi, oi, e.target.value)}
+                        placeholder={`Option ${oi + 1}`}
+                        className="flex-1 bg-white/5 dark:bg-white border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500">🟢 Sélectionnez la bonne réponse en cliquant sur le cercle</p>
+              </div>
+            ))}
+            <button
+              onClick={addQuestion}
+              className="self-start text-xs text-green-400 hover:text-green-300 font-medium transition-colors"
+            >
+              + Ajouter une question
+            </button>
           </div>
         )}
 
