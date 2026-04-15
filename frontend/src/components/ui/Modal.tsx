@@ -19,6 +19,7 @@ export function Modal({ isOpen, onClose, title, children, footer, size = "md" }:
   useEffect(() => {
     if (isOpen) state.open();
     else state.close();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   return (

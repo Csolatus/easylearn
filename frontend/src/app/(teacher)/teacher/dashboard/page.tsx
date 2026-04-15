@@ -35,7 +35,7 @@ export default function TeacherDashboard() {
               Bonjour, Professeur 👋
             </h1>
             <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
-              Voici un aperçu de vos classes et de l'activité récente.
+              Voici un aperçu de vos classes et de l&apos;activité récente.
             </p>
           </div>
           <div className="flex gap-3">

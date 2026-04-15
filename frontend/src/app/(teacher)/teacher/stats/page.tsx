@@ -60,7 +60,7 @@ export default function StatsPage() {
         <div>
           <h1 className="text-3xl font-bold text-white dark:text-gray-900">Statistiques</h1>
           <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
-            Vue d'ensemble de la progression de vos étudiants.
+            Vue d&apos;ensemble de la progression de vos étudiants.
           </p>
         </div>
 
