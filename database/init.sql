@@ -1,22 +1,3 @@
--- Tables de jonction
-CREATE TABLE Ecole_Prof (
-    ecole_id INT REFERENCES Ecole(id),
-    prof_id  INT REFERENCES Prof(id),
-    PRIMARY KEY (ecole_id, prof_id)
-);
-
-CREATE TABLE Prof_Eleve (
-    prof_id  INT REFERENCES Prof(id),
-    eleve_id INT REFERENCES Eleve(id),
-    PRIMARY KEY (prof_id, eleve_id)
-);
-
-CREATE TABLE Classe_Cours (
-    classe_id INT REFERENCES Classe(id),
-    cours_id  INT REFERENCES Cours(id),
-    PRIMARY KEY (classe_id, cours_id)
-);
-
 -- Tables principales
 CREATE TABLE Ecole (
     id   SERIAL PRIMARY KEY,
@@ -116,3 +97,23 @@ CREATE TABLE GenerateAI (
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
+
+-- Tables de jonction
+CREATE TABLE Ecole_Prof (
+    ecole_id INT REFERENCES Ecole(id),
+    prof_id  INT REFERENCES Prof(id),
+    PRIMARY KEY (ecole_id, prof_id)
+);
+
+CREATE TABLE Prof_Eleve (
+    prof_id  INT REFERENCES Prof(id),
+    eleve_id INT REFERENCES Eleve(id),
+    PRIMARY KEY (prof_id, eleve_id)
+);
+
+CREATE TABLE Classe_Cours (
+    classe_id INT REFERENCES Classe(id),
+    cours_id  INT REFERENCES Cours(id),
+    PRIMARY KEY (classe_id, cours_id)
+);
+
