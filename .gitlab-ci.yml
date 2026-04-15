@@ -1,7 +1,7 @@
 stages:
   - lint
   - test
-  # ajouter build et deploy plus tard
+  - build
 
 # ─── LINT ─────────────────────────────────────────────────────────────────────
 
@@ -44,12 +44,14 @@ test:backend:
     JWT_ALGORITHM: HS256
     JWT_EXPIRE_MINUTES: "30"
   before_script:
+    - apt-get update -qq && apt-get install -y -qq postgresql-client
     - pip install --quiet uv
     - uv pip install --system --quiet -r backend/requirements.txt
     - uv pip install --system --quiet pytest pytest-asyncio httpx
+    - PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres -U $POSTGRES_USER -d $POSTGRES_DB -f database/init.sql
   script:
     - pytest backend/ -v --tb=short
-  allow_failure: true  # a supprimer quand Thomas aura bien voulu faire ses tests pytest
+  allow_failure: true  # remove once backend/ contains at least one test file
 
 test:frontend:
   stage: test
@@ -64,4 +66,26 @@ test:frontend:
     - cd frontend && npm ci --prefer-offline
   script:
     - npm test -- --passWithNoTests
-  allow_failure: true  # a supprimer quand Matthieu aura bien voulu configuré Jest et écrire les tests
+
+# ─── BUILD ────────────────────────────────────────────────────────────────────
+
+build:backend:
+  stage: build
+  image: docker:27
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  script:
+    - docker build --target runner -t easylearn/backend:ci backend/
+
+build:frontend:
+  stage: build
+  image: docker:27
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    NEXT_PUBLIC_API_URL: "http://localhost:8000"
+  script:
+    - docker build --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL --target runner -t easylearn/frontend:ci frontend/
