@@ -168,6 +168,21 @@ export default function RegisterPage() {
               </div>
               {errors.confirmPassword && <p className="text-red-400 text-xs">{errors.confirmPassword}</p>}
             </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/20"
+            >
+              {isLoading ? "Inscription..." : "Créer mon compte →"}
+            </button>
+
+            <p className="text-center text-sm text-gray-500 mt-2">
+              Déjà un compte ?{" "}
+              <a href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+                Se connecter
+              </a>
+            </p>
           </form>
         </div>
       </div>
