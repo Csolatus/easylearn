@@ -55,6 +55,31 @@ function Sidebar() {
   );
 }
 
+function Navbar() {
+  return (
+    <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-[#0f0f1a]">
+      <div className="relative w-64">
+        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">🔍</span>
+        <input
+          type="text"
+          placeholder="Rechercher un cours..."
+          className="w-full bg-[#1a1a2e] text-white placeholder-gray-500 rounded-xl pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+      </div>
+      <div className="flex items-center gap-4">
+        <button className="relative text-gray-400 hover:text-white transition-colors">
+          🔔
+          <span className="absolute -top-1 -right-1 w-2 h-2 bg-purple-500 rounded-full" />
+        </button>
+        <button className="text-gray-400 hover:text-white transition-colors">🎓</button>
+        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm font-bold">
+          T
+        </div>
+      </div>
+    </header>
+  );
+}
+
 export default function StudentLayout({
   children,
 }: {
@@ -63,7 +88,10 @@ export default function StudentLayout({
   return (
     <div className="flex min-h-screen bg-[#0f0f1a] text-white">
       <Sidebar />
-      <main className="flex-1">{children}</main>
+      <div className="flex flex-col flex-1">
+        <Navbar />
+        <main className="flex-1">{children}</main>
+      </div>
     </div>
   );
 }
