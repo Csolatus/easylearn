@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.database import getDb
 from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, UserResponse
 from app.services import auth_service
 
@@ -10,8 +12,8 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def register(data: RegisterRequest):
-    user = auth_service.registerUser(data)
+async def register(data: RegisterRequest, db: AsyncSession = Depends(getDb)):
+    user = await auth_service.registerUser(data, db)
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -21,8 +23,8 @@ def register(data: RegisterRequest):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(data: LoginRequest):
-    token = auth_service.loginUser(data.email, data.password)
+async def login(data: LoginRequest, db: AsyncSession = Depends(getDb)):
+    token = await auth_service.loginUser(data.email, data.password, db)
     if token is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
