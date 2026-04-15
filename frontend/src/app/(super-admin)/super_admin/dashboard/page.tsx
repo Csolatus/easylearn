@@ -87,6 +87,7 @@ export default function SuperAdminDashboardPage() {
         ))}
       </div>
 
+      {/* Recent Schools Table */}
       <div className="rounded-2xl border border-white/5 dark:border-gray-200 bg-[#111118] dark:bg-white overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 dark:border-gray-100">
           <h2 className="text-sm font-semibold text-white dark:text-gray-900">Écoles récentes</h2>
