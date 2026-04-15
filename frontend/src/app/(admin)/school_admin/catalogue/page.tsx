@@ -37,7 +37,7 @@ export default function AdminCataloguePage() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-white/5 dark:border-gray-300 bg-[#111118] dark:bg-gray-50 px-6 py-5 flex items-center justify-between gap-4">
+      <div className="rounded-2xl border border-white/10 dark:border-gray-400 bg-[#111118] dark:bg-white shadow-md px-6 py-5 flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-white dark:text-gray-900">
             Mode d&apos;accès
@@ -64,12 +64,12 @@ export default function AdminCataloguePage() {
       </div>
 
       {isRestricted && (
-        <div className="rounded-2xl border border-white/5 dark:border-gray-300 bg-[#111118] dark:bg-gray-50 overflow-hidden">
-          <div className="px-6 py-4 border-b border-white/5 dark:border-gray-100 flex items-center justify-between">
+        <div className="rounded-2xl border border-white/10 dark:border-gray-400 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
+          <div className="px-6 py-4 border-b border-white/10 dark:border-gray-300 flex items-center justify-between bg-white/5 dark:bg-gray-50">
             <h2 className="text-sm font-semibold text-white dark:text-gray-900">Cours autorisés</h2>
             <span className="text-xs text-gray-400 dark:text-gray-500">{whitelist.length} sélectionné(s)</span>
           </div>
-          <div className="divide-y divide-white/5 dark:divide-gray-100">
+          <div className="divide-y divide-white/10 dark:divide-gray-300">
             {filtered.length === 0 ? (
               <p className="px-6 py-6 text-sm text-gray-500 text-center">Aucun cours trouvé.</p>
             ) : (
@@ -78,7 +78,7 @@ export default function AdminCataloguePage() {
                 return (
                   <label
                     key={course.id}
-                    className="flex items-center gap-4 px-6 py-4 hover:bg-white/5 dark:hover:bg-gray-50 transition-colors cursor-pointer"
+                    className="flex items-center gap-4 px-6 py-4 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors cursor-pointer"
                   >
                     <input
                       type="checkbox"
@@ -113,7 +113,7 @@ export default function AdminCataloguePage() {
           placeholder="Rechercher un cours..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-[#111118] dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="w-full bg-[#111118] dark:bg-white border-2 border-white/10 dark:border-gray-400 text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-md"
         />
       </div>
     </div>
