@@ -73,6 +73,36 @@ export default function RegisterPage() {
           <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                Je suis
+              </label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setRole("student")}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-colors border ${
+                    role === "student"
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-500/20"
+                      : "bg-white/5 text-gray-400 border-white/10 hover:border-indigo-500"
+                  }`}
+                >
+                  🎓 Élève
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRole("teacher")}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-colors border ${
+                    role === "teacher"
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-500/20"
+                      : "bg-white/5 text-gray-400 border-white/10 hover:border-indigo-500"
+                  }`}
+                >
+                  🧑‍🏫 Professeur
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
                 Email Address
               </label>
               <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
@@ -97,12 +127,19 @@ export default function RegisterPage() {
                 <span className="text-gray-500 text-sm">🔒</span>
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
               </div>
               {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
             </div>
@@ -115,12 +152,19 @@ export default function RegisterPage() {
                 <span className="text-gray-500 text-sm">🔒</span>
                 <input
                   id="confirmPassword"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+                >
+                  {showConfirmPassword ? "🙈" : "👁️"}
+                </button>
               </div>
               {errors.confirmPassword && <p className="text-red-400 text-xs">{errors.confirmPassword}</p>}
             </div>
