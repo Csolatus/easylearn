@@ -49,22 +49,22 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-md">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-2">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0f0f1a]">
+      <div className="w-full max-w-md p-8 bg-white dark:bg-[#1a1a2e] rounded-2xl shadow-md">
+        <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-2">
           Créer un compte
         </h1>
-        <p className="text-center text-gray-500 text-sm mb-6">
+        <p className="text-center text-gray-500 dark:text-gray-400 text-sm mb-6">
           Rejoignez EasyLearn dès maintenant
         </p>
         {apiError && (
-          <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm text-center">
+          <div className="mb-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm text-center">
             {apiError}
           </div>
         )}
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Email
             </label>
             <input
@@ -73,12 +73,12 @@ export default function RegisterPage() {
               placeholder="exemple@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="password" className="text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Mot de passe
             </label>
             <input
@@ -87,12 +87,12 @@ export default function RegisterPage() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+            <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Confirmer le mot de passe
             </label>
             <input
@@ -101,7 +101,7 @@ export default function RegisterPage() {
               placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-300 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.confirmPassword && <p className="text-red-500 text-xs">{errors.confirmPassword}</p>}
           </div>
@@ -110,7 +110,7 @@ export default function RegisterPage() {
             disabled={isLoading}
             className="mt-2 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Inscription..." : "S'inscrire"}
+            {isLoading ? "Inscription..." : "S&apos;inscrire"}
           </button>
         </form>
       </div>
