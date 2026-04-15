@@ -1,5 +1,13 @@
 "use client";
 
+const TEACHERS = [
+  { name: "Marie Dupont", subject: "Mathématiques", students: 45, statut: "SCHOOL_TEACHER" },
+  { name: "Jean Martin", subject: "Informatique", students: 38, statut: "SCHOOL_TEACHER" },
+  { name: "Sophie Bernard", subject: "Physique", students: 52, statut: "SCHOOL_TEACHER" },
+  { name: "Lucas Petit", subject: "Anglais", students: 30, statut: "Inactif" },
+  { name: "Claire Moreau", subject: "Histoire", students: 41, statut: "SCHOOL_TEACHER" },
+];
+
 const ACTIVITY_DATA = [
   40, 55, 30, 70, 60, 45, 80, 50, 65, 35,
   75, 90, 55, 40, 60, 70, 85, 45, 30, 65,
@@ -71,6 +79,52 @@ export default function SchoolAdminDashboardPage() {
           <span>J-30</span>
           <span>J-15</span>
           <span>Aujourd&apos;hui</span>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50">
+          <h2 className="text-sm font-semibold text-white dark:text-gray-900">Professeurs rattachés</h2>
+          <a href="/school_admin/professeurs" className="text-xs text-orange-400 hover:text-orange-300 transition-colors font-medium">
+            Voir tout →
+          </a>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/10 dark:border-gray-200">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Professeur</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Matière</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Élèves</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10 dark:divide-gray-200">
+              {TEACHERS.map((teacher) => (
+                <tr key={teacher.name} className="hover:bg-white/5 dark:hover:bg-gray-100 transition-colors">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-orange-600/20 flex items-center justify-center text-sm font-bold text-orange-400">
+                        {teacher.name[0]}
+                      </div>
+                      <span className="font-medium text-white dark:text-gray-900">{teacher.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-gray-400 dark:text-gray-500">{teacher.subject}</td>
+                  <td className="px-6 py-4 text-gray-300 dark:text-gray-700 font-medium">{teacher.students}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
+                      teacher.statut === "SCHOOL_TEACHER"
+                        ? "bg-green-500/10 text-green-400 dark:text-green-600"
+                        : "bg-red-500/10 text-red-400 dark:text-red-600"
+                    }`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${teacher.statut === "SCHOOL_TEACHER" ? "bg-green-400" : "bg-red-400"}`} />
+                      {teacher.statut}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
