@@ -46,10 +46,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a0a0f] dark:bg-[#0a0a0f]">
-      <div className="flex items-center justify-between px-8 py-4 border-b border-white/5">
-        <span className="text-white font-bold text-sm">EasyLearn</span>
-        <div className="flex items-center gap-1 text-sm text-gray-400">
+    <div className="min-h-screen flex flex-col bg-[#0a0a0f] dark:bg-gray-50">
+      <div className="flex items-center justify-between px-8 py-4 border-b border-white/5 dark:border-gray-200">
+        <span className="text-white dark:text-gray-900 font-bold text-sm">EasyLearn</span>
+        <div className="flex items-center gap-1 text-sm text-gray-400 dark:text-gray-500">
           <span>Nouveau ?</span>
           <a href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
             Créer un compte
@@ -57,29 +57,29 @@ export default function LoginPage() {
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md bg-[#111118] border border-white/8 rounded-2xl p-8 shadow-2xl">
+        <div className="w-full max-w-md bg-[#111118] dark:bg-white dark:shadow-xl border border-white/8 dark:border-gray-200 rounded-2xl p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
             <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-lg shadow-indigo-500/30">
               🎓
             </div>
-            <h1 className="text-2xl font-bold text-white mb-1">Welcome Back</h1>
-            <p className="text-gray-400 text-sm text-center">
+            <h1 className="text-2xl font-bold text-white dark:text-gray-900 mb-1">Welcome Back</h1>
+            <p className="text-gray-400 dark:text-gray-500 text-sm text-center">
               Accédez à votre espace EasyLearn
             </p>
           </div>
 
           {apiError && (
-            <div className="mb-4 px-4 py-3 bg-red-900/20 border border-red-800 rounded-lg text-red-400 text-sm text-center">
+            <div className="mb-4 px-4 py-3 bg-red-900/20 dark:bg-red-50 border border-red-800 dark:border-red-200 rounded-lg text-red-400 dark:text-red-600 text-sm text-center">
               {apiError}
             </div>
           )}
 
           <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+              <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
                 Email Address
               </label>
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
+              <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
                 <span className="text-gray-500 text-sm">@</span>
                 <input
                   id="email"
@@ -87,7 +87,7 @@ export default function LoginPage() {
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
+                  className="flex-1 bg-transparent text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none"
                 />
               </div>
               {errors.email && <p className="text-red-400 text-xs">{errors.email}</p>}
@@ -95,7 +95,7 @@ export default function LoginPage() {
 
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
                   Password
                 </label>
                 <button
@@ -105,7 +105,7 @@ export default function LoginPage() {
                   Forgot password?
                 </button>
               </div>
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
+              <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
                 <span className="text-gray-500 text-sm">🔒</span>
                 <input
                   id="password"
@@ -113,12 +113,12 @@ export default function LoginPage() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
+                  className="flex-1 bg-transparent text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+                  className="text-gray-500 hover:text-gray-300 dark:hover:text-gray-600 transition-colors text-sm"
                 >
                   {showPassword ? "🙈" : "👁️"}
                 </button>
@@ -135,21 +135,21 @@ export default function LoginPage() {
             </button>
 
             <div className="flex items-center gap-3 my-1">
-              <div className="flex-1 h-px bg-white/10" />
+              <div className="flex-1 h-px bg-white/10 dark:bg-gray-200" />
               <span className="text-xs text-gray-500 tracking-widest uppercase">Or continue with</span>
-              <div className="flex-1 h-px bg-white/10" />
+              <div className="flex-1 h-px bg-white/10 dark:bg-gray-200" />
             </div>
 
             <div className="flex gap-3">
               <button
                 type="button"
-                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium py-3 rounded-xl transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 bg-white/5 dark:bg-gray-100 hover:bg-white/10 dark:hover:bg-gray-200 border border-white/10 dark:border-gray-200 text-white dark:text-gray-700 text-sm font-medium py-3 rounded-xl transition-colors"
               >
                 <span>G</span> Google
               </button>
               <button
                 type="button"
-                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium py-3 rounded-xl transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 bg-white/5 dark:bg-gray-100 hover:bg-white/10 dark:hover:bg-gray-200 border border-white/10 dark:border-gray-200 text-white dark:text-gray-700 text-sm font-medium py-3 rounded-xl transition-colors"
               >
                 <span>🐙</span> GitHub
               </button>
@@ -165,12 +165,12 @@ export default function LoginPage() {
         </div>
       </div>
       <footer className="py-6 flex flex-col items-center gap-3">
-        <div className="flex items-center gap-6 text-xs text-gray-600">
-          <a href="#" className="hover:text-gray-400 transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-gray-400 transition-colors">Need help?</a>
-          <a href="#" className="hover:text-gray-400 transition-colors">Legal notice</a>
+        <div className="flex items-center gap-6 text-xs text-gray-600 dark:text-gray-400">
+          <a href="#" className="hover:text-gray-400 dark:hover:text-gray-600 transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-gray-400 dark:hover:text-gray-600 transition-colors">Need help?</a>
+          <a href="#" className="hover:text-gray-400 dark:hover:text-gray-600 transition-colors">Legal notice</a>
         </div>
-        <p className="text-xs text-gray-700">
+        <p className="text-xs text-gray-700 dark:text-gray-400">
           © 2024 EasyLearn. All rights reserved.
         </p>
       </footer>
