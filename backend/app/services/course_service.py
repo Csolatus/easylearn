@@ -17,13 +17,25 @@ async def createCourse(data: CourseCreate, user_id: str, db: AsyncSession) -> di
     return result.fetchone()._mapping
 
 
-async def listCourses(db: AsyncSession) -> list[dict]:
-    result = await db.execute(
-        text(
-            "SELECT id, title, created_by, visibility, created_at, updated_at "
-            "FROM courses ORDER BY created_at DESC"
+async def listCourses(db: AsyncSession, school_id: str | None = None) -> list[dict]:
+    if school_id:
+        result = await db.execute(
+            text(
+                "SELECT c.id, c.title, c.created_by, c.visibility, c.created_at, c.updated_at "
+                "FROM courses c "
+                "JOIN school_course_whitelists w ON w.course_id = c.id "
+                "WHERE w.school_id = :school_id "
+                "ORDER BY c.created_at DESC"
+            ),
+            {"school_id": school_id},
         )
-    )
+    else:
+        result = await db.execute(
+            text(
+                "SELECT id, title, created_by, visibility, created_at, updated_at "
+                "FROM courses ORDER BY created_at DESC"
+            )
+        )
     return [row._mapping for row in result.fetchall()]
 
 

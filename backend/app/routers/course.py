@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import getDb
-from app.dependencies.auth import getCurrentUser, teacherOrAdmin
+from app.dependencies.auth import getCurrentUser, getSchoolContext, teacherOrAdmin
 from app.schemas.course import CourseCreate, CourseResponse, CourseUpdate
 from app.schemas.lesson import LessonCreate, LessonResponse, LessonUpdate
 from app.services import course_service, lesson_service
@@ -22,9 +22,9 @@ async def createCourse(
 @router.get("", response_model=list[CourseResponse])
 async def listCourses(
     db: AsyncSession = Depends(getDb),
-    _: dict = Depends(getCurrentUser),
+    school_id: str | None = Depends(getSchoolContext),
 ):
-    return await course_service.listCourses(db)
+    return await course_service.listCourses(db, school_id)
 
 
 @router.get("/{course_id}", response_model=CourseResponse)
