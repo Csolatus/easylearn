@@ -13,8 +13,7 @@ async def createSchool(data: SchoolCreate, db: AsyncSession) -> dict:
         {"name": data.name},
     )
     await db.commit()
-    row = result.fetchone()
-    return row._mapping
+    return result.fetchone()._mapping
 
 
 async def listSchools(db: AsyncSession) -> list[dict]:

@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import getDb
 from app.dependencies.auth import teacherOrAdmin
 from app.schemas.classroom import ClassroomCreate, ClassroomResponse, ClassroomUpdate
-from app.services import classroom_service
+from app.services import classroom_service, course_service
 
 router = APIRouter(prefix="/classrooms", tags=["classrooms"])
 
@@ -62,3 +62,27 @@ async def archiveClassroom(
     if classroom is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Classe introuvable")
     return classroom
+
+
+@router.post("/{classroom_id}/courses", status_code=status.HTTP_204_NO_CONTENT)
+async def assignCourse(
+    classroom_id: str,
+    course_id: str = Query(...),
+    db: AsyncSession = Depends(getDb),
+    _: dict = Depends(teacherOrAdmin),
+):
+    assigned = await course_service.assignCourseToClassroom(classroom_id, course_id, db)
+    if not assigned:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Cours déjà assigné à cette classe")
+
+
+@router.delete("/{classroom_id}/courses/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def removeCourse(
+    classroom_id: str,
+    course_id: str,
+    db: AsyncSession = Depends(getDb),
+    _: dict = Depends(teacherOrAdmin),
+):
+    removed = await course_service.removeCourseFromClassroom(classroom_id, course_id, db)
+    if not removed:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assignation introuvable")
