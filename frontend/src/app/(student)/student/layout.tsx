@@ -55,6 +55,27 @@ function Sidebar() {
   );
 }
 
+function BottomNav() {
+  const pathname = usePathname();
+
+  return (
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-[#0d0d1a] border-t border-white/5 flex justify-around items-center py-3 z-50">
+      {navItems.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className={`flex flex-col items-center gap-1 text-xs transition-colors ${
+            pathname === item.href ? "text-purple-400" : "text-gray-500 hover:text-white"
+          }`}
+        >
+          <span className="text-lg">{item.icon}</span>
+          {item.label}
+        </Link>
+      ))}
+    </nav>
+  );
+}
+
 function Navbar() {
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-[#0f0f1a]">
@@ -90,7 +111,8 @@ export default function StudentLayout({
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-16 md:pb-0">{children}</main>
+        <BottomNav />
       </div>
     </div>
   );
