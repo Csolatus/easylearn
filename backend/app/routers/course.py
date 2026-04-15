@@ -10,8 +10,6 @@ from app.services import course_service, lesson_service
 router = APIRouter(prefix="/courses", tags=["courses"])
 
 
-# ── Cours ─────────────────────────────────────────────────────────────────────
-
 @router.post("", response_model=CourseResponse, status_code=status.HTTP_201_CREATED)
 async def createCourse(
     data: CourseCreate,
@@ -64,8 +62,6 @@ async def deleteCourse(
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cours introuvable")
 
-
-# ── Leçons ────────────────────────────────────────────────────────────────────
 
 @router.post("/{course_id}/lessons", response_model=LessonResponse, status_code=status.HTTP_201_CREATED)
 async def createLesson(

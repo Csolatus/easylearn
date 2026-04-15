@@ -88,3 +88,15 @@ async def assignCourseToClassroom(classroom_id: str, course_id: str, db: AsyncSe
     )
     await db.commit()
     return True
+
+
+async def removeCourseFromClassroom(classroom_id: str, course_id: str, db: AsyncSession) -> bool:
+    result = await db.execute(
+        text(
+            "DELETE FROM classroom_courses "
+            "WHERE classroom_id = :classroom_id AND course_id = :course_id RETURNING course_id"
+        ),
+        {"classroom_id": classroom_id, "course_id": course_id},
+    )
+    await db.commit()
+    return result.fetchone() is not None
