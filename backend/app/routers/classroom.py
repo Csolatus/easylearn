@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import getDb
 from app.dependencies.auth import teacherOrAdmin
 from app.schemas.classroom import ClassroomCreate, ClassroomResponse, ClassroomUpdate
-from app.schemas.course import CourseResponse
 from app.services import classroom_service, course_service
 
 router = APIRouter(prefix="/classrooms", tags=["classrooms"])
