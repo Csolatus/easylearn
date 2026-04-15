@@ -1,6 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
+
+const ROLE_DASHBOARDS: Record<string, string> = {
+  student: "/student/dashboard",
+  teacher: "/teacher/dashboard",
+  school_admin: "/school_admin/dashboard",
+  super_admin: "/super_admin/dashboard",
+};
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -9,6 +18,8 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const login = useAuthStore((s) => s.login);
 
   const validate = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -37,7 +48,9 @@ export default function LoginPage() {
       });
       if (!res.ok) throw new Error("Email ou mot de passe incorrect");
       const data = await res.json();
-      console.log("Login success", data);
+      login(data.access_token);
+      const payload = JSON.parse(atob(data.access_token.split(".")[1]));
+      router.push(ROLE_DASHBOARDS[payload.role] ?? "/");
     } catch (err) {
       setApiError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
