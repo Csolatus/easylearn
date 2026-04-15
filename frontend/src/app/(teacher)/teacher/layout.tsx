@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSchoolStore } from "@/store/schoolStore";
 
 const navItems = [
   { label: "Dashboard", href: "/teacher/dashboard", icon: "⊞" },
@@ -77,6 +78,8 @@ function BottomNav() {
 }
 
 function Navbar() {
+  const { schools, activeSchool, setActiveSchool } = useSchoolStore();
+
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 dark:border-gray-200 bg-[#0f0f1a] dark:bg-white sticky top-0 z-40">
       <div className="relative w-full max-w-xs">
@@ -88,6 +91,23 @@ function Navbar() {
         />
       </div>
       <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 dark:border-gray-300 bg-white/5 dark:bg-gray-100 text-sm">
+          <span className="text-gray-400 dark:text-gray-500 text-xs">Vous opérez en tant que prof de</span>
+          <select
+            className="bg-transparent text-white dark:text-gray-900 text-xs font-semibold focus:outline-none cursor-pointer"
+            value={activeSchool?.id ?? ""}
+            onChange={(e) => {
+              const selected = schools.find((s) => s.id === e.target.value);
+              if (selected) setActiveSchool(selected);
+            }}
+          >
+            {schools.map((school) => (
+              <option key={school.id} value={school.id} className="bg-[#0f0f1a] dark:bg-white text-white dark:text-gray-900">
+                {school.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <button className="relative text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 transition-colors">
           🔔
           <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" />
