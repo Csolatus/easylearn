@@ -8,6 +8,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const validate = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -84,19 +85,34 @@ export default function LoginPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+                >
+                  Forgot password?
+                </button>
+              </div>
               <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
                 <span className="text-gray-500 text-sm">🔒</span>
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-500 hover:text-gray-300 transition-colors text-sm"
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
               </div>
               {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
             </div>
