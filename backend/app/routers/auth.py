@@ -43,4 +43,3 @@ def logout(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
             detail="Token déjà invalidé",
         )
     auth_service.logoutUser(token)
-
