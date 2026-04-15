@@ -116,6 +116,42 @@ export default function LoginPage() {
               </div>
               {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
             </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/20"
+            >
+              {isLoading ? "Connexion..." : "Sign In →"}
+            </button>
+
+            <div className="flex items-center gap-3 my-1">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-xs text-gray-500 tracking-widest uppercase">Or continue with</span>
+              <div className="flex-1 h-px bg-white/10" />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium py-3 rounded-xl transition-colors"
+              >
+                <span>G</span> Google
+              </button>
+              <button
+                type="button"
+                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium py-3 rounded-xl transition-colors"
+              >
+                <span>🐙</span> GitHub
+              </button>
+            </div>
+
+            <p className="text-center text-sm text-gray-500 mt-2">
+              Pas de compte ?{" "}
+              <a href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+                Créer un compte
+              </a>
+            </p>
           </form>
         </div>
       </div>
