@@ -7,6 +7,7 @@ export default function ParametresPage() {
   const [email, setEmail] = useState("contact@efrei.fr");
   const [website, setWebsite] = useState("https://www.efrei.fr");
   const [address, setAddress] = useState("30-32 Avenue de la République, 94800 Villejuif");
+  const [logo, setLogo] = useState<string | null>(null);
 
   return (
     <div className="px-6 py-8 space-y-8">
@@ -53,6 +54,47 @@ export default function ParametresPage() {
               onChange={(e) => setAddress(e.target.value)}
               className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
+          </div>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
+        <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50">
+          <h2 className="text-sm font-semibold text-white dark:text-gray-900">Logo de l&apos;école</h2>
+        </div>
+        <div className="px-6 py-6 flex items-center gap-6">
+          <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-white/20 dark:border-gray-300 bg-white/5 dark:bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+            {logo ? (
+              <img src={logo} alt="Logo" className="w-full h-full object-cover rounded-2xl" />
+            ) : (
+              <span className="text-3xl">🏛️</span>
+            )}
+          </div>
+          <div className="flex flex-col gap-3">
+            <p className="text-sm text-gray-400 dark:text-gray-500">
+              Format recommandé : PNG ou SVG, 256x256px minimum
+            </p>
+            <div className="flex gap-3">
+              <label className="cursor-pointer px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white transition-colors">
+                📁 Choisir un fichier
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) setLogo(URL.createObjectURL(file));
+                  }}
+                />
+              </label>
+              {logo && (
+                <button
+                  onClick={() => setLogo(null)}
+                  className="px-4 py-2 rounded-xl text-sm font-medium border border-white/10 dark:border-gray-300 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
+                >
+                  Supprimer
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
