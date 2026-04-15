@@ -63,6 +63,68 @@ export default function RegisterPage() {
               Rejoignez EasyLearn dès maintenant
             </p>
           </div>
+
+          {apiError && (
+            <div className="mb-4 px-4 py-3 bg-red-900/20 border border-red-800 rounded-lg text-red-400 text-sm text-center">
+              {apiError}
+            </div>
+          )}
+
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                Email Address
+              </label>
+              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
+                <span className="text-gray-500 text-sm">@</span>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
+                />
+              </div>
+              {errors.email && <p className="text-red-400 text-xs">{errors.email}</p>}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                Password
+              </label>
+              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
+                <span className="text-gray-500 text-sm">🔒</span>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
+                />
+              </div>
+              {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                Confirm Password
+              </label>
+              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
+                <span className="text-gray-500 text-sm">🔒</span>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="flex-1 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none"
+                />
+              </div>
+              {errors.confirmPassword && <p className="text-red-400 text-xs">{errors.confirmPassword}</p>}
+            </div>
+          </form>
         </div>
       </div>
     </div>
