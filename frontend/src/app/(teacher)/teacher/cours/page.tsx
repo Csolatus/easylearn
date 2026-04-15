@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 
 const MOCK_COURSES = [
-  { id: 1, title: "JavaScript Avancé", description: "Closures, prototypes, async/await et patterns ES2024.", lessons: 12, students: 24, status: "published" },
-  { id: 2, title: "Introduction à Python", description: "Les bases de Python avec des projets pratiques.", lessons: 8, students: 18, status: "published" },
-  { id: 3, title: "React — Les Fondamentaux", description: "Composants, hooks, state management avec React 19.", lessons: 15, students: 30, status: "draft" },
-  { id: 4, title: "SQL & Bases de données", description: "Requêtes SQL, jointures, optimisation de requêtes.", lessons: 6, students: 0, status: "archived" },
+  { id: 1, title: "JavaScript Avancé", description: "Closures, prototypes, async/await et patterns ES2024.", lessons: 12, students: 1200, hours: 18, rating: 4.8, category: "JAVASCRIPT", gradient: "from-yellow-600/80 to-orange-700/80", status: "published" },
+  { id: 2, title: "Introduction à Python", description: "Les bases de Python avec des projets pratiques.", lessons: 8, students: 980, hours: 12, rating: 4.6, category: "PYTHON", gradient: "from-blue-600/80 to-indigo-700/80", status: "published" },
+  { id: 3, title: "React — Les Fondamentaux", description: "Composants, hooks, state management avec React 19.", lessons: 15, students: 0, hours: 20, rating: 4.9, category: "REACT", gradient: "from-cyan-600/80 to-teal-700/80", status: "draft" },
+  { id: 4, title: "SQL & Bases de données", description: "Requêtes SQL, jointures, optimisation de requêtes.", lessons: 6, students: 540, hours: 10, rating: 4.5, category: "SQL", gradient: "from-purple-600/80 to-violet-700/80", status: "archived" },
 ];
 
 const STATUS_BADGE: Record<string, string> = {
@@ -221,30 +221,53 @@ export default function CoursPage() {
       {filtered.length === 0 ? (
         <p className="text-center text-sm text-gray-500 py-16">Aucun cours trouvé.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filtered.map((course) => (
-            <div key={course.id} className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
-              <div className="h-20 bg-gradient-to-br from-green-900/60 to-teal-900/60 dark:from-green-100 dark:to-teal-100" />
-              <div className="p-5 flex flex-col gap-3">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-white dark:text-gray-900 text-sm leading-snug">{course.title}</h3>
-                  <span className={`text-xs px-2.5 py-0.5 rounded-full font-medium shrink-0 ${STATUS_BADGE[course.status]}`}>
-                    {STATUS_LABEL[course.status]}
-                  </span>
+            <div key={course.id} className="rounded-2xl border border-white/10 dark:border-gray-200 bg-[#111118] dark:bg-white shadow-md overflow-hidden flex flex-col group">
+              {/* Banner */}
+              <div className={`relative h-40 bg-gradient-to-br ${course.gradient} overflow-hidden`}>
+                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 30% 50%, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+                <span className="absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full bg-black/40 text-white tracking-wider">
+                  {course.category}
+                </span>
+                <span className={`absolute top-3 right-3 text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_BADGE[course.status]}`}>
+                  {STATUS_LABEL[course.status]}
+                </span>
+              </div>
+
+              {/* Content */}
+              <div className="p-5 flex flex-col gap-3 flex-1">
+                <h3 className="font-bold text-white dark:text-gray-900 text-base leading-snug">{course.title}</h3>
+                <p className="text-xs text-gray-400 dark:text-gray-500 line-clamp-2 flex-1">{course.description}</p>
+
+                {/* Instructor */}
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                    T
+                  </div>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">Vous</span>
+                  <div className="ml-auto flex items-center gap-1">
+                    <span className="text-yellow-400 text-xs">★</span>
+                    <span className="text-xs font-semibold text-white dark:text-gray-900">{course.rating}</span>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-400 dark:text-gray-500 line-clamp-2">{course.description}</p>
-                <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
-                  <span>📚 {course.lessons} leçons</span>
-                  <span>👥 {course.students} étudiants</span>
+
+                {/* Stats */}
+                <div className="flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500 border-t border-white/5 dark:border-gray-100 pt-3">
+                  <span className="flex items-center gap-1">🕐 {course.hours}h</span>
+                  <span className="flex items-center gap-1">👥 {course.students.toLocaleString()} étudiants</span>
+                  <span className="flex items-center gap-1 ml-auto">📚 {course.lessons} leçons</span>
                 </div>
-                <div className="flex gap-2 pt-1">
+
+                {/* Actions */}
+                <div className="flex gap-2">
                   <Link
                     href={`/teacher/cours/${course.id}`}
-                    className="flex-1 text-center bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2 rounded-lg transition-colors"
+                    className="flex-1 text-center bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2.5 rounded-xl transition-colors"
                   >
-                    Modifier
+                    ✏️ Modifier
                   </Link>
-                  <button className="px-3 py-2 bg-white/5 dark:bg-gray-100 hover:bg-white/10 dark:hover:bg-gray-200 rounded-lg text-gray-400 text-xs transition-colors">
+                  <button className="px-3 py-2 bg-white/5 dark:bg-gray-100 hover:bg-white/10 dark:hover:bg-gray-200 rounded-xl text-gray-400 text-xs transition-colors">
                     ···
                   </button>
                 </div>
