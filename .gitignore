@@ -10,7 +10,7 @@ frontend/out/
 frontend/dist/
 
 # Backend
-backend/__pycache__/
+backend/*__pycache__
 backend/*.pyc
 backend/*.pyo
 backend/.venv/
