@@ -17,6 +17,19 @@ export default function ElevesPage() {
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("Tous");
 
+  const exportCSV = () => {
+    const headers = ["Nom", "Email", "Cours", "Progression", "Statut"];
+    const rows = filtered.map((s) => [s.name, s.email, s.cours, `${s.progression}%`, s.statut]);
+    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "eleves.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const filtered = MOCK_STUDENTS.filter((s) => {
     const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) ||
       s.email.toLowerCase().includes(search.toLowerCase());
@@ -65,6 +78,12 @@ export default function ElevesPage() {
           <h2 className="text-sm font-semibold text-white dark:text-gray-900">
             {filtered.length} élève{filtered.length > 1 ? "s" : ""}
           </h2>
+          <button
+            onClick={exportCSV}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white transition-colors"
+          >
+            📥 Exporter CSV
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
