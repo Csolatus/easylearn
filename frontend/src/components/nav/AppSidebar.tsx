@@ -89,12 +89,14 @@ export default function AppSidebar() {
 
       {/* Bottom links */}
       <div className="flex flex-col gap-1 mt-4">
-        <Link
-          href={`/${role}/settings`}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
-        >
-          <span>⚙️</span> Settings
-        </Link>
+        {config.settingsHref && (
+          <Link
+            href={config.settingsHref}
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
+          >
+            <span>⚙️</span> Settings
+          </Link>
+        )}
         <Link
           href={`/${role}/help`}
           className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"

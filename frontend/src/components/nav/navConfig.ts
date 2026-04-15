@@ -13,6 +13,7 @@ export type RoleNavConfig = {
   navItems: NavItem[];
   ctaLabel?: string;
   ctaHref?: string;
+  settingsHref?: string;
 };
 
 export const NAV_CONFIG: Record<string, RoleNavConfig> = {
@@ -29,6 +30,7 @@ export const NAV_CONFIG: Record<string, RoleNavConfig> = {
       { label: "Profile", href: "/student/profil", icon: "👤" },
     ],
     ctaLabel: "Start Learning",
+    settingsHref: "/student/settings",
   },
   teacher: {
     portalLabel: "Teacher Portal",
@@ -44,6 +46,7 @@ export const NAV_CONFIG: Record<string, RoleNavConfig> = {
     ],
     ctaLabel: "Nouveau cours",
     ctaHref: "/teacher/cours",
+    settingsHref: "/teacher/settings",
   },
   school_admin: {
     portalLabel: "Admin Portal",
