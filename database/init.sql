@@ -3,7 +3,6 @@
 -- Architecture Option C : teacher indépendant, invité par école
 -- ============================================================
 
--- Extension UUID
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- ============================================================
@@ -33,12 +32,12 @@ CREATE TABLE schools (
 
 -- Relation école ↔ teacher (Option C : invitation)
 CREATE TABLE school_teachers (
-    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    school_id   UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
-    teacher_id  UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    status      VARCHAR(50) NOT NULL DEFAULT 'invited' CHECK (status IN ('invited', 'active', 'suspended', 'removed')),
-    invited_at  TIMESTAMP DEFAULT NOW(),
-    joined_at   TIMESTAMP,
+    id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    school_id  UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    teacher_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    status     VARCHAR(50) NOT NULL DEFAULT 'invited' CHECK (status IN ('invited', 'active', 'suspended', 'removed')),
+    invited_at TIMESTAMP DEFAULT NOW(),
+    joined_at  TIMESTAMP,
     UNIQUE (school_id, teacher_id)
 );
 
@@ -48,14 +47,13 @@ CREATE TABLE school_teachers (
 
 CREATE TABLE classrooms (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    school_id   UUID REFERENCES schools(id) ON DELETE SET NULL,  -- nullable (Option C)
+    school_id   UUID REFERENCES schools(id) ON DELETE SET NULL,
     name        VARCHAR(255) NOT NULL,
     invite_code VARCHAR(32) NOT NULL UNIQUE DEFAULT encode(gen_random_bytes(16), 'hex'),
     is_archived BOOLEAN DEFAULT FALSE,
     created_at  TIMESTAMP DEFAULT NOW()
 );
 
--- Relation étudiant ↔ classe (via invite_code)
 CREATE TABLE student_classrooms (
     student_id   UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     classroom_id UUID NOT NULL REFERENCES classrooms(id) ON DELETE CASCADE,
@@ -76,7 +74,6 @@ CREATE TABLE courses (
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- Assignation cours → classe (Option C)
 CREATE TABLE classroom_courses (
     classroom_id UUID NOT NULL REFERENCES classrooms(id) ON DELETE CASCADE,
     course_id    UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
@@ -84,10 +81,9 @@ CREATE TABLE classroom_courses (
     PRIMARY KEY (classroom_id, course_id)
 );
 
--- Whitelist cours par école
 CREATE TABLE school_course_whitelists (
-    school_id  UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
-    course_id  UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    course_id UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     PRIMARY KEY (school_id, course_id)
 );
 
@@ -105,13 +101,12 @@ CREATE TABLE lessons (
 -- ============================================================
 
 CREATE TABLE practical_exercises (
-    id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    lesson_id        UUID NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
-    instructions     TEXT NOT NULL,
-    expected_output  TEXT NOT NULL
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lesson_id       UUID NOT NULL REFERENCES lessons(id) ON DELETE CASCADE,
+    instructions    TEXT NOT NULL,
+    expected_output TEXT NOT NULL
 );
 
--- Sessions de code (IDE web)
 CREATE TABLE coding_sessions (
     id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     student_id   UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -131,10 +126,10 @@ CREATE TABLE quizzes (
 );
 
 CREATE TABLE questions (
-    id      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    quiz_id UUID NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
+    id        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    quiz_id   UUID NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
     statement TEXT NOT NULL,
-    ordre   INT NOT NULL
+    ordre     INT NOT NULL
 );
 
 CREATE TABLE choices (
@@ -153,10 +148,10 @@ CREATE TABLE quiz_results (
 );
 
 CREATE TABLE student_answers (
-    id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    quiz_result_id   UUID NOT NULL REFERENCES quiz_results(id) ON DELETE CASCADE,
-    question_id      UUID NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
-    choice_id        UUID NOT NULL REFERENCES choices(id) ON DELETE CASCADE
+    id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    quiz_result_id UUID NOT NULL REFERENCES quiz_results(id) ON DELETE CASCADE,
+    question_id    UUID NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
+    choice_id      UUID NOT NULL REFERENCES choices(id) ON DELETE CASCADE
 );
 
 -- ============================================================

@@ -15,7 +15,6 @@ SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "60"))
 
-# Blacklist en mémoire (tokens révoqués — réinitialisée au redémarrage)
 _blacklist: set[str] = set()
 
 
@@ -36,7 +35,7 @@ def createAccessToken(data: dict) -> str:
 
 async def registerUser(data: RegisterRequest, db: AsyncSession) -> dict | None:
     result = await db.execute(
-        text('SELECT id FROM users WHERE email = :email'),
+        text("SELECT id FROM users WHERE email = :email"),
         {"email": data.email},
     )
     if result.fetchone():
@@ -44,7 +43,7 @@ async def registerUser(data: RegisterRequest, db: AsyncSession) -> dict | None:
 
     result = await db.execute(
         text(
-            'INSERT INTO users (first_name, last_name, email, password, role) '
+            "INSERT INTO users (first_name, last_name, email, password, role) "
             "VALUES (:first_name, :last_name, :email, :password, :role) "
             "RETURNING id, first_name, last_name, email, role"
         ),
@@ -58,19 +57,25 @@ async def registerUser(data: RegisterRequest, db: AsyncSession) -> dict | None:
     )
     await db.commit()
     row = result.fetchone()
-    return {"id": str(row.id), "first_name": row.first_name, "last_name": row.last_name, "email": row.email, "role": row.role}
+    return {
+        "id": str(row.id),
+        "first_name": row.first_name,
+        "last_name": row.last_name,
+        "email": row.email,
+        "role": row.role,
+    }
 
 
 async def loginUser(email: str, password: str, db: AsyncSession) -> str | None:
     result = await db.execute(
-        text('SELECT id, email, password FROM users WHERE email = :email'),
+        text("SELECT id, email, password, role FROM users WHERE email = :email"),
         {"email": email},
     )
     row = result.fetchone()
     if not row or not verifyPassword(password, row.password):
         return None
 
-    return createAccessToken({"sub": str(row.id), "email": row.email})
+    return createAccessToken({"sub": str(row.id), "email": row.email, "role": row.role})
 
 
 def logoutUser(token: str) -> None:
