@@ -1,5 +1,11 @@
 "use client";
 
+const INACTIVE_STUDENTS = [
+  { name: "Thomas Leroy", lastSeen: "il y a 14 jours", course: "Introduction au JavaScript" },
+  { name: "Emma Blanc", lastSeen: "il y a 18 jours", course: "Python pour la Data Science" },
+  { name: "Noah Garcia", lastSeen: "il y a 21 jours", course: "HTML & CSS Avancé" },
+];
+
 const TEACHERS = [
   { name: "Marie Dupont", subject: "Mathématiques", students: 45, statut: "SCHOOL_TEACHER" },
   { name: "Jean Martin", subject: "Informatique", students: 38, statut: "SCHOOL_TEACHER" },
@@ -125,6 +131,32 @@ export default function SchoolAdminDashboardPage() {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-red-500/20 bg-red-500/5 dark:bg-red-50 dark:border-red-200 shadow-md overflow-hidden">
+        <div className="flex items-center gap-3 px-6 py-4 border-b border-red-500/20 dark:border-red-200">
+          <span className="text-lg">⚠️</span>
+          <div>
+            <h2 className="text-sm font-semibold text-white dark:text-gray-900">Élèves inactifs</h2>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Sans connexion depuis plus de 14 jours</p>
+          </div>
+          <span className="ml-auto text-xs font-semibold px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 dark:text-red-600">
+            {INACTIVE_STUDENTS.length} alertes
+          </span>
+        </div>
+        <div className="divide-y divide-red-500/10 dark:divide-red-100">
+          {INACTIVE_STUDENTS.map((student) => (
+            <div key={student.name} className="flex items-center gap-4 px-6 py-4 hover:bg-red-500/5 dark:hover:bg-red-100/50 transition-colors">
+              <div className="w-9 h-9 rounded-full bg-red-500/20 flex items-center justify-center text-sm font-bold text-red-400 shrink-0">
+                {student.name[0]}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-white dark:text-gray-900">{student.name}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">{student.course}</p>
+              </div>
+              <span className="text-xs text-red-400 dark:text-red-500 font-medium shrink-0">{student.lastSeen}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
