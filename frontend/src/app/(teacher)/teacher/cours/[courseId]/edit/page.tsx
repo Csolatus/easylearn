@@ -35,7 +35,7 @@ export default function CourseEditPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
+    <div className="px-6 py-8">
       <div className="max-w-4xl mx-auto flex flex-col gap-8">
 
         {/* Header */}
