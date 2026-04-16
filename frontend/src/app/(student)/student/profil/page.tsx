@@ -1,5 +1,7 @@
 "use client";
 
+import ProgressBar from "@/components/course/ProgressBar";
+
 const ONGOING_COURSES = [
   { title: "Introduction au JavaScript", progress: 75, category: "Web Development", icon: "🌐" },
   { title: "Python pour la Data Science", progress: 40, category: "Data Science", icon: "🐍" },
@@ -65,12 +67,7 @@ export default function StudentProfilPage() {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-white dark:text-gray-900 truncate">{course.title}</p>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{course.category}</p>
-                <div className="mt-2 h-1.5 w-full bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-purple-500 rounded-full"
-                    style={{ width: `${course.progress}%` }}
-                  />
-                </div>
+                <ProgressBar value={course.progress} color="purple" className="mt-2" />
               </div>
               <span className="text-xs font-semibold text-purple-400 dark:text-purple-600 shrink-0">
                 {course.progress}%

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ProgressBar from "@/components/course/ProgressBar";
 
 const MY_COURSES = [
   { id: 1, title: "Advanced Modern JavaScript", instructor: "Marc Dupont", progress: 68, lessons: 42, nextLesson: "Async Generators" },
@@ -66,12 +67,11 @@ export default function StudentDashboard() {
                     <span className="text-xs text-gray-400">{course.progress}%</span>
                   )}
                 </div>
-                <div className="flex-1 h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full ${course.progress === 100 ? "bg-green-500" : "bg-purple-500"}`}
-                    style={{ width: `${course.progress}%` }}
-                  />
-                </div>
+                <ProgressBar
+                  value={course.progress}
+                  color={course.progress === 100 ? "green" : "purple"}
+                  className="flex-1"
+                />
                 {course.nextLesson && (
                   <p className="text-xs text-gray-400 dark:text-gray-500">
                     Prochaine leçon : <span className="text-purple-400">{course.nextLesson}</span>

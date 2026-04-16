@@ -115,9 +115,7 @@ export default function ElevesPage() {
                     <td className="px-6 py-4 text-gray-300 dark:text-gray-700 font-medium">{student.cours}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-24 h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                          <div className="h-full bg-orange-500 rounded-full" style={{ width: `${student.progression}%` }} />
-                        </div>
+                        <ProgressBar value={student.progression} color="orange" className="w-24" />
                         <span className="text-xs text-gray-400 dark:text-gray-500">{student.progression}%</span>
                       </div>
                     </td>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import ProgressBar from "@/components/course/ProgressBar";
 
 const STATS = [
   { label: "Classes actives", value: "4", icon: "🏫", color: "from-green-600 to-green-400" },
@@ -243,12 +244,7 @@ export default function TeacherDashboard() {
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-green-500 rounded-full"
-                        style={{ width: `${cls.completion}%` }}
-                      />
-                    </div>
+                    <ProgressBar value={cls.completion} color="green" className="flex-1" />
                     <span className="text-xs text-gray-400 dark:text-gray-500 w-8 text-right">
                       {cls.completion}%
                     </span>

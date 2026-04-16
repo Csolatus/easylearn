@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Modal } from "@/components/ui/Modal";
+import ProgressBar from "@/components/course/ProgressBar";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
 
@@ -183,9 +184,7 @@ export default function ClassesPage() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs text-gray-500 w-20">Complétion</span>
-                <div className="flex-1 h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-green-500 rounded-full" style={{ width: `${cls.completion}%` }} />
-                </div>
+                <ProgressBar value={cls.completion} color="green" className="flex-1" />
                 <span className="text-xs text-gray-400 w-8 text-right">{cls.completion}%</span>
               </div>
             </Link>

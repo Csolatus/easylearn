@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import ProgressBar from "@/components/course/ProgressBar";
 
 type Tab = "etudiants" | "cours" | "stats";
 
@@ -76,9 +77,7 @@ export default function ClassDetailPage() {
         {/* Progression bar */}
         <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5 flex items-center gap-4">
           <span className="text-gray-400 text-sm w-28">Complétion globale</span>
-          <div className="flex-1 h-2 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-green-500 rounded-full" style={{ width: `${data.completion}%` }} />
-          </div>
+          <ProgressBar value={data.completion} color="green" size="lg" className="flex-1" />
           <span className="text-green-400 font-bold text-sm w-10 text-right">{data.completion}%</span>
         </div>
 
@@ -122,9 +121,7 @@ export default function ClassDetailPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-1 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-green-500 rounded-full" style={{ width: `${student.completion}%` }} />
-                    </div>
+                    <ProgressBar value={student.completion} color="green" size="sm" className="flex-1" />
                     <span className="text-xs text-gray-400 w-8 text-right">{student.completion}%</span>
                   </div>
                 </div>
@@ -145,9 +142,7 @@ export default function ClassDetailPage() {
                   <span className="text-xs text-gray-400">📚 {course.lessons} leçons</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 h-1 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: `${course.completion}%` }} />
-                  </div>
+                  <ProgressBar value={course.completion} color="green" size="sm" className="flex-1" />
                   <span className="text-xs text-gray-400 w-8 text-right">{course.completion}%</span>
                 </div>
               </div>
