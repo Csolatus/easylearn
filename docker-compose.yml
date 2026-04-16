@@ -25,8 +25,9 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - JWT_ALGORITHM=${JWT_ALGORITHM}
       - JWT_EXPIRE_MINUTES=${JWT_EXPIRE_MINUTES}
-      #- OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
-      #- OLLAMA_MODEL=${OLLAMA_MODEL}
+      - OLLAMA_HOST=host.docker.internal
+      - OLLAMA_MODEL=${OLLAMA_MODEL}
+      - OLLAMA_SYSTEM_PROMPT=${OLLAMA_SYSTEM_PROMPT}
       - PISTON_API_URL=${PISTON_API_URL}
     depends_on:
       postgres:
@@ -62,18 +63,6 @@ services:
       - easylearn-network
     restart: unless-stopped
 
-  # ollama et piston commentés pour accélérer le démarrage en dev
-  # décommenter quand le chatbot et l'exécution de code sont nécessaires
-  # ollama:
-  #   image: ollama/ollama:latest
-  #   ports:
-  #     - "11434:11434"
-  #   volumes:
-  #     - ollama-data:/root/.ollama
-  #   networks:
-  #     - easylearn-network
-  #   restart: on-failure
-
   # piston:
   #   image: ghcr.io/engineer-man/piston
   #   ports:
@@ -88,4 +77,3 @@ networks:
 
 volumes:
   postgres-data:
-  ollama-data:
