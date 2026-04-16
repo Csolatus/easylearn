@@ -47,7 +47,7 @@ console.log(fastSquare(4)); // Calculating... 16
 console.log(fastSquare(4)); // 16 (from cache)
 `;
 
-const MOCK_LESSONS = [
+const INITIAL_LESSONS = [
   { id: 1, title: "Introduction & Setup", type: "theory", done: true },
   { id: 2, title: "Variables & Types", type: "theory", done: true },
   { id: 3, title: "Fonctions avancées", type: "theory", done: false },
@@ -127,9 +127,16 @@ Ces concepts sont fondamentaux pour écrire du JavaScript moderne et performant.
 
 export default function StudentLessonPage() {
   const { courseId } = useParams<{ courseId: string }>();
+  const [lessons, setLessons] = useState(INITIAL_LESSONS);
   const [activeLesson, setActiveLesson] = useState(3);
   const [activeTab, setActiveTab] = useState("Théorie");
   const [readProgress, setReadProgress] = useState(0);
+
+  const markAsRead = () => {
+    setLessons((prev) =>
+      prev.map((l) => l.id === activeLesson ? { ...l, done: true } : l)
+    );
+  };
   const [codeContent, setCodeContent] = useState(CODE_STARTER);
   const [terminalLines, setTerminalLines] = useState<{ type: "info" | "success" | "error" | "log"; text: string }[]>([]);
   const [isRunning, setIsRunning] = useState(false);
@@ -170,7 +177,8 @@ export default function StudentLessonPage() {
     setQuizSubmitted(false);
   };
 
-  const currentLesson = MOCK_LESSONS.find((l) => l.id === activeLesson);
+  const currentLesson = lessons.find((l) => l.id === activeLesson);
+  const isCurrentDone = currentLesson?.done ?? false;
 
   useEffect(() => {
     setReadProgress(0);
@@ -203,12 +211,12 @@ export default function StudentLessonPage() {
           <div className="mt-3">
             <div className="flex justify-between text-xs text-gray-500 mb-1">
               <span>Progression</span>
-              <span>{MOCK_LESSONS.filter((l) => l.done).length}/{MOCK_LESSONS.length} leçons</span>
+              <span>{lessons.filter((l) => l.done).length}/{lessons.length} leçons</span>
             </div>
             <div className="h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-purple-500 rounded-full transition-all"
-                style={{ width: `${(MOCK_LESSONS.filter((l) => l.done).length / MOCK_LESSONS.length) * 100}%` }}
+                style={{ width: `${(lessons.filter((l) => l.done).length / lessons.length) * 100}%` }}
               />
             </div>
           </div>
@@ -216,7 +224,7 @@ export default function StudentLessonPage() {
 
         <div className="px-3 py-3 flex-1">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">Leçons</p>
-          {MOCK_LESSONS.map((lesson) => (
+          {lessons.map((lesson) => (
             <button
               key={lesson.id}
               onClick={() => { setActiveLesson(lesson.id); setActiveTab("Théorie"); }}
@@ -244,8 +252,16 @@ export default function StudentLessonPage() {
             <h1 className="text-sm font-semibold text-white dark:text-gray-900">{currentLesson?.title}</h1>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">JavaScript Avancé</p>
           </div>
-          <button className="text-sm font-semibold px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white transition-colors">
-            ✓ Marquer comme lu
+          <button
+            onClick={markAsRead}
+            disabled={isCurrentDone}
+            className={`text-sm font-semibold px-4 py-2 rounded-xl transition-colors ${
+              isCurrentDone
+                ? "bg-green-600/20 text-green-400 cursor-default"
+                : "bg-purple-600 hover:bg-purple-700 text-white"
+            }`}
+          >
+            {isCurrentDone ? "✓ Leçon complétée" : "Marquer comme lu"}
           </button>
         </div>
 
