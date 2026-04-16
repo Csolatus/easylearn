@@ -17,17 +17,42 @@ const STUDENTS = [
   { name: "Marc Leroy", class: "SQL & BDD", completion: 20, submissions: 5, avgScore: 48 },
 ];
 
-const WEEKLY = [
-  { day: "Lun", submissions: 18 },
-  { day: "Mar", submissions: 32 },
-  { day: "Mer", submissions: 25 },
-  { day: "Jeu", submissions: 41 },
-  { day: "Ven", submissions: 28 },
-  { day: "Sam", submissions: 8 },
-  { day: "Dim", submissions: 4 },
-];
+type Period = "7j" | "30j" | "3m";
 
-const MAX_SUBMISSIONS = Math.max(...WEEKLY.map((d) => d.submissions));
+const PERIOD_LABELS: Record<Period, string> = {
+  "7j": "7 derniers jours",
+  "30j": "30 derniers jours",
+  "3m": "3 derniers mois",
+};
+
+const PERIOD_DATA: Record<Period, { label: string; submissions: number }[]> = {
+  "7j": [
+    { label: "Lun", submissions: 18 },
+    { label: "Mar", submissions: 32 },
+    { label: "Mer", submissions: 25 },
+    { label: "Jeu", submissions: 41 },
+    { label: "Ven", submissions: 28 },
+    { label: "Sam", submissions: 8 },
+    { label: "Dim", submissions: 4 },
+  ],
+  "30j": [
+    { label: "S1", submissions: 112 },
+    { label: "S2", submissions: 98 },
+    { label: "S3", submissions: 143 },
+    { label: "S4", submissions: 129 },
+  ],
+  "3m": [
+    { label: "Fév", submissions: 320 },
+    { label: "Mar", submissions: 410 },
+    { label: "Avr", submissions: 482 },
+  ],
+};
+
+const PERIOD_KPIS: Record<Period, { submissions: string; completion: string; score: string; active: string }> = {
+  "7j":  { submissions: "156",  completion: "64%", score: "72/100", active: "71" },
+  "30j": { submissions: "482",  completion: "64%", score: "72/100", active: "84" },
+  "3m":  { submissions: "1212", completion: "61%", score: "70/100", active: "87" },
+};
 
 function StatCard({
   label,
@@ -51,41 +76,64 @@ function StatCard({
 
 export default function StatsPage() {
   const [activeTab, setActiveTab] = useState<"cours" | "etudiants">("cours");
+  const [period, setPeriod] = useState<Period>("7j");
+
+  const kpis = PERIOD_KPIS[period];
+  const chartData = PERIOD_DATA[period];
+  const maxSubmissions = Math.max(...chartData.map((d) => d.submissions));
 
   return (
     <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
 
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-white dark:text-gray-900">Statistiques</h1>
-          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
-            Vue d&apos;ensemble de la progression de vos étudiants.
-          </p>
+        <div className="flex items-start justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-white dark:text-gray-900">Statistiques</h1>
+            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+              Vue d&apos;ensemble de la progression de vos étudiants.
+            </p>
+          </div>
+          {/* Period selector */}
+          <div className="flex gap-2">
+            {(["7j", "30j", "3m"] as Period[]).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  period === p
+                    ? "bg-green-600 text-white"
+                    : "bg-white/5 dark:bg-gray-100 text-gray-400 dark:text-gray-600 hover:bg-white/10 dark:hover:bg-gray-200"
+                }`}
+              >
+                {PERIOD_LABELS[p]}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Soumissions totales" value="482" sub="toutes classes" color="text-green-400" />
-          <StatCard label="Taux de complétion" value="64%" sub="moyenne globale" color="text-emerald-400" />
-          <StatCard label="Score moyen" value="72/100" sub="tous exercices" color="text-yellow-400" />
-          <StatCard label="Étudiants actifs" value="71" sub="cette semaine" color="text-teal-400" />
+          <StatCard label="Soumissions totales" value={kpis.submissions} sub={PERIOD_LABELS[period]} color="text-green-400" />
+          <StatCard label="Taux de complétion" value={kpis.completion} sub="moyenne globale" color="text-emerald-400" />
+          <StatCard label="Score moyen" value={kpis.score} sub="tous exercices" color="text-yellow-400" />
+          <StatCard label="Étudiants actifs" value={kpis.active} sub={PERIOD_LABELS[period]} color="text-teal-400" />
         </div>
 
-        {/* Graphe soumissions hebdo */}
+        {/* Graphe soumissions */}
         <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6">
           <h2 className="font-semibold text-white dark:text-gray-900 mb-6">
-            Soumissions cette semaine
+            Soumissions — {PERIOD_LABELS[period]}
           </h2>
           <div className="flex items-end gap-3 h-36">
-            {WEEKLY.map((d) => (
-              <div key={d.day} className="flex flex-col items-center gap-2 flex-1">
+            {chartData.map((d) => (
+              <div key={d.label} className="flex flex-col items-center gap-2 flex-1">
                 <span className="text-xs text-gray-400">{d.submissions}</span>
                 <div
-                  className="w-full bg-green-500 rounded-t-lg transition-all"
-                  style={{ height: `${(d.submissions / MAX_SUBMISSIONS) * 100}%` }}
+                  className="w-full bg-green-500 rounded-t-lg transition-all duration-300"
+                  style={{ height: `${(d.submissions / maxSubmissions) * 100}%` }}
                 />
-                <span className="text-xs text-gray-500">{d.day}</span>
+                <span className="text-xs text-gray-500">{d.label}</span>
               </div>
             ))}
           </div>
