@@ -68,6 +68,19 @@ export default function ProfesseursPage() {
   const token = useAuthStore((s) => s.token);
   const activeSchool = useSchoolStore((s) => s.activeSchool);
 
+  const exportCSV = () => {
+    const headers = ["Nom", "Email", "Classes", "Statut"];
+    const rows = filtered.map((t) => [t.name, t.email, t.classes, STATUS_LABELS[t.status]]);
+    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "professeurs.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const filtered = teachers.filter((t) => {
     const matchSearch =
       t.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -216,10 +229,16 @@ export default function ProfesseursPage() {
 
       {/* Table */}
       <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
-        <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50">
+        <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-white dark:text-gray-900">
             {filtered.length} professeur{filtered.length > 1 ? "s" : ""}
           </h2>
+          <button
+            onClick={exportCSV}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white transition-colors"
+          >
+            📥 Exporter CSV
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
