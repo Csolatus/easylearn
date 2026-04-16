@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import CodeEditor from "@/components/editor/CodeEditor";
+import TheoryTab from "@/components/course/TheoryTab";
 
 const MOCK_QUIZ = [
   {
@@ -130,7 +131,6 @@ export default function StudentLessonPage() {
   const [lessons, setLessons] = useState(INITIAL_LESSONS);
   const [activeLesson, setActiveLesson] = useState(3);
   const [activeTab, setActiveTab] = useState("Théorie");
-  const [readProgress, setReadProgress] = useState(0);
 
   const markAsRead = () => {
     setLessons((prev) =>
@@ -162,8 +162,6 @@ export default function StudentLessonPage() {
     setCodeContent(CODE_STARTER);
     setTerminalLines([]);
   };
-  const contentRef = useRef<HTMLDivElement>(null);
-
   const score = quizSubmitted
     ? MOCK_QUIZ.filter((q) => selectedAnswers[q.id] === q.answer).length
     : 0;
@@ -181,14 +179,6 @@ export default function StudentLessonPage() {
   const isCurrentDone = currentLesson?.done ?? false;
 
 
-  const handleScroll = () => {
-    const el = contentRef.current;
-    if (!el) return;
-    const scrolled = el.scrollTop;
-    const total = el.scrollHeight - el.clientHeight;
-    if (total <= 0) return;
-    setReadProgress(Math.min(100, Math.round((scrolled / total) * 100)));
-  };
 
   return (
     <div className="flex h-[calc(100vh-65px)] overflow-hidden">
@@ -262,22 +252,12 @@ export default function StudentLessonPage() {
           </button>
         </div>
 
-        {/* Reading progress bar */}
-        {activeTab === "Théorie" && (
-          <div className="h-1 bg-white/5 dark:bg-gray-200 shrink-0">
-            <div
-              className="h-full bg-purple-500 transition-all duration-150"
-              style={{ width: `${readProgress}%` }}
-            />
-          </div>
-        )}
-
         {/* Tabs */}
         <div className="flex border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
           {TABS.map((tab) => (
             <button
               key={tab}
-              onClick={() => { setActiveTab(tab); setReadProgress(0); }}
+              onClick={() => setActiveTab(tab)}
               className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
                 activeTab === tab
                   ? "border-purple-500 text-purple-400 dark:text-purple-600"
@@ -287,25 +267,12 @@ export default function StudentLessonPage() {
               {tab}
             </button>
           ))}
-          {activeTab === "Théorie" && (
-            <div className="ml-auto flex items-center pr-5 gap-2">
-              <span className="text-xs text-gray-500">{readProgress}% lu</span>
-            </div>
-          )}
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-hidden">
           {activeTab === "Théorie" && (
-            <div
-              ref={contentRef}
-              onScroll={handleScroll}
-              className="h-full overflow-y-auto px-8 py-6 max-w-3xl mx-auto"
-            >
-              <div className="prose prose-invert max-w-none text-gray-300 dark:text-gray-700 text-sm leading-relaxed">
-                <pre className="whitespace-pre-wrap font-sans">{THEORY_CONTENT}</pre>
-              </div>
-            </div>
+            <TheoryTab content={THEORY_CONTENT} />
           )}
 
           {activeTab === "Pratique" && (
