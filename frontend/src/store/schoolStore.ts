@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { api } from "@/lib/api";
-import type { School } from "@/types/api";
+import { useAuthStore } from "@/store/authStore";
 
 export type School = {
   id: string;
@@ -15,7 +14,7 @@ type SchoolState = {
   activeSchool: School | null;
   isLoaded: boolean;
   setActiveSchool: (school: School) => void;
-  fetchSchools: (token: string) => Promise<void>;
+  fetchSchools: () => Promise<void>;
 };
 
 export const useSchoolStore = create<SchoolState>()(
@@ -27,8 +26,10 @@ export const useSchoolStore = create<SchoolState>()(
 
       setActiveSchool: (school: School) => set({ activeSchool: school }),
 
-      fetchSchools: async (token: string) => {
+      fetchSchools: async () => {
         if (get().isLoaded) return;
+        const token = useAuthStore.getState().token;
+        if (!token) return;
         try {
           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools`, {
             headers: { Authorization: `Bearer ${token}` },
