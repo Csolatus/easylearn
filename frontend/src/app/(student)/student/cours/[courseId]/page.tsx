@@ -3,6 +3,49 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import CodeEditor from "@/components/editor/CodeEditor";
+
+const MOCK_QUIZ = [
+  {
+    id: 1,
+    question: "Qu'est-ce qu'une closure en JavaScript ?",
+    options: [
+      "Une fonction simple sans paramètre",
+      "Une fonction qui capture les variables de son environnement lexical",
+      "Un objet JavaScript",
+      "Une classe ES6",
+    ],
+    answer: 1,
+  },
+  {
+    id: 2,
+    question: "Quelle méthode permet de transformer chaque élément d'un tableau ?",
+    options: ["filter()", "reduce()", "map()", "forEach()"],
+    answer: 2,
+  },
+  {
+    id: 3,
+    question: "Les fonctions fléchées redéfinissent-elles `this` ?",
+    options: ["Oui, toujours", "Non, jamais", "Seulement en mode strict", "Ça dépend du contexte"],
+    answer: 1,
+  },
+];
+
+const CODE_STARTER = `// Exercice : Créez une fonction de mémoïsation
+function memoize(fn) {
+  // Votre code ici...
+}
+
+// Test
+const slowSquare = (n) => {
+  console.log("Calculating...");
+  return n * n;
+};
+
+const fastSquare = memoize(slowSquare);
+console.log(fastSquare(4)); // Calculating... 16
+console.log(fastSquare(4)); // 16 (from cache)
+`;
 
 const MOCK_LESSONS = [
   { id: 1, title: "Introduction & Setup", type: "theory", done: true },
@@ -87,7 +130,23 @@ export default function StudentLessonPage() {
   const [activeLesson, setActiveLesson] = useState(3);
   const [activeTab, setActiveTab] = useState("Théorie");
   const [readProgress, setReadProgress] = useState(0);
+  const [codeContent, setCodeContent] = useState(CODE_STARTER);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const score = quizSubmitted
+    ? MOCK_QUIZ.filter((q) => selectedAnswers[q.id] === q.answer).length
+    : 0;
+
+  const handleQuizSubmit = () => {
+    if (Object.keys(selectedAnswers).length === MOCK_QUIZ.length) setQuizSubmitted(true);
+  };
+
+  const handleQuizReset = () => {
+    setSelectedAnswers({});
+    setQuizSubmitted(false);
+  };
 
   const currentLesson = MOCK_LESSONS.find((l) => l.id === activeLesson);
 
@@ -215,14 +274,112 @@ export default function StudentLessonPage() {
           )}
 
           {activeTab === "Pratique" && (
-            <div className="h-full flex items-center justify-center">
-              <p className="text-gray-500 text-sm">Chargement de l&apos;éditeur…</p>
+            <div className="flex flex-col h-full">
+              <div className="flex items-center gap-3 px-5 py-2.5 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
+                <span className="text-xs text-gray-500">Langage :</span>
+                <span className="text-xs font-semibold text-white dark:text-gray-900">JavaScript</span>
+                <div className="ml-auto">
+                  <button className="text-xs px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium transition-colors">
+                    ▶ Exécuter
+                  </button>
+                </div>
+              </div>
+              <div className="flex-1 overflow-hidden">
+                <CodeEditor
+                  value={codeContent}
+                  onChange={setCodeContent}
+                  language="javascript"
+                  minHeight="100%"
+                />
+              </div>
             </div>
           )}
 
           {activeTab === "Quiz" && (
-            <div className="h-full flex items-center justify-center">
-              <p className="text-gray-500 text-sm">Chargement du quiz…</p>
+            <div className="h-full overflow-y-auto px-6 py-6 max-w-2xl mx-auto w-full">
+              {quizSubmitted ? (
+                <div className="flex flex-col items-center gap-6 py-8">
+                  <div className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold border-4 ${
+                    score === MOCK_QUIZ.length
+                      ? "border-green-500 text-green-400"
+                      : score >= MOCK_QUIZ.length / 2
+                      ? "border-yellow-500 text-yellow-400"
+                      : "border-red-500 text-red-400"
+                  }`}>
+                    {score}/{MOCK_QUIZ.length}
+                  </div>
+                  <div className="text-center">
+                    <p className="text-white dark:text-gray-900 font-semibold text-lg">
+                      {score === MOCK_QUIZ.length ? "Parfait ! 🎉" : score >= MOCK_QUIZ.length / 2 ? "Bien joué ! 👍" : "À retravailler 💪"}
+                    </p>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+                      {score} bonne{score > 1 ? "s" : ""} réponse{score > 1 ? "s" : ""} sur {MOCK_QUIZ.length}
+                    </p>
+                  </div>
+                  <div className="w-full flex flex-col gap-4">
+                    {MOCK_QUIZ.map((q) => {
+                      const chosen = selectedAnswers[q.id];
+                      const isCorrect = chosen === q.answer;
+                      return (
+                        <div key={q.id} className={`rounded-xl border p-4 ${isCorrect ? "border-green-500/30 bg-green-500/5" : "border-red-500/30 bg-red-500/5"}`}>
+                          <p className="text-sm font-medium text-white dark:text-gray-900 mb-3">{q.question}</p>
+                          <div className="flex flex-col gap-2">
+                            {q.options.map((opt, oi) => (
+                              <div key={oi} className={`text-xs px-3 py-2 rounded-lg flex items-center gap-2 ${
+                                oi === q.answer ? "bg-green-500/20 text-green-400" :
+                                oi === chosen && !isCorrect ? "bg-red-500/20 text-red-400" :
+                                "text-gray-500"
+                              }`}>
+                                <span>{oi === q.answer ? "✓" : oi === chosen && !isCorrect ? "✗" : "·"}</span>
+                                {opt}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={handleQuizReset}
+                    className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors"
+                  >
+                    🔄 Recommencer
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-5">
+                  <p className="text-xs text-gray-500">{MOCK_QUIZ.length} questions · Sélectionnez une réponse par question</p>
+                  {MOCK_QUIZ.map((q, qi) => (
+                    <div key={q.id} className="rounded-xl border border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 p-4 flex flex-col gap-3">
+                      <p className="text-sm font-medium text-white dark:text-gray-900">
+                        <span className="text-gray-500 mr-2">Q{qi + 1}.</span>{q.question}
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        {q.options.map((opt, oi) => (
+                          <button
+                            key={oi}
+                            onClick={() => setSelectedAnswers((prev) => ({ ...prev, [q.id]: oi }))}
+                            className={`text-left text-sm px-4 py-2.5 rounded-xl border transition-colors ${
+                              selectedAnswers[q.id] === oi
+                                ? "border-purple-500 bg-purple-500/20 text-purple-300 dark:text-purple-700"
+                                : "border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100"
+                            }`}
+                          >
+                            <span className="text-gray-500 mr-2">{String.fromCharCode(65 + oi)}.</span>{opt}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    onClick={handleQuizSubmit}
+                    disabled={Object.keys(selectedAnswers).length < MOCK_QUIZ.length}
+                    className="self-end px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+                  >
+                    Valider le quiz →
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
