@@ -131,8 +131,30 @@ export default function StudentLessonPage() {
   const [activeTab, setActiveTab] = useState("Théorie");
   const [readProgress, setReadProgress] = useState(0);
   const [codeContent, setCodeContent] = useState(CODE_STARTER);
+  const [terminalLines, setTerminalLines] = useState<{ type: "info" | "success" | "error" | "log"; text: string }[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+
+  const handleRun = () => {
+    setIsRunning(true);
+    setTerminalLines([{ type: "info", text: "Compiling project..." }]);
+    setTimeout(() => {
+      setTerminalLines([
+        { type: "info", text: "Compiling project..." },
+        { type: "success", text: "Compiled successfully." },
+        { type: "log", text: "Calculating..." },
+        { type: "log", text: "16" },
+        { type: "log", text: "16 (from cache)" },
+      ]);
+      setIsRunning(false);
+    }, 1200);
+  };
+
+  const handleReset = () => {
+    setCodeContent(CODE_STARTER);
+    setTerminalLines([]);
+  };
   const contentRef = useRef<HTMLDivElement>(null);
 
   const score = quizSubmitted
@@ -275,22 +297,88 @@ export default function StudentLessonPage() {
 
           {activeTab === "Pratique" && (
             <div className="flex flex-col h-full">
-              <div className="flex items-center gap-3 px-5 py-2.5 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
-                <span className="text-xs text-gray-500">Langage :</span>
-                <span className="text-xs font-semibold text-white dark:text-gray-900">JavaScript</span>
-                <div className="ml-auto">
-                  <button className="text-xs px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium transition-colors">
-                    ▶ Exécuter
+              {/* Toolbar */}
+              <div className="flex items-center gap-2 px-4 py-2 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
+                <span className="text-xs text-gray-500 mr-1">index.js</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400">·</span>
+                <span className="text-xs text-gray-500">
+                  {isRunning ? "Compilation en cours..." : terminalLines.length > 0 ? "Dernière sauvegarde il y a 2 min" : "Prêt"}
+                </span>
+                <div className="ml-auto flex items-center gap-2">
+                  <button
+                    onClick={handleReset}
+                    className="text-xs px-3 py-1.5 rounded-lg border border-white/10 dark:border-gray-300 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
+                  >
+                    Reset
+                  </button>
+                  <button className="text-xs px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 transition-colors font-medium">
+                    ✦ Indice IA
+                  </button>
+                  <button
+                    onClick={handleRun}
+                    disabled={isRunning}
+                    className="text-xs px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-semibold transition-colors"
+                  >
+                    {isRunning ? "..." : "▶ Exécuter"}
                   </button>
                 </div>
               </div>
-              <div className="flex-1 overflow-hidden">
-                <CodeEditor
-                  value={codeContent}
-                  onChange={setCodeContent}
-                  language="javascript"
-                  minHeight="100%"
-                />
+
+              {/* Split editor + terminal */}
+              <div className="flex-1 grid grid-cols-2 divide-x divide-white/10 dark:divide-gray-200 overflow-hidden">
+                {/* Code editor */}
+                <div className="overflow-hidden">
+                  <CodeEditor
+                    value={codeContent}
+                    onChange={setCodeContent}
+                    language="javascript"
+                    minHeight="100%"
+                  />
+                </div>
+
+                {/* Terminal */}
+                <div className="flex flex-col bg-[#0a0a14] dark:bg-gray-900 overflow-hidden">
+                  <div className="px-4 py-2 border-b border-white/10 dark:border-gray-700 flex items-center gap-2 shrink-0">
+                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-300 uppercase tracking-wider">Terminal / Console</span>
+                  </div>
+                  <div className="flex-1 overflow-y-auto px-4 py-3 font-mono text-xs flex flex-col gap-1.5">
+                    {terminalLines.length === 0 ? (
+                      <span className="text-gray-600">$ Appuyez sur Exécuter pour lancer le code</span>
+                    ) : (
+                      terminalLines.map((line, i) => (
+                        <div key={i} className={`flex items-start gap-2 ${
+                          line.type === "success" ? "text-green-400" :
+                          line.type === "error" ? "text-red-400" :
+                          line.type === "info" ? "text-blue-400" :
+                          "text-gray-300"
+                        }`}>
+                          {line.type === "success" && <span className="shrink-0 mt-0.5">✓</span>}
+                          {line.type === "error" && <span className="shrink-0 mt-0.5">✗</span>}
+                          {line.type === "info" && <span className="shrink-0 mt-0.5">›</span>}
+                          {line.type === "log" && <span className="shrink-0 mt-0.5 text-gray-600">$</span>}
+                          <span>{line.text}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Objectif */}
+                  <div className="border-t border-white/10 dark:border-gray-700 px-4 py-3 shrink-0">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-semibold text-gray-400 dark:text-gray-300">Objectif du Lab</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 font-medium">Mode expert</span>
+                    </div>
+                    <p className="text-xs text-gray-500 leading-relaxed mb-2">
+                      Utilisez <code className="text-purple-400">useEffect</code> pour simuler un abonnement à un statut. N&apos;oubliez pas de retourner une fonction de nettoyage.
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 bg-white/10 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div className="h-full bg-purple-500 rounded-full" style={{ width: "65%" }} />
+                      </div>
+                      <span className="text-xs text-gray-500 shrink-0">65%</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
