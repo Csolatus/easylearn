@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/authStore";
+import { students } from "@/lib/api";
+import type { ActivityItem } from "@/types/api";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -16,11 +18,15 @@ type CourseProgress = {
 
 type EnrolledCourse = Course & CourseProgress;
 
-const ACTIVITY = [
-  { text: "Leçon complétée", time: "Récemment", icon: "✅" },
-  { text: "Quiz soumis", time: "Récemment", icon: "📝" },
-  { text: "Exercice pratique soumis", time: "Récemment", icon: "💻" },
-];
+const ACTIVITY_ICONS: Record<string, string> = {
+  lesson_complete: "✅",
+  quiz_submit: "📝",
+};
+
+const ACTIVITY_LABELS: Record<string, string> = {
+  lesson_complete: "Leçon complétée",
+  quiz_submit: "Quiz soumis",
+};
 
 export default function StudentDashboard() {
   const token = useAuthStore((s) => s.token);
@@ -28,6 +34,7 @@ export default function StudentDashboard() {
   const [enrolled, setEnrolled] = useState<EnrolledCourse[]>([]);
   const [allCount, setAllCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [activity, setActivity] = useState<ActivityItem[]>([]);
 
   useEffect(() => {
     if (!token) return;
@@ -55,6 +62,8 @@ export default function StudentDashboard() {
       })
       .catch(() => {})
       .finally(() => setIsLoading(false));
+
+    students.activity().then(setActivity).catch(() => {});
   }, [token]);
 
   const totalCompleted = enrolled.reduce((sum, c) => sum + c.completed_lessons, 0);
@@ -148,12 +157,19 @@ export default function StudentDashboard() {
           {/* Activity */}
           <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
             <h2 className="font-semibold text-white dark:text-gray-900">Activité récente</h2>
-            {ACTIVITY.map((item, i) => (
+            {activity.length === 0 && !isLoading && (
+              <p className="text-xs text-gray-500 text-center py-4">Aucune activité récente.</p>
+            )}
+            {activity.map((item, i) => (
               <div key={i} className="flex gap-3">
-                <span className="text-lg shrink-0">{item.icon}</span>
+                <span className="text-lg shrink-0">{ACTIVITY_ICONS[item.type] ?? "📌"}</span>
                 <div>
-                  <p className="text-xs text-gray-300 dark:text-gray-700 leading-snug">{item.text}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{item.time}</p>
+                  <p className="text-xs text-gray-300 dark:text-gray-700 leading-snug">
+                    {ACTIVITY_LABELS[item.type] ?? item.type} — <span className="text-white dark:text-gray-900">{item.lesson_title}</span>
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {item.course_title} · {new Date(item.timestamp).toLocaleDateString("fr-FR")}
+                  </p>
                 </div>
               </div>
             ))}
