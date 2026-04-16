@@ -12,3 +12,8 @@ app.include_router(course.router)
 app.include_router(school_teacher.router)
 app.include_router(whitelist.router)
 app.include_router(quiz.router)
+
+
+@app.get("/health", tags=["health"])
+def health():
+    return {"status": "ok"}
