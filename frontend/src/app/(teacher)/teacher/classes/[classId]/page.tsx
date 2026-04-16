@@ -1,62 +1,112 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { useAuthStore } from "@/store/authStore";
 
-type Tab = "etudiants" | "cours" | "stats";
+const API = process.env.NEXT_PUBLIC_API_URL;
 
-const CLASS_DATA: Record<string, {
-  name: string; students: number; courses: number; completion: number;
-  studentList: { name: string; completion: number; avgScore: number; submissions: number }[];
-  courseList: { title: string; lessons: number; completion: number }[];
-}> = {
-  "1": {
-    name: "JS Avancé — Groupe A", students: 24, courses: 3, completion: 72,
-    studentList: [
-      { name: "Lucas Martin", completion: 92, avgScore: 85, submissions: 18 },
-      { name: "Sarah Chen", completion: 75, avgScore: 72, submissions: 14 },
-      { name: "Maxime Petit", completion: 60, avgScore: 65, submissions: 11 },
-      { name: "Camille Roux", completion: 40, avgScore: 55, submissions: 7 },
-    ],
-    courseList: [
-      { title: "JavaScript Avancé", lessons: 12, completion: 80 },
-      { title: "Design Patterns JS", lessons: 8, completion: 65 },
-      { title: "Testing avec Jest", lessons: 6, completion: 50 },
-    ],
-  },
-  "2": {
-    name: "Python Débutant — Groupe B", students: 18, courses: 5, completion: 45,
-    studentList: [
-      { name: "Théo Bernard", completion: 40, avgScore: 60, submissions: 9 },
-      { name: "Lucie Fontaine", completion: 55, avgScore: 68, submissions: 12 },
-    ],
-    courseList: [
-      { title: "Introduction à Python", lessons: 8, completion: 45 },
-    ],
-  },
+type Tab = "cours" | "info";
+
+type Classroom = {
+  id: string;
+  name: string;
+  school_id: string | null;
+  invite_code: string;
+  is_archived: boolean;
+  created_at: string;
 };
 
-const FALLBACK = { name: "Classe inconnue", students: 0, courses: 0, completion: 0, studentList: [], courseList: [] };
+type Course = {
+  id: string;
+  title: string;
+  visibility: string;
+};
 
 export default function ClassDetailPage() {
   const { classId } = useParams<{ classId: string }>();
-  const data = CLASS_DATA[classId] ?? FALLBACK;
-  const [activeTab, setActiveTab] = useState<Tab>("etudiants");
+  const token = useAuthStore((s) => s.token);
 
-  const avgScore = data.studentList.length
-    ? Math.round(data.studentList.reduce((a, s) => a + s.avgScore, 0) / data.studentList.length)
-    : 0;
-  const totalSubmissions = data.studentList.reduce((a, s) => a + s.submissions, 0);
-  const struggling = data.studentList.filter((s) => s.completion < 50 || s.avgScore < 60);
-  const active = data.studentList.filter((s) => s.completion >= 50 && s.avgScore >= 60);
-  const maxCourseCompletion = Math.max(...data.courseList.map((c) => c.completion), 1);
+  const [classroom, setClassroom] = useState<Classroom | null>(null);
+  const [myCourses, setMyCourses] = useState<Course[]>([]);
+  const [assignedIds, setAssignedIds] = useState<Set<string>>(new Set());
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<Tab>("cours");
+  const [toggling, setToggling] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!token || !classId) return;
+    const headers: HeadersInit = { Authorization: `Bearer ${token}` };
+    Promise.all([
+      fetch(`${API}/classrooms/${classId}`, { headers }).then((r) => r.ok ? r.json() : null),
+      fetch(`${API}/courses`, { headers }).then((r) => r.ok ? r.json() : []),
+    ])
+      .then(([cls, courses]) => {
+        setClassroom(cls);
+        setMyCourses(Array.isArray(courses) ? courses : []);
+      })
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, [token, classId]);
+
+  async function toggleCourse(courseId: string) {
+    if (toggling) return;
+    setToggling(courseId);
+    const isAssigned = assignedIds.has(courseId);
+    try {
+      let res: Response;
+      if (isAssigned) {
+        res = await fetch(`${API}/classrooms/${classId}/courses/${courseId}`, {
+          method: "DELETE",
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+      } else {
+        res = await fetch(`${API}/classrooms/${classId}/courses?course_id=${courseId}`, {
+          method: "POST",
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+      }
+      if (res.ok) {
+        setAssignedIds((prev) => {
+          const next = new Set(prev);
+          isAssigned ? next.delete(courseId) : next.add(courseId);
+          return next;
+        });
+      }
+    } finally {
+      setToggling(null);
+    }
+  }
+
+  async function copyCode() {
+    if (!classroom?.invite_code) return;
+    await navigator.clipboard.writeText(classroom.invite_code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   const TABS: { key: Tab; label: string }[] = [
-    { key: "etudiants", label: "Étudiants" },
     { key: "cours", label: "Cours assignés" },
-    { key: "stats", label: "Stats" },
+    { key: "info", label: "Informations" },
   ];
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-20">
+        <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!classroom) {
+    return (
+      <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-400">Classe introuvable.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
@@ -67,19 +117,18 @@ export default function ClassDetailPage() {
           <Link href="/teacher/classes" className="text-gray-400 hover:text-white dark:hover:text-gray-900 text-xs transition-colors mb-3 inline-block">
             ← Retour aux classes
           </Link>
-          <h1 className="text-3xl font-bold text-white dark:text-gray-900">{data.name}</h1>
-          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
-            {data.students} étudiants · {data.courses} cours · {data.completion}% de complétion globale
+          <h1 className="text-3xl font-bold text-white dark:text-gray-900">{classroom.name}</h1>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1 flex items-center gap-3">
+            <span className="font-mono text-green-400">{classroom.invite_code}</span>
+            <button onClick={copyCode} className="text-xs text-gray-500 hover:text-white transition-colors">
+              {copied ? "Copié !" : "Copier"}
+            </button>
+            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+              classroom.is_archived ? "bg-gray-500/20 text-gray-400" : "bg-green-500/20 text-green-400"
+            }`}>
+              {classroom.is_archived ? "Archivée" : "Active"}
+            </span>
           </p>
-        </div>
-
-        {/* Progression bar */}
-        <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5 flex items-center gap-4">
-          <span className="text-gray-400 text-sm w-28">Complétion globale</span>
-          <div className="flex-1 h-2 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-green-500 rounded-full" style={{ width: `${data.completion}%` }} />
-          </div>
-          <span className="text-green-400 font-bold text-sm w-10 text-right">{data.completion}%</span>
         </div>
 
         {/* Tabs */}
@@ -99,156 +148,77 @@ export default function ClassDetailPage() {
           ))}
         </div>
 
-        {/* Tab — Étudiants */}
-        {activeTab === "etudiants" && (
-          <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
-            <h2 className="font-semibold text-white dark:text-gray-900">Étudiants</h2>
-            {data.studentList.length === 0 && <p className="text-gray-500 text-sm">Aucun étudiant.</p>}
-            <div className="flex flex-col gap-3">
-              {data.studentList.map((student) => (
-                <div key={student.name} className="p-3 rounded-xl bg-white/5 dark:bg-gray-50 flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full bg-green-600 flex items-center justify-center text-xs text-white font-bold">
-                        {student.name[0]}
-                      </div>
-                      <span className="text-sm font-medium text-white dark:text-gray-900">{student.name}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-gray-400">{student.submissions} soumissions</span>
-                      <span className={`text-xs font-semibold ${student.avgScore >= 80 ? "text-green-400" : student.avgScore >= 60 ? "text-yellow-400" : "text-red-400"}`}>
-                        {student.avgScore}/100
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-1 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-green-500 rounded-full" style={{ width: `${student.completion}%` }} />
-                    </div>
-                    <span className="text-xs text-gray-400 w-8 text-right">{student.completion}%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Tab — Cours */}
         {activeTab === "cours" && (
           <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
-            <h2 className="font-semibold text-white dark:text-gray-900">Cours assignés</h2>
-            {data.courseList.length === 0 && <p className="text-gray-500 text-sm">Aucun cours assigné.</p>}
-            {data.courseList.map((course) => (
-              <div key={course.title} className="p-3 rounded-xl bg-white/5 dark:bg-gray-50 flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-white dark:text-gray-900">{course.title}</span>
-                  <span className="text-xs text-gray-400">📚 {course.lessons} leçons</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 h-1 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: `${course.completion}%` }} />
-                  </div>
-                  <span className="text-xs text-gray-400 w-8 text-right">{course.completion}%</span>
-                </div>
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-white dark:text-gray-900">
+                Mes cours
+              </h2>
+              <span className="text-xs text-gray-400">{assignedIds.size} assigné{assignedIds.size > 1 ? "s" : ""}</span>
+            </div>
+            <p className="text-xs text-gray-500">Cochez les cours à rendre accessibles à cette classe.</p>
+
+            {myCourses.length === 0 ? (
+              <div className="flex flex-col items-center gap-3 py-6">
+                <p className="text-gray-500 text-sm">Aucun cours créé.</p>
+                <Link href="/teacher/cours" className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition-colors">
+                  Créer un cours →
+                </Link>
               </div>
-            ))}
-            <button className="mt-2 w-full border border-dashed border-white/10 dark:border-gray-300 text-gray-400 hover:text-white dark:hover:text-gray-900 hover:border-green-500 text-sm py-2.5 rounded-xl transition-colors">
-              + Assigner un cours
-            </button>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {myCourses.map((course) => {
+                  const isAssigned = assignedIds.has(course.id);
+                  return (
+                    <div key={course.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 dark:bg-gray-50">
+                      <span className="text-sm text-white dark:text-gray-900 flex-1 truncate">{course.title}</span>
+                      <span className="text-xs text-gray-500 capitalize">{course.visibility}</span>
+                      <button
+                        onClick={() => toggleCourse(course.id)}
+                        disabled={toggling === course.id}
+                        className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
+                          isAssigned
+                            ? "bg-green-500/20 text-green-400 hover:bg-red-500/20 hover:text-red-400"
+                            : "bg-white/5 text-gray-400 hover:bg-green-500/20 hover:text-green-400"
+                        }`}
+                      >
+                        {toggling === course.id ? "…" : isAssigned ? "Assigné ✓" : "Assigner"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
-        {/* Tab — Stats */}
-        {activeTab === "stats" && (
-          <div className="flex flex-col gap-6">
-
-            {/* KPIs */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-green-400">{data.completion}%</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">Complétion</p>
-                <p className="text-gray-500 text-xs mt-0.5">moyenne globale</p>
+        {/* Tab — Informations */}
+        {activeTab === "info" && (
+          <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
+            <h2 className="font-semibold text-white dark:text-gray-900">Informations de la classe</h2>
+            <div className="flex flex-col gap-3">
+              <div className="flex justify-between items-center py-2 border-b border-white/5 dark:border-gray-100">
+                <span className="text-xs text-gray-400 uppercase tracking-wider">Nom</span>
+                <span className="text-sm text-white dark:text-gray-900 font-medium">{classroom.name}</span>
               </div>
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-yellow-400">{avgScore}/100</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">Score moyen</p>
-                <p className="text-gray-500 text-xs mt-0.5">tous exercices</p>
+              <div className="flex justify-between items-center py-2 border-b border-white/5 dark:border-gray-100">
+                <span className="text-xs text-gray-400 uppercase tracking-wider">Code d&apos;invitation</span>
+                <span className="font-mono text-green-400 text-sm font-bold">{classroom.invite_code}</span>
               </div>
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-teal-400">{totalSubmissions}</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">Soumissions</p>
-                <p className="text-gray-500 text-xs mt-0.5">total de la classe</p>
+              <div className="flex justify-between items-center py-2 border-b border-white/5 dark:border-gray-100">
+                <span className="text-xs text-gray-400 uppercase tracking-wider">Statut</span>
+                <span className={`text-sm font-medium ${classroom.is_archived ? "text-gray-400" : "text-green-400"}`}>
+                  {classroom.is_archived ? "Archivée" : "Active"}
+                </span>
               </div>
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-red-400">{struggling.length}</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">En difficulté</p>
-                <p className="text-gray-500 text-xs mt-0.5">complétion &lt;50% ou score &lt;60</p>
-              </div>
-            </div>
-
-            {/* Bar chart complétion par cours */}
-            {data.courseList.length > 0 && (
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6">
-                <h2 className="font-semibold text-white dark:text-gray-900 mb-6">Complétion par cours</h2>
-                <div className="flex items-end gap-4 h-32">
-                  {data.courseList.map((course) => (
-                    <div key={course.title} className="flex flex-col items-center gap-2 flex-1">
-                      <span className="text-xs text-gray-400">{course.completion}%</span>
-                      <div
-                        className="w-full bg-green-500 rounded-t-lg transition-all duration-300"
-                        style={{ height: `${(course.completion / maxCourseCompletion) * 100}%` }}
-                      />
-                      <span className="text-xs text-gray-500 text-center leading-tight">{course.title}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Actifs vs En difficulté */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-3">
-                <h2 className="font-semibold text-white dark:text-gray-900 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-400 inline-block" />
-                  Actifs ({active.length})
-                </h2>
-                {active.length === 0 && <p className="text-gray-500 text-sm">Aucun.</p>}
-                {active.map((s) => (
-                  <div key={s.name} className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-green-600/30 flex items-center justify-center text-xs text-green-400 font-bold">
-                        {s.name[0]}
-                      </div>
-                      <span className="text-white dark:text-gray-900">{s.name}</span>
-                    </div>
-                    <span className="text-green-400 font-semibold text-xs">{s.completion}%</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-3">
-                <h2 className="font-semibold text-white dark:text-gray-900 flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-red-400 inline-block" />
-                  En difficulté ({struggling.length})
-                </h2>
-                {struggling.length === 0 && <p className="text-gray-500 text-sm">Aucun étudiant en difficulté.</p>}
-                {struggling.map((s) => (
-                  <div key={s.name} className="flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-red-600/30 flex items-center justify-center text-xs text-red-400 font-bold">
-                        {s.name[0]}
-                      </div>
-                      <span className="text-white dark:text-gray-900">{s.name}</span>
-                    </div>
-                    <div className="flex gap-2 text-xs">
-                      <span className="text-gray-400">{s.completion}%</span>
-                      <span className="text-red-400 font-semibold">{s.avgScore}/100</span>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex justify-between items-center py-2">
+                <span className="text-xs text-gray-400 uppercase tracking-wider">Créée le</span>
+                <span className="text-sm text-white dark:text-gray-900">
+                  {new Date(classroom.created_at).toLocaleDateString("fr-FR")}
+                </span>
               </div>
             </div>
-
           </div>
         )}
 

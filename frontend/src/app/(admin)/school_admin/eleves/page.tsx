@@ -4,14 +4,8 @@ import { useState } from "react";
 
 const FILTERS = ["Tous", "Actif", "Inactif"];
 
-const MOCK_STUDENTS = [
-  { id: 1, name: "Lucas Martin", email: "lucas.martin@email.com", cours: 5, progression: 72, statut: "Actif" },
-  { id: 2, name: "Emma Blanc", email: "emma.blanc@email.com", cours: 3, progression: 45, statut: "Inactif" },
-  { id: 3, name: "Noah Garcia", email: "noah.garcia@email.com", cours: 8, progression: 88, statut: "Actif" },
-  { id: 4, name: "Léa Dubois", email: "lea.dubois@email.com", cours: 2, progression: 30, statut: "Actif" },
-  { id: 5, name: "Thomas Leroy", email: "thomas.leroy@email.com", cours: 6, progression: 60, statut: "Inactif" },
-  { id: 6, name: "Camille Petit", email: "camille.petit@email.com", cours: 4, progression: 55, statut: "Actif" },
-];
+type Student = { id: number; name: string; email: string; cours: number; progression: number; statut: string };
+const MOCK_STUDENTS: Student[] = [];
 
 export default function ElevesPage() {
   const [search, setSearch] = useState("");

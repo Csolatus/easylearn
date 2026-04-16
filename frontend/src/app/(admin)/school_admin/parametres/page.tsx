@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useSchoolStore } from "@/store/schoolStore";
 
 export default function ParametresPage() {
-  const [schoolName, setSchoolName] = useState("EFREI Paris");
-  const [email, setEmail] = useState("contact@efrei.fr");
-  const [website, setWebsite] = useState("https://www.efrei.fr");
-  const [address, setAddress] = useState("30-32 Avenue de la République, 94800 Villejuif");
+  const activeSchool = useSchoolStore((s) => s.activeSchool);
+  const [schoolName, setSchoolName] = useState(activeSchool?.name ?? "");
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [address, setAddress] = useState("");
   const [logo, setLogo] = useState<string | null>(null);
   const [accentColor, setAccentColor] = useState("#ea580c");
 
