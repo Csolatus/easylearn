@@ -15,28 +15,34 @@ type SchoolState = {
   activeSchool: School | null;
   isLoaded: boolean;
   setActiveSchool: (school: School) => void;
-  setSchools: (schools: School[]) => void;
   fetchSchools: (token: string) => Promise<void>;
 };
 
 export const useSchoolStore = create<SchoolState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       schools: [],
       activeSchool: null,
+      isLoaded: false,
+
       setActiveSchool: (school: School) => set({ activeSchool: school }),
-      setSchools: (schools: School[]) => set({ schools }),
+
       fetchSchools: async (token: string) => {
+        if (get().isLoaded) return;
         try {
           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (res.ok) {
-            const data: School[] = await res.json();
-            set({ schools: data });
+            const schools: School[] = await res.json();
+            set({
+              schools,
+              activeSchool: get().activeSchool ?? schools[0] ?? null,
+              isLoaded: true,
+            });
           }
         } catch {
-          // ignore
+          // keep existing state on error
         }
       },
     }),
