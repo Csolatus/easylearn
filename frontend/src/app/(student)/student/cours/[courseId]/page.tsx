@@ -273,7 +273,7 @@ export default function StudentLessonPage() {
         {/* Content */}
         <div className="flex-1 overflow-hidden">
           {activeTab === "Théorie" && (
-            <TheoryTab content={THEORY_CONTENT} />
+            <TheoryTab content={THEORY_CONTENT} onProgressChange={setReadProgress} />
           )}
 
           {activeTab === "Pratique" && (
