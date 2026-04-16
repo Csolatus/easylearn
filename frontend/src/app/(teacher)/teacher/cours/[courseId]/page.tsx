@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import MarkdownRenderer from "@/components/course/MarkdownRenderer";
 
 const MOCK_LESSONS = [
   { id: 1, title: "Introduction & Setup", type: "theory", done: true },
@@ -178,8 +179,8 @@ export default function LessonEditorPage() {
                 onChange={(e) => setMdContent(e.target.value)}
                 className="h-full bg-transparent text-white dark:text-gray-900 text-sm font-mono p-5 focus:outline-none resize-none"
               />
-              <div className="h-full overflow-y-auto p-5 text-sm text-gray-300 dark:text-gray-700">
-                <pre className="whitespace-pre-wrap font-sans leading-relaxed">{mdContent}</pre>
+              <div className="h-full overflow-y-auto p-5">
+                <MarkdownRenderer content={mdContent} />
               </div>
             </div>
           )}
