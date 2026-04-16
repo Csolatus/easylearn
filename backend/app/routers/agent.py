@@ -1,7 +1,9 @@
+import json
 from uuid import UUID
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import getDb
@@ -67,6 +69,43 @@ async def chat(
     )
 
     return ChatResponse(response=response_text, conversation_id=conversation_id)
+
+
+@router.post("/conversations/{conversation_id}/stream")
+async def chatStream(
+    conversation_id: UUID,
+    request: ChatRequest,
+    db: AsyncSession = Depends(getDb),
+):
+    if not await agent_service.conversationExists(db, conversation_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Conversation introuvable.",
+        )
+
+    history = await agent_service.getHistory(db, conversation_id)
+
+    async def event_generator():
+        full_response = ""
+        try:
+            async for token in agent_service.askOllamaStream(history, request.message):
+                full_response += token
+                yield f"data: {json.dumps({'token': token})}\n\n"
+        except (httpx.ConnectError, httpx.HTTPStatusError):
+            yield f"data: {json.dumps({'error': 'Agent IA indisponible'})}\n\n"
+            return
+        finally:
+            if full_response:
+                await agent_service.saveExchange(
+                    db, conversation_id, request.student_id, request.message, full_response
+                )
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @router.get(
