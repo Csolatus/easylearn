@@ -1,24 +1,36 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState<"student" | "teacher">("student");
-  const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+  const [errors, setErrors] = useState<{
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validate = () => {
-    const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
+    const newErrors: typeof errors = {};
+    if (!firstName.trim()) newErrors.firstName = "Le prénom est requis";
+    if (!lastName.trim()) newErrors.lastName = "Le nom est requis";
     if (!email) newErrors.email = "L'email est requis";
     else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email invalide";
     if (!password) newErrors.password = "Le mot de passe est requis";
-    else if (password.length < 6) newErrors.password = "Minimum 6 caractères";
+    else if (password.length < 8) newErrors.password = "Minimum 8 caractères";
     if (!confirmPassword) newErrors.confirmPassword = "Veuillez confirmer le mot de passe";
     else if (password !== confirmPassword) newErrors.confirmPassword = "Les mots de passe ne correspondent pas";
     return newErrors;
@@ -38,11 +50,19 @@ export default function RegisterPage() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          email,
+          password,
+          role,
+        }),
       });
-      if (!res.ok) throw new Error("Erreur lors de la création du compte");
-      const data = await res.json();
-      console.log("Register success", data);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail ?? "Erreur lors de la création du compte");
+      }
+      router.push("/login?registered=1");
     } catch (err) {
       setApiError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
@@ -61,6 +81,7 @@ export default function RegisterPage() {
           </a>
         </div>
       </div>
+
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md bg-[#111118] dark:bg-white dark:shadow-xl border border-white/8 dark:border-gray-200 rounded-2xl p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
@@ -80,6 +101,7 @@ export default function RegisterPage() {
           )}
 
           <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            {/* Role selector */}
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
                 Je suis
@@ -110,14 +132,49 @@ export default function RegisterPage() {
               </div>
             </div>
 
+            {/* First name + Last name */}
+            <div className="flex gap-3">
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
+                  Prénom
+                </label>
+                <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
+                  <input
+                    type="text"
+                    placeholder="Jean"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="flex-1 bg-transparent text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none"
+                  />
+                </div>
+                {errors.firstName && <p className="text-red-400 text-xs">{errors.firstName}</p>}
+              </div>
+
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
+                  Nom
+                </label>
+                <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
+                  <input
+                    type="text"
+                    placeholder="Dupont"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="flex-1 bg-transparent text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none"
+                  />
+                </div>
+                {errors.lastName && <p className="text-red-400 text-xs">{errors.lastName}</p>}
+              </div>
+            </div>
+
+            {/* Email */}
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
-                Email Address
+                Email
               </label>
               <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
                 <span className="text-gray-500 text-sm">@</span>
                 <input
-                  id="email"
                   type="email"
                   placeholder="name@example.com"
                   value={email}
@@ -128,14 +185,14 @@ export default function RegisterPage() {
               {errors.email && <p className="text-red-400 text-xs">{errors.email}</p>}
             </div>
 
+            {/* Password */}
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
-                Password
+                Mot de passe
               </label>
               <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
                 <span className="text-gray-500 text-sm">🔒</span>
                 <input
-                  id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={password}
@@ -153,14 +210,14 @@ export default function RegisterPage() {
               {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
             </div>
 
+            {/* Confirm password */}
             <div className="flex flex-col gap-2">
               <label className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
-                Confirm Password
+                Confirmer le mot de passe
               </label>
               <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
                 <span className="text-gray-500 text-sm">🔒</span>
                 <input
-                  id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={confirmPassword}
@@ -195,6 +252,7 @@ export default function RegisterPage() {
           </form>
         </div>
       </div>
+
       <footer className="py-6 flex flex-col items-center gap-3">
         <div className="flex items-center gap-6 text-xs text-gray-600 dark:text-gray-400">
           <a href="#" className="hover:text-gray-400 dark:hover:text-gray-600 transition-colors">Privacy Policy</a>

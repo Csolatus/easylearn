@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 
 const ROLE_DASHBOARDS: Record<string, string> = {
@@ -19,6 +19,8 @@ export default function LoginPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const justRegistered = searchParams.get("registered") === "1";
   const login = useAuthStore((s) => s.login);
 
   const validate = () => {
@@ -80,6 +82,12 @@ export default function LoginPage() {
               Accédez à votre espace EasyLearn
             </p>
           </div>
+
+          {justRegistered && (
+            <div className="mb-4 px-4 py-3 bg-green-900/20 dark:bg-green-50 border border-green-800 dark:border-green-200 rounded-lg text-green-400 dark:text-green-600 text-sm text-center">
+              Compte créé avec succès ! Vous pouvez vous connecter.
+            </div>
+          )}
 
           {apiError && (
             <div className="mb-4 px-4 py-3 bg-red-900/20 dark:bg-red-50 border border-red-800 dark:border-red-200 rounded-lg text-red-400 dark:text-red-600 text-sm text-center">
