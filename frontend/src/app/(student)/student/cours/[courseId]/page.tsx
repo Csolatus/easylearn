@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import CodeEditor from "@/components/editor/CodeEditor";
 import TheoryTab from "@/components/course/TheoryTab";
+import QuizTab from "@/components/course/QuizTab";
+import PracticeTab from "@/components/course/PracticeTab";
 
 const MOCK_QUIZ = [
   {
@@ -138,43 +139,6 @@ export default function StudentLessonPage() {
     );
   };
   const [readProgress, setReadProgress] = useState(0);
-  const [codeContent, setCodeContent] = useState(CODE_STARTER);
-  const [terminalLines, setTerminalLines] = useState<{ type: "info" | "success" | "error" | "log"; text: string }[]>([]);
-  const [isRunning, setIsRunning] = useState(false);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
-  const [quizSubmitted, setQuizSubmitted] = useState(false);
-
-  const handleRun = () => {
-    setIsRunning(true);
-    setTerminalLines([{ type: "info", text: "Compiling project..." }]);
-    setTimeout(() => {
-      setTerminalLines([
-        { type: "info", text: "Compiling project..." },
-        { type: "success", text: "Compiled successfully." },
-        { type: "log", text: "Calculating..." },
-        { type: "log", text: "16" },
-        { type: "log", text: "16 (from cache)" },
-      ]);
-      setIsRunning(false);
-    }, 1200);
-  };
-
-  const handleReset = () => {
-    setCodeContent(CODE_STARTER);
-    setTerminalLines([]);
-  };
-  const score = quizSubmitted
-    ? MOCK_QUIZ.filter((q) => selectedAnswers[q.id] === q.answer).length
-    : 0;
-
-  const handleQuizSubmit = () => {
-    if (Object.keys(selectedAnswers).length === MOCK_QUIZ.length) setQuizSubmitted(true);
-  };
-
-  const handleQuizReset = () => {
-    setSelectedAnswers({});
-    setQuizSubmitted(false);
-  };
 
   const currentLesson = lessons.find((l) => l.id === activeLesson);
   const isCurrentDone = currentLesson?.done ?? false;
@@ -277,179 +241,16 @@ export default function StudentLessonPage() {
           )}
 
           {activeTab === "Pratique" && (
-            <div className="flex flex-col h-full">
-              {/* Toolbar */}
-              <div className="flex items-center gap-2 px-4 py-2 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
-                <span className="text-xs text-gray-500 mr-1">index.js</span>
-                <span className="text-xs text-gray-600 dark:text-gray-400">·</span>
-                <span className="text-xs text-gray-500">
-                  {isRunning ? "Compilation en cours..." : terminalLines.length > 0 ? "Dernière sauvegarde il y a 2 min" : "Prêt"}
-                </span>
-                <div className="ml-auto flex items-center gap-2">
-                  <button
-                    onClick={handleReset}
-                    className="text-xs px-3 py-1.5 rounded-lg border border-white/10 dark:border-gray-300 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
-                  >
-                    Reset
-                  </button>
-                  <button className="text-xs px-3 py-1.5 rounded-lg border border-purple-500/40 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 transition-colors font-medium">
-                    ✦ Indice IA
-                  </button>
-                  <button
-                    onClick={handleRun}
-                    disabled={isRunning}
-                    className="text-xs px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-semibold transition-colors"
-                  >
-                    {isRunning ? "..." : "▶ Exécuter"}
-                  </button>
-                </div>
-              </div>
-
-              {/* Split editor + terminal */}
-              <div className="flex-1 grid grid-cols-2 divide-x divide-white/10 dark:divide-gray-200 overflow-hidden">
-                {/* Code editor */}
-                <div className="overflow-hidden">
-                  <CodeEditor
-                    value={codeContent}
-                    onChange={setCodeContent}
-                    language="javascript"
-                    minHeight="100%"
-                  />
-                </div>
-
-                {/* Terminal */}
-                <div className="flex flex-col bg-[#0a0a14] dark:bg-gray-900 overflow-hidden">
-                  <div className="px-4 py-2 border-b border-white/10 dark:border-gray-700 flex items-center gap-2 shrink-0">
-                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-300 uppercase tracking-wider">Terminal / Console</span>
-                  </div>
-                  <div className="flex-1 overflow-y-auto px-4 py-3 font-mono text-xs flex flex-col gap-1.5">
-                    {terminalLines.length === 0 ? (
-                      <span className="text-gray-600">$ Appuyez sur Exécuter pour lancer le code</span>
-                    ) : (
-                      terminalLines.map((line, i) => (
-                        <div key={i} className={`flex items-start gap-2 ${
-                          line.type === "success" ? "text-green-400" :
-                          line.type === "error" ? "text-red-400" :
-                          line.type === "info" ? "text-blue-400" :
-                          "text-gray-300"
-                        }`}>
-                          {line.type === "success" && <span className="shrink-0 mt-0.5">✓</span>}
-                          {line.type === "error" && <span className="shrink-0 mt-0.5">✗</span>}
-                          {line.type === "info" && <span className="shrink-0 mt-0.5">›</span>}
-                          {line.type === "log" && <span className="shrink-0 mt-0.5 text-gray-600">$</span>}
-                          <span>{line.text}</span>
-                        </div>
-                      ))
-                    )}
-                  </div>
-
-                  {/* Objectif */}
-                  <div className="border-t border-white/10 dark:border-gray-700 px-4 py-3 shrink-0">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-semibold text-gray-400 dark:text-gray-300">Objectif du Lab</span>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 font-medium">Mode expert</span>
-                    </div>
-                    <p className="text-xs text-gray-500 leading-relaxed mb-2">
-                      Utilisez <code className="text-purple-400">useEffect</code> pour simuler un abonnement à un statut. N&apos;oubliez pas de retourner une fonction de nettoyage.
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-1.5 bg-white/10 dark:bg-gray-700 rounded-full overflow-hidden">
-                        <div className="h-full bg-purple-500 rounded-full" style={{ width: "65%" }} />
-                      </div>
-                      <span className="text-xs text-gray-500 shrink-0">65%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <PracticeTab
+              initialCode={CODE_STARTER}
+              language="javascript"
+              objective="Utilisez useEffect pour simuler un abonnement à un statut. N'oubliez pas de retourner une fonction de nettoyage."
+              objectiveProgress={65}
+            />
           )}
 
           {activeTab === "Quiz" && (
-            <div className="h-full overflow-y-auto px-6 py-6 max-w-2xl mx-auto w-full">
-              {quizSubmitted ? (
-                <div className="flex flex-col items-center gap-6 py-8">
-                  <div className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold border-4 ${
-                    score === MOCK_QUIZ.length
-                      ? "border-green-500 text-green-400"
-                      : score >= MOCK_QUIZ.length / 2
-                      ? "border-yellow-500 text-yellow-400"
-                      : "border-red-500 text-red-400"
-                  }`}>
-                    {score}/{MOCK_QUIZ.length}
-                  </div>
-                  <div className="text-center">
-                    <p className="text-white dark:text-gray-900 font-semibold text-lg">
-                      {score === MOCK_QUIZ.length ? "Parfait ! 🎉" : score >= MOCK_QUIZ.length / 2 ? "Bien joué ! 👍" : "À retravailler 💪"}
-                    </p>
-                    <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
-                      {score} bonne{score > 1 ? "s" : ""} réponse{score > 1 ? "s" : ""} sur {MOCK_QUIZ.length}
-                    </p>
-                  </div>
-                  <div className="w-full flex flex-col gap-4">
-                    {MOCK_QUIZ.map((q) => {
-                      const chosen = selectedAnswers[q.id];
-                      const isCorrect = chosen === q.answer;
-                      return (
-                        <div key={q.id} className={`rounded-xl border p-4 ${isCorrect ? "border-green-500/30 bg-green-500/5" : "border-red-500/30 bg-red-500/5"}`}>
-                          <p className="text-sm font-medium text-white dark:text-gray-900 mb-3">{q.question}</p>
-                          <div className="flex flex-col gap-2">
-                            {q.options.map((opt, oi) => (
-                              <div key={oi} className={`text-xs px-3 py-2 rounded-lg flex items-center gap-2 ${
-                                oi === q.answer ? "bg-green-500/20 text-green-400" :
-                                oi === chosen && !isCorrect ? "bg-red-500/20 text-red-400" :
-                                "text-gray-500"
-                              }`}>
-                                <span>{oi === q.answer ? "✓" : oi === chosen && !isCorrect ? "✗" : "·"}</span>
-                                {opt}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <button
-                    onClick={handleQuizReset}
-                    className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors"
-                  >
-                    🔄 Recommencer
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-5">
-                  <p className="text-xs text-gray-500">{MOCK_QUIZ.length} questions · Sélectionnez une réponse par question</p>
-                  {MOCK_QUIZ.map((q, qi) => (
-                    <div key={q.id} className="rounded-xl border border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 p-4 flex flex-col gap-3">
-                      <p className="text-sm font-medium text-white dark:text-gray-900">
-                        <span className="text-gray-500 mr-2">Q{qi + 1}.</span>{q.question}
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {q.options.map((opt, oi) => (
-                          <button
-                            key={oi}
-                            onClick={() => setSelectedAnswers((prev) => ({ ...prev, [q.id]: oi }))}
-                            className={`text-left text-sm px-4 py-2.5 rounded-xl border transition-colors ${
-                              selectedAnswers[q.id] === oi
-                                ? "border-purple-500 bg-purple-500/20 text-purple-300 dark:text-purple-700"
-                                : "border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100"
-                            }`}
-                          >
-                            <span className="text-gray-500 mr-2">{String.fromCharCode(65 + oi)}.</span>{opt}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  <button
-                    onClick={handleQuizSubmit}
-                    disabled={Object.keys(selectedAnswers).length < MOCK_QUIZ.length}
-                    className="self-end px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
-                  >
-                    Valider le quiz →
-                  </button>
-                </div>
-              )}
-            </div>
+            <QuizTab questions={MOCK_QUIZ} />
           )}
         </div>
       </div>

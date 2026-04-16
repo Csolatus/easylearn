@@ -2,7 +2,7 @@
 
 type Props = {
   count?: number;
-  accentColor?: "purple" | "green" | "blue";
+  accentColor?: "purple" | "green" | "blue" | "orange" | "red";
   onClick?: () => void;
 };
 
@@ -10,6 +10,8 @@ const DOT_COLORS: Record<NonNullable<Props["accentColor"]>, string> = {
   purple: "bg-purple-500",
   green: "bg-green-500",
   blue: "bg-blue-500",
+  orange: "bg-orange-500",
+  red: "bg-red-500",
 };
 
 export default function NotificationBell({ count = 0, accentColor = "purple", onClick }: Props) {

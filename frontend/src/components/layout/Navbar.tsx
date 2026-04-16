@@ -5,7 +5,7 @@ import NotificationBell from "./NotificationBell";
 
 type Props = {
   searchPlaceholder?: string;
-  accentColor?: "purple" | "green" | "blue";
+  accentColor?: "purple" | "green" | "blue" | "orange" | "red";
   notificationCount?: number;
   onNotificationClick?: () => void;
 };
@@ -14,12 +14,16 @@ const RING_COLORS: Record<NonNullable<Props["accentColor"]>, string> = {
   purple: "focus:ring-purple-500",
   green: "focus:ring-green-500",
   blue: "focus:ring-blue-500",
+  orange: "focus:ring-orange-500",
+  red: "focus:ring-red-500",
 };
 
 const AVATAR_COLORS: Record<NonNullable<Props["accentColor"]>, string> = {
   purple: "bg-purple-600",
   green: "bg-green-600",
   blue: "bg-blue-600",
+  orange: "bg-orange-600",
+  red: "bg-red-600",
 };
 
 export default function Navbar({
