@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import getDb
-from app.dependencies.auth import getCurrentUser, requireRoles
+from app.dependencies.auth import requireRoles
 from app.schemas.analytics import SchoolAnalyticsResponse, TeacherAnalyticsResponse
 from app.services import analytics_service
 
