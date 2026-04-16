@@ -26,7 +26,6 @@ export const NAV_CONFIG: Record<string, RoleNavConfig> = {
     navItems: [
       { label: "Dashboard", href: "/student/dashboard", icon: "⊞" },
       { label: "Courses", href: "/student/catalogue", icon: "📖" },
-      { label: "AI Lab", href: "/student/ai-lab", icon: "🤖" },
       { label: "Profile", href: "/student/profil", icon: "👤" },
     ],
     ctaLabel: "Start Learning",
