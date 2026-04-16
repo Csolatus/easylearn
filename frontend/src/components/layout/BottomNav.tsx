@@ -1,3 +1,1 @@
-export default function BottomNav() {
-  return null;
-}
+export { default } from "@/components/nav/AppBottomNav";
