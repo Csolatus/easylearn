@@ -3,10 +3,22 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import getDb
 from app.dependencies.auth import requireRoles, teacherOnly
-from app.schemas.school_teacher import InviteTeacherRequest, SchoolTeacherResponse
+from app.schemas.school_teacher import InviteTeacherRequest, SchoolTeacherResponse, TeacherInSchoolResponse
 from app.services import school_teacher_service
 
 router = APIRouter(tags=["school-teachers"])
+
+
+@router.get(
+    "/schools/{school_id}/teachers",
+    response_model=list[TeacherInSchoolResponse],
+)
+async def listSchoolTeachers(
+    school_id: str,
+    db: AsyncSession = Depends(getDb),
+    _: dict = Depends(requireRoles("school_admin", "super_admin")),
+):
+    return await school_teacher_service.listSchoolTeachers(school_id, db)
 
 
 @router.post(

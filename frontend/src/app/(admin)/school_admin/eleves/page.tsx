@@ -1,19 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
+import { useSchoolStore } from "@/store/schoolStore";
 
-const FILTERS = ["Tous", "Actif", "Inactif"];
+const FILTERS = ["Tous", "A-M", "N-Z"];
 
-type Student = { id: number; name: string; email: string; cours: number; progression: number; statut: string };
-const MOCK_STUDENTS: Student[] = [];
+type Student = {
+  id: string;
+  name: string;
+  email: string;
+};
 
 export default function ElevesPage() {
+  const activeSchool = useSchoolStore((s) => s.activeSchool);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("Tous");
 
+  useEffect(() => {
+    if (!activeSchool?.id) { setIsLoading(false); return; }
+    api.get<Student[]>(`/schools/${activeSchool.id}/students`)
+      .then((data) => setStudents(data))
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, [activeSchool]);
+
   const exportCSV = () => {
-    const headers = ["Nom", "Email", "Cours", "Progression", "Statut"];
-    const rows = filtered.map((s) => [s.name, s.email, s.cours, `${s.progression}%`, s.statut]);
+    const headers = ["Nom", "Email"];
+    const rows = filtered.map((s) => [s.name, s.email]);
     const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -24,10 +40,14 @@ export default function ElevesPage() {
     URL.revokeObjectURL(url);
   };
 
-  const filtered = MOCK_STUDENTS.filter((s) => {
-    const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) ||
+  const filtered = students.filter((s) => {
+    const matchSearch =
+      s.name.toLowerCase().includes(search.toLowerCase()) ||
       s.email.toLowerCase().includes(search.toLowerCase());
-    const matchFilter = activeFilter === "Tous" || s.statut === activeFilter;
+    const matchFilter =
+      activeFilter === "Tous" ? true :
+      activeFilter === "A-M" ? s.name[0]?.toUpperCase() <= "M" :
+      s.name[0]?.toUpperCase() > "M";
     return matchSearch && matchFilter;
   });
 
@@ -36,7 +56,7 @@ export default function ElevesPage() {
       <div>
         <h1 className="text-2xl font-bold text-white dark:text-gray-900">Élèves</h1>
         <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-          Gérez les élèves de votre école
+          {isLoading ? "Chargement…" : `${students.length} élève${students.length > 1 ? "s" : ""} actif${students.length > 1 ? "s" : ""}`}
         </p>
       </div>
 
@@ -67,6 +87,7 @@ export default function ElevesPage() {
           ))}
         </div>
       </div>
+
       <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
         <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-white dark:text-gray-900">
@@ -74,7 +95,8 @@ export default function ElevesPage() {
           </h2>
           <button
             onClick={exportCSV}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white transition-colors"
+            disabled={filtered.length === 0}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white transition-colors"
           >
             📥 Exporter CSV
           </button>
@@ -84,16 +106,24 @@ export default function ElevesPage() {
             <thead>
               <tr className="border-b border-white/10 dark:border-gray-200">
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Élève</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Cours</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Progression</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10 dark:divide-gray-200">
-              {filtered.length === 0 ? (
+              {isLoading ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-sm text-gray-500">
-                    Aucun élève trouvé.
+                  <td colSpan={2} className="px-6 py-8 text-center">
+                    <div className="flex justify-center"><div className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" /></div>
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={2} className="px-6 py-8 text-center text-sm text-gray-500">
+                    {!activeSchool
+                      ? "Aucune école sélectionnée."
+                      : students.length === 0
+                      ? "Aucun élève actif sur les cours de l'école."
+                      : "Aucun élève trouvé."}
                   </td>
                 </tr>
               ) : (
@@ -102,33 +132,12 @@ export default function ElevesPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-orange-600/20 flex items-center justify-center text-sm font-bold text-orange-400">
-                          {student.name[0]}
+                          {student.name[0]?.toUpperCase()}
                         </div>
-                        <div>
-                          <p className="font-medium text-white dark:text-gray-900">{student.name}</p>
-                          <p className="text-xs text-gray-400 dark:text-gray-500">{student.email}</p>
-                        </div>
+                        <p className="font-medium text-white dark:text-gray-900">{student.name}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-gray-300 dark:text-gray-700 font-medium">{student.cours}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                          <div className="h-full bg-orange-500 rounded-full" style={{ width: `${student.progression}%` }} />
-                        </div>
-                        <span className="text-xs text-gray-400 dark:text-gray-500">{student.progression}%</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-                        student.statut === "Actif"
-                          ? "bg-green-500/10 text-green-400 dark:text-green-600"
-                          : "bg-red-500/10 text-red-400 dark:text-red-600"
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${student.statut === "Actif" ? "bg-green-400" : "bg-red-400"}`} />
-                        {student.statut}
-                      </span>
-                    </td>
+                    <td className="px-6 py-4 text-gray-400 dark:text-gray-500">{student.email}</td>
                   </tr>
                 ))
               )}
