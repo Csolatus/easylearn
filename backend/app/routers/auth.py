@@ -3,6 +3,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import getDb
+from app.dependencies.auth import getCurrentUser
 from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, UserResponse
 from app.services import auth_service
 
@@ -32,6 +33,11 @@ async def login(data: LoginRequest, db: AsyncSession = Depends(getDb)):
             headers={"WWW-Authenticate": "Bearer"},
         )
     return TokenResponse(access_token=token)
+
+
+@router.get("/me", response_model=UserResponse)
+async def getMe(user: dict = Depends(getCurrentUser)):
+    return user
 
 
 @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
