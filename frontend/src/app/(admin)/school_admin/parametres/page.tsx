@@ -8,9 +8,9 @@ export default function ParametresPage() {
   const activeSchool = useSchoolStore((s) => s.activeSchool);
   const setActiveSchool = useSchoolStore((s) => s.setActiveSchool);
   const [schoolName, setSchoolName] = useState(activeSchool?.name ?? "");
-  const [email, setEmail] = useState("");
-  const [website, setWebsite] = useState("");
-  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState(activeSchool?.email ?? "");
+  const [website, setWebsite] = useState(activeSchool?.website ?? "");
+  const [address, setAddress] = useState(activeSchool?.address ?? "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -20,11 +20,16 @@ export default function ParametresPage() {
     setSaving(true);
     setSaveError(null);
     try {
-      const updated = await api.patch<{ id: string; name: string; is_active: boolean; created_at: string }>(
+      const updated = await api.patch<{ id: string; name: string; email: string | null; website: string | null; address: string | null; is_active: boolean; created_at: string }>(
         `/schools/${activeSchool.id}`,
-        { name: schoolName.trim() }
+        {
+          name: schoolName.trim() || undefined,
+          email: email.trim() || null,
+          website: website.trim() || null,
+          address: address.trim() || null,
+        }
       );
-      setActiveSchool({ ...activeSchool, name: updated.name });
+      setActiveSchool({ ...activeSchool, name: updated.name, email: updated.email, website: updated.website, address: updated.address });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {

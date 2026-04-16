@@ -2,6 +2,39 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
+async def getStudentActivity(student_id: str, db: AsyncSession, limit: int = 10) -> list[dict]:
+    result = await db.execute(
+        text(
+            "SELECT type, lesson_title, course_title, ts AS timestamp FROM ("
+            "  SELECT 'lesson_complete' AS type,"
+            "         l.title AS lesson_title,"
+            "         c.title AS course_title,"
+            "         cp.completed_at AS ts"
+            "  FROM course_progress cp"
+            "  JOIN lessons l ON l.id = cp.lesson_id"
+            "  JOIN courses c ON c.id = l.course_id"
+            "  WHERE cp.student_id = :student_id"
+            "    AND cp.completed = TRUE"
+            "    AND cp.completed_at IS NOT NULL"
+            "  UNION ALL"
+            "  SELECT 'quiz_submit' AS type,"
+            "         l.title AS lesson_title,"
+            "         c.title AS course_title,"
+            "         qr.submitted_at AS ts"
+            "  FROM quiz_results qr"
+            "  JOIN quizzes q ON q.id = qr.quiz_id"
+            "  JOIN lessons l ON l.id = q.lesson_id"
+            "  JOIN courses c ON c.id = l.course_id"
+            "  WHERE qr.student_id = :student_id"
+            ") events"
+            " ORDER BY ts DESC"
+            " LIMIT :limit"
+        ),
+        {"student_id": student_id, "limit": limit},
+    )
+    return [dict(row._mapping) for row in result.fetchall()]
+
+
 async def markLessonComplete(lesson_id: str, student_id: str, db: AsyncSession) -> dict | None:
     lesson = await db.execute(
         text("SELECT id FROM lessons WHERE id = :id"),

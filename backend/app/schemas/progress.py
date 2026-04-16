@@ -4,6 +4,13 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
+class ActivityItem(BaseModel):
+    type: str  # "lesson_complete" | "quiz_submit"
+    lesson_title: str
+    course_title: str
+    timestamp: datetime
+
+
 class LessonProgressResponse(BaseModel):
     lesson_id: UUID
     completed: bool

@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import getDb
 from app.dependencies.auth import getCurrentUser, studentOnly, teacherOrAdmin
-from app.schemas.progress import CourseProgressResponse, LessonProgressResponse
+from app.schemas.progress import ActivityItem, CourseProgressResponse, LessonProgressResponse
 from app.schemas.quiz import (
     ChoiceCreate,
     ChoiceResponse,
@@ -140,6 +140,14 @@ async def markLessonComplete(
     if result is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Leçon introuvable")
     return result
+
+
+@router.get("/students/me/activity", response_model=list[ActivityItem])
+async def getMyActivity(
+    db: AsyncSession = Depends(getDb),
+    user: dict = Depends(studentOnly),
+):
+    return await progress_service.getStudentActivity(user["id"], db)
 
 
 @router.get("/courses/{course_id}/progress/me", response_model=CourseProgressResponse)

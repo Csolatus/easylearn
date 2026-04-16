@@ -82,24 +82,28 @@ export type ClassroomUpdate = {
 export type School = {
   id: string;
   name: string;
+  email: string | null;
+  website: string | null;
+  address: string | null;
   is_active: boolean;
   created_at: string;
 };
 
 /** @deprecated use School */
-export type SchoolResponse = {
-  id: string;
-  name: string;
-  is_active: boolean;
-  created_at: string;
-};
+export type SchoolResponse = School;
 
 export type SchoolCreate = {
   name: string;
+  email?: string | null;
+  website?: string | null;
+  address?: string | null;
 };
 
 export type SchoolUpdate = {
-  name: string;
+  name?: string;
+  email?: string | null;
+  website?: string | null;
+  address?: string | null;
 };
 
 // ── School Teachers ───────────────────────────────────────────────────────────
@@ -195,6 +199,15 @@ export type SchoolAnalyticsResponse = {
   total_classrooms: number;
   avg_lesson_completion_pct: number;
   avg_quiz_score_pct: number;
+};
+
+// ── Activity ──────────────────────────────────────────────────────────────────
+
+export type ActivityItem = {
+  type: "lesson_complete" | "quiz_submit";
+  lesson_title: string;
+  course_title: string;
+  timestamp: string;
 };
 
 // ── Agent ─────────────────────────────────────────────────────────────────────

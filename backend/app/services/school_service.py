@@ -3,14 +3,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.schemas.school import SchoolCreate, SchoolUpdate
 
+_SCHOOL_COLS = "id, name, email, website, address, is_active, created_at"
+
 
 async def createSchool(data: SchoolCreate, db: AsyncSession) -> dict:
     result = await db.execute(
         text(
-            "INSERT INTO schools (name) VALUES (:name) "
-            "RETURNING id, name, is_active, created_at"
+            "INSERT INTO schools (name, email, website, address) "
+            "VALUES (:name, :email, :website, :address) "
+            f"RETURNING {_SCHOOL_COLS}"
         ),
-        {"name": data.name},
+        {"name": data.name, "email": data.email, "website": data.website, "address": data.address},
     )
     await db.commit()
     return result.fetchone()._mapping
@@ -18,14 +21,14 @@ async def createSchool(data: SchoolCreate, db: AsyncSession) -> dict:
 
 async def listSchools(db: AsyncSession) -> list[dict]:
     result = await db.execute(
-        text("SELECT id, name, is_active, created_at FROM schools ORDER BY created_at DESC")
+        text(f"SELECT {_SCHOOL_COLS} FROM schools ORDER BY created_at DESC")
     )
     return [row._mapping for row in result.fetchall()]
 
 
 async def getSchool(school_id: str, db: AsyncSession) -> dict | None:
     result = await db.execute(
-        text("SELECT id, name, is_active, created_at FROM schools WHERE id = :id"),
+        text(f"SELECT {_SCHOOL_COLS} FROM schools WHERE id = :id"),
         {"id": school_id},
     )
     row = result.fetchone()
@@ -35,10 +38,14 @@ async def getSchool(school_id: str, db: AsyncSession) -> dict | None:
 async def updateSchool(school_id: str, data: SchoolUpdate, db: AsyncSession) -> dict | None:
     result = await db.execute(
         text(
-            "UPDATE schools SET name = :name WHERE id = :id "
-            "RETURNING id, name, is_active, created_at"
+            "UPDATE schools SET "
+            "  name    = COALESCE(:name, name), "
+            "  email   = COALESCE(:email, email), "
+            "  website = COALESCE(:website, website), "
+            "  address = COALESCE(:address, address) "
+            f"WHERE id = :id RETURNING {_SCHOOL_COLS}"
         ),
-        {"name": data.name, "id": school_id},
+        {"name": data.name, "email": data.email, "website": data.website, "address": data.address, "id": school_id},
     )
     await db.commit()
     row = result.fetchone()
@@ -66,8 +73,7 @@ async def listSchoolStudents(school_id: str, db: AsyncSession) -> list[dict]:
 async def suspendSchool(school_id: str, db: AsyncSession) -> dict | None:
     result = await db.execute(
         text(
-            "UPDATE schools SET is_active = FALSE WHERE id = :id "
-            "RETURNING id, name, is_active, created_at"
+            f"UPDATE schools SET is_active = FALSE WHERE id = :id RETURNING {_SCHOOL_COLS}"
         ),
         {"id": school_id},
     )
