@@ -12,7 +12,7 @@ export default function EcolesPage() {
 
   useEffect(() => {
     if (!token) return;
-    fetchSchools(token).finally(() => setIsLoading(false));
+    fetchSchools().finally(() => setIsLoading(false));
   }, [token, fetchSchools]);
 
   const filtered = schools.filter((s) =>

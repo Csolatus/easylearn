@@ -12,7 +12,7 @@ export default function SuperAdminDashboardPage() {
 
   useEffect(() => {
     if (!token) return;
-    fetchSchools(token).finally(() => setIsLoading(false));
+    fetchSchools().finally(() => setIsLoading(false));
   }, [token, fetchSchools]);
 
   const activeSchools = schools.filter((s) => s.is_active !== false);
