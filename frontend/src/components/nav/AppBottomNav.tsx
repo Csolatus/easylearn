@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
+import { useAuth } from "@/hooks/useAuth";
 import { NAV_CONFIG } from "./navConfig";
 
 function getRoleFromCookie(): string {
@@ -20,6 +21,7 @@ function getRoleFromCookie(): string {
 export default function AppBottomNav() {
   const pathname = usePathname();
   const { user } = useAuthStore();
+  const { logout } = useAuth();
 
   const role = user?.role ?? getRoleFromCookie();
   const config = NAV_CONFIG[role];
@@ -44,6 +46,13 @@ export default function AppBottomNav() {
           {item.label}
         </Link>
       ))}
+      <button
+        onClick={logout}
+        className="flex flex-col items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors"
+      >
+        <span className="text-lg">🚪</span>
+        Sortir
+      </button>
     </nav>
   );
 }
