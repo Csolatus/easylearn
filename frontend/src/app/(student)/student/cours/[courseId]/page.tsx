@@ -137,6 +137,7 @@ export default function StudentLessonPage() {
       prev.map((l) => l.id === activeLesson ? { ...l, done: true } : l)
     );
   };
+  const [readProgress, setReadProgress] = useState(0);
   const [codeContent, setCodeContent] = useState(CODE_STARTER);
   const [terminalLines, setTerminalLines] = useState<{ type: "info" | "success" | "error" | "log"; text: string }[]>([]);
   const [isRunning, setIsRunning] = useState(false);
