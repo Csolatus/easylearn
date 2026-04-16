@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useStreamingText } from "./useStreamingText";
 
 type Message = {
   id: number;
@@ -31,6 +32,7 @@ export default function ChatPanel({ isOpen }: Props) {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const { start: startStream, stop: stopStream } = useStreamingText();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,26 +49,27 @@ export default function ChatPanel({ isOpen }: Props) {
     const assistantId = Date.now() + 1;
     setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "", streaming: true }]);
 
-    // Simulated SSE response
     const response = generateResponse(text.trim());
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i >= response.length) {
-        clearInterval(interval);
+    startStream({
+      text: response,
+      delayMs: 18,
+      onToken: (char) => {
+        setMessages((prev) =>
+          prev.map((m) => m.id === assistantId ? { ...m, content: m.content + char } : m)
+        );
+      },
+      onDone: () => {
         setMessages((prev) =>
           prev.map((m) => m.id === assistantId ? { ...m, streaming: false } : m)
         );
         setIsStreaming(false);
-        return;
-      }
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.id === assistantId ? { ...m, content: m.content + response[i] } : m
-        )
-      );
-      i++;
-    }, 18);
+      },
+    });
   };
+
+  useEffect(() => {
+    return () => stopStream();
+  }, [stopStream]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
