@@ -47,7 +47,7 @@ export default function ClassDetailPage() {
     setToggling(courseId);
     const isAssigned = assignedIds.has(courseId);
     try {
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
       const res = isAssigned
         ? await fetch(`${API}/classrooms/${classId}/courses/${courseId}`, { method: "DELETE", headers })
         : await fetch(`${API}/classrooms/${classId}/courses?course_id=${courseId}`, { method: "POST", headers });

@@ -52,6 +52,7 @@ export function useCourse(courseId: string) {
 
   useEffect(() => {
     if (!courseId) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(null);
     Promise.all([api.courses.get(courseId), api.courses.lessons.list(courseId)])
