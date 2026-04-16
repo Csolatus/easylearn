@@ -8,8 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 load_dotenv()
 
-OLLAMA_HOST = os.getenv("OLLAMA_HOST", "localhost")
-OLLAMA_URL = f"http://{OLLAMA_HOST}:11434/api/chat"
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_URL = f"{OLLAMA_BASE_URL}/api/chat"
 MODEL_NAME = os.getenv("OLLAMA_MODEL", "")
 SYSTEM_PROMPT = os.getenv("OLLAMA_SYSTEM_PROMPT", "")
 
@@ -110,7 +110,7 @@ async def askOllama(history: list[dict], user_message: str) -> str:
 async def checkHealth() -> bool:
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
-            res = await client.get(f"http://{OLLAMA_HOST}:11434/api/tags")
+            res = await client.get(f"{OLLAMA_BASE_URL}/api/tags")
             return res.status_code == 200
     except httpx.ConnectError:
         return False
