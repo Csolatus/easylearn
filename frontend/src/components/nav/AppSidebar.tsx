@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
+import { decodeJwtPayload } from "@/lib/auth";
 import { NAV_CONFIG } from "./navConfig";
 
 function getRoleFromCookie(): string {
@@ -11,8 +13,7 @@ function getRoleFromCookie(): string {
   try {
     const match = document.cookie.match(/auth_token=([^;]+)/);
     if (!match) return "student";
-    const payload = JSON.parse(atob(match[1].split(".")[1]));
-    return payload.role || "student";
+    return decodeJwtPayload(match[1])?.role ?? "student";
   } catch {
     return "student";
   }
@@ -21,7 +22,9 @@ function getRoleFromCookie(): string {
 export default function AppSidebar() {
   const pathname = usePathname();
   const { user } = useAuthStore();
-  const { schools, activeSchool, setActiveSchool } = useSchoolStore();
+  const { schools, activeSchool, setActiveSchool, fetchSchools } = useSchoolStore();
+
+  useEffect(() => { fetchSchools(); }, [fetchSchools]);
 
   const role = user?.role ?? getRoleFromCookie();
   const config = NAV_CONFIG[role];
