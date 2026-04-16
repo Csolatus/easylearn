@@ -30,6 +30,11 @@ class ExchangeResponse(BaseModel):
     created_at: datetime
 
 
+class ExerciseInstructionsResponse(BaseModel):
+    exercise_id: UUID
+    instructions: str
+
+
 class HealthResponse(BaseModel):
     status: Literal["ok", "unavailable"]
     model: str
