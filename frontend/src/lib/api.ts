@@ -22,6 +22,7 @@ import type {
   CourseProgressResponse,
   TeacherAnalyticsResponse,
   SchoolAnalyticsResponse,
+  ActivityItem,
   ConversationResponse,
   ChatResponse,
   ExchangeResponse,
@@ -281,6 +282,12 @@ export const analytics = {
   },
 };
 
+// ── Students ──────────────────────────────────────────────────────────────────
+
+export const students = {
+  activity: () => request<ActivityItem[]>("/students/me/activity"),
+};
+
 // ── Agent ─────────────────────────────────────────────────────────────────────
 
 export const agent = {
@@ -313,6 +320,7 @@ export const api = {
   quiz,
   progress,
   analytics,
+  students,
   agent,
 
   get: <T>(path: string, opts?: { schoolId?: string }) =>
