@@ -1,0 +1,177 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+
+type Message = {
+  id: number;
+  role: "user" | "assistant";
+  content: string;
+  streaming?: boolean;
+};
+
+const QUICK_SUGGESTIONS = [
+  "Explique-moi les closures",
+  "C'est quoi une higher-order function ?",
+  "Donne-moi un exemple de mémoïsation",
+  "Comment fonctionne async/await ?",
+];
+
+type Props = {
+  isOpen: boolean;
+};
+
+export default function ChatPanel({ isOpen }: Props) {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 0,
+      role: "assistant",
+      content: "Bonjour ! Je suis ton assistant IA. Comment puis-je t'aider dans ton apprentissage ?",
+    },
+  ]);
+  const [input, setInput] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const sendMessage = (text: string) => {
+    if (!text.trim() || isStreaming) return;
+
+    const userMsg: Message = { id: Date.now(), role: "user", content: text.trim() };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
+    setIsStreaming(true);
+
+    const assistantId = Date.now() + 1;
+    setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "", streaming: true }]);
+
+    // Simulated SSE response
+    const response = generateResponse(text.trim());
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i >= response.length) {
+        clearInterval(interval);
+        setMessages((prev) =>
+          prev.map((m) => m.id === assistantId ? { ...m, streaming: false } : m)
+        );
+        setIsStreaming(false);
+        return;
+      }
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantId ? { ...m, content: m.content + response[i] } : m
+        )
+      );
+      i++;
+    }, 18);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input);
+    }
+  };
+
+  return (
+    <div
+      className={`fixed bottom-24 right-6 z-40 w-80 sm:w-96 flex flex-col rounded-2xl border border-white/10 dark:border-gray-200 bg-[#111118] dark:bg-white shadow-2xl transition-all duration-300 origin-bottom-right ${
+        isOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
+      }`}
+      style={{ maxHeight: "70vh" }}
+    >
+      {/* Header */}
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10 dark:border-gray-200 shrink-0">
+        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm shrink-0">
+          ✦
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-white dark:text-gray-900">Assistant IA</p>
+          <p className="text-xs text-gray-500">
+            {isStreaming ? (
+              <span className="text-purple-400 animate-pulse">En train de répondre...</span>
+            ) : (
+              "En ligne"
+            )}
+          </p>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-3 min-h-0">
+        {messages.map((msg) => (
+          <div
+            key={msg.id}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
+                msg.role === "user"
+                  ? "bg-purple-600 text-white rounded-br-sm"
+                  : "bg-white/10 dark:bg-gray-100 text-gray-200 dark:text-gray-800 rounded-bl-sm"
+              }`}
+            >
+              {msg.content}
+              {msg.streaming && (
+                <span className="inline-block w-1 h-3.5 bg-purple-400 ml-0.5 animate-pulse rounded-sm align-middle" />
+              )}
+            </div>
+          </div>
+        ))}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Quick suggestions */}
+      {messages.length <= 1 && !isStreaming && (
+        <div className="px-4 pb-2 flex flex-col gap-1.5 shrink-0">
+          <p className="text-xs text-gray-500 mb-0.5">Suggestions</p>
+          {QUICK_SUGGESTIONS.map((s) => (
+            <button
+              key={s}
+              onClick={() => sendMessage(s)}
+              className="text-left text-xs px-3 py-2 rounded-xl border border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100 hover:text-white dark:hover:text-gray-900 transition-colors"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Input */}
+      <div className="px-3 py-3 border-t border-white/10 dark:border-gray-200 flex items-center gap-2 shrink-0">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Pose ta question..."
+          disabled={isStreaming}
+          className="flex-1 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 placeholder-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
+        />
+        <button
+          onClick={() => sendMessage(input)}
+          disabled={!input.trim() || isStreaming}
+          className="w-8 h-8 rounded-xl bg-purple-600 hover:bg-purple-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center text-white transition-colors shrink-0"
+          aria-label="Envoyer le message"
+        >
+          ↑
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function generateResponse(input: string): string {
+  const lower = input.toLowerCase();
+  if (lower.includes("closure"))
+    return "Une closure est une fonction qui se souvient des variables de son environnement lexical, même après que la fonction parente a terminé son exécution. C'est l'un des concepts les plus puissants de JavaScript !";
+  if (lower.includes("higher-order") || lower.includes("higher order"))
+    return "Une higher-order function est une fonction qui prend une autre fonction en argument, ou qui retourne une fonction. Exemples courants : map(), filter(), reduce().";
+  if (lower.includes("mémoïsation") || lower.includes("memoiz"))
+    return "La mémoïsation consiste à mettre en cache le résultat d'une fonction pour éviter de recalculer la même chose plusieurs fois. Très utile pour optimiser les fonctions coûteuses !";
+  if (lower.includes("async") || lower.includes("await"))
+    return "async/await est du sucre syntaxique sur les Promises. Une fonction async retourne toujours une Promise, et await suspend l'exécution jusqu'à ce que la Promise soit résolue.";
+  return "C'est une excellente question ! En JavaScript, ce concept est fondamental pour maîtriser le langage. Je te recommande de pratiquer dans l'onglet Pratique pour mieux comprendre.";
+}
