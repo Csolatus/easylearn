@@ -51,7 +51,6 @@ test:backend:
     - PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres -U $POSTGRES_USER -d $POSTGRES_DB -f database/init.sql
   script:
     - pytest backend/ -v --tb=short
-  allow_failure: true  # remove once backend/ contains at least one test file
 
 test:frontend:
   stage: test
