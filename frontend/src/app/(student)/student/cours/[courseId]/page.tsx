@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import CodeEditor from "@/components/editor/CodeEditor";
@@ -180,9 +180,6 @@ export default function StudentLessonPage() {
   const currentLesson = lessons.find((l) => l.id === activeLesson);
   const isCurrentDone = currentLesson?.done ?? false;
 
-  useEffect(() => {
-    setReadProgress(0);
-  }, [activeLesson, activeTab]);
 
   const handleScroll = () => {
     const el = contentRef.current;
@@ -227,7 +224,7 @@ export default function StudentLessonPage() {
           {lessons.map((lesson) => (
             <button
               key={lesson.id}
-              onClick={() => { setActiveLesson(lesson.id); setActiveTab("Théorie"); }}
+              onClick={() => { setActiveLesson(lesson.id); setActiveTab("Théorie"); setReadProgress(0); }}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
                 activeLesson === lesson.id
                   ? "bg-purple-600/20 text-purple-400"
@@ -280,7 +277,7 @@ export default function StudentLessonPage() {
           {TABS.map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => { setActiveTab(tab); setReadProgress(0); }}
               className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
                 activeTab === tab
                   ? "border-purple-500 text-purple-400 dark:text-purple-600"
