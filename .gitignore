@@ -10,9 +10,9 @@ frontend/out/
 frontend/dist/
 
 # Backend
-backend/*__pycache__
-backend/*.pyc
-backend/*.pyo
+**/__pycache__/
+**/*.pyc
+**/*.pyo
 backend/.venv/
 backend/venv/
 backend/.pytest_cache/
@@ -28,3 +28,5 @@ Thumbs.db
 
 # Claude Code
 .claude/
+
+test-local.sh
