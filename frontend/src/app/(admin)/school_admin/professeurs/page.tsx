@@ -15,12 +15,6 @@ type Teacher = {
   status: TeacherStatus;
 };
 
-const MOCK_TEACHERS: Teacher[] = [
-  { id: "1", name: "Sophie Bernard", email: "sophie.bernard@ecole.fr", classes: 3, status: "active" },
-  { id: "2", name: "Marc Dupont", email: "marc.dupont@ecole.fr", classes: 1, status: "active" },
-  { id: "3", name: "Isabelle Moreau", email: "isabelle.moreau@ecole.fr", classes: 0, status: "invited" },
-  { id: "4", name: "Julien Faure", email: "julien.faure@ecole.fr", classes: 2, status: "suspended" },
-];
 
 const STATUS_FILTERS = ["Tous", "Actif", "Invité", "Suspendu"] as const;
 type FilterLabel = (typeof STATUS_FILTERS)[number];
@@ -51,7 +45,7 @@ const STATUS_DOT: Record<TeacherStatus, string> = {
 };
 
 export default function ProfesseursPage() {
-  const [teachers, setTeachers] = useState<Teacher[]>(MOCK_TEACHERS);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterLabel>("Tous");
 

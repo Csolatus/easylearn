@@ -1,213 +1,137 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useAuthStore } from "@/store/authStore";
+
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 type Course = {
-  id: number;
+  id: string;
   title: string;
-  description: string;
-  instructor: string;
-  level: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
-  rating: number;
-  lessons: number;
-  duration: string;
-  enrolled: number;
-  category: string;
+  visibility: string;
+  created_at: string;
 };
 
 function CourseCard({ course }: { course: Course }) {
-  const levelColors = {
-    BEGINNER: "bg-green-500",
-    INTERMEDIATE: "bg-yellow-500",
-    ADVANCED: "bg-red-500",
-  };
-
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white rounded-2xl overflow-hidden hover:ring-2 hover:ring-purple-500 transition-all">
-      <div className="h-36 bg-gradient-to-br from-purple-900 to-blue-900 dark:from-purple-200 dark:to-blue-200" />
-      <div className="p-4 flex flex-col gap-2">
-        <span className={`text-xs font-bold px-2 py-1 rounded-full w-fit ${levelColors[course.level]}`}>
-          {course.level}
-        </span>
-        <h3 className="font-semibold text-white dark:text-gray-900 text-sm leading-snug">{course.title}</h3>
-        <p className="text-gray-400 dark:text-gray-500 text-xs line-clamp-2">{course.description}</p>
-        <div className="flex items-center gap-2 mt-1">
-          <div className="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-xs text-white">
-            {course.instructor[0]}
-          </div>
-          <span className="text-gray-400 dark:text-gray-500 text-xs">{course.instructor}</span>
-          <span className="ml-auto text-yellow-400 text-xs">★ {course.rating}</span>
-        </div>
-        <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400 text-xs mt-1">
-          <span>📚 {course.lessons} leçons</span>
-          <span>⏱ {course.duration}</span>
-          <span>👥 {course.enrolled}</span>
-        </div>
+    <Link
+      href={`/student/cours/${course.id}`}
+      className="bg-[#1a1a2e] dark:bg-white rounded-2xl overflow-hidden hover:ring-2 hover:ring-purple-500 transition-all flex flex-col"
+    >
+      <div className="h-36 bg-gradient-to-br from-purple-900 to-blue-900 dark:from-purple-200 dark:to-blue-200 flex items-center justify-center">
+        <span className="text-4xl">📚</span>
       </div>
-    </div>
+      <div className="p-4 flex flex-col gap-2 flex-1">
+        <div className="flex items-center gap-2">
+          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+            course.visibility === "public"
+              ? "bg-green-500/20 text-green-400"
+              : course.visibility === "school"
+              ? "bg-blue-500/20 text-blue-400"
+              : "bg-gray-500/20 text-gray-400"
+          }`}>
+            {course.visibility}
+          </span>
+        </div>
+        <h3 className="font-semibold text-white dark:text-gray-900 text-sm leading-snug">
+          {course.title}
+        </h3>
+        <p className="text-gray-500 dark:text-gray-400 text-xs mt-auto">
+          Ajouté le {new Date(course.created_at).toLocaleDateString("fr-FR")}
+        </p>
+      </div>
+    </Link>
   );
 }
 
-const MOCK_COURSES: Course[] = [
-  {
-    id: 1,
-    title: "Advanced Modern JavaScript & Patterns",
-    description: "Master advanced JavaScript patterns, closures, prototypes and modern ES2024 features.",
-    instructor: "Marc Dupont",
-    level: "ADVANCED",
-    rating: 4.8,
-    lessons: 42,
-    duration: "18h",
-    enrolled: 1240,
-    category: "Web Development",
-  },
-  {
-    id: 2,
-    title: "Neural Networks from Ground Zero",
-    description: "Build and train neural networks from scratch using Python and NumPy.",
-    instructor: "Sarah Connor",
-    level: "INTERMEDIATE",
-    rating: 4.6,
-    lessons: 38,
-    duration: "14h",
-    enrolled: 980,
-    category: "AI & ML",
-  },
-  {
-    id: 3,
-    title: "Visual Storytelling with Big Data",
-    description: "Transform complex datasets into compelling visual narratives.",
-    instructor: "Jean Miller",
-    level: "INTERMEDIATE",
-    rating: 4.7,
-    lessons: 27,
-    duration: "10h",
-    enrolled: 760,
-    category: "Data Science",
-  },
-  {
-    id: 4,
-    title: "Kubernetes for Cloud Native Apps",
-    description: "Deploy and manage containerized applications at scale with Kubernetes.",
-    instructor: "Thomas Lee",
-    level: "ADVANCED",
-    rating: 4.9,
-    lessons: 35,
-    duration: "16h",
-    enrolled: 540,
-    category: "Web Development",
-  },
-  {
-    id: 5,
-    title: "Introduction to Python",
-    description: "Learn Python from scratch with hands-on projects and exercises.",
-    instructor: "Alice Martin",
-    level: "BEGINNER",
-    rating: 4.5,
-    lessons: 30,
-    duration: "12h",
-    enrolled: 3200,
-    category: "Data Science",
-  },
-  {
-    id: 6,
-    title: "Machine Learning Fundamentals",
-    description: "Understand the core concepts of machine learning algorithms and applications.",
-    instructor: "David Chen",
-    level: "BEGINNER",
-    rating: 4.4,
-    lessons: 24,
-    duration: "9h",
-    enrolled: 2100,
-    category: "AI & ML",
-  },
-];
-
 export default function CataloguePage() {
+  const token = useAuthStore((s) => s.token);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [activeFilter, setActiveFilter] = useState("All Courses");
 
-  const filters = [
-    "All Courses",
-    "Web Development",
-    "Data Science",
-    "AI & ML",
-    "Beginner",
-    "Intermediate",
-  ];
+  useEffect(() => {
+    fetch(`${API}/courses`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Impossible de charger les cours");
+        return res.json();
+      })
+      .then((data: Course[]) => setCourses(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setIsLoading(false));
+  }, [token]);
+
+  const filtered = courses.filter((c) =>
+    c.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 text-white dark:text-gray-900 px-8 py-10">
       <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <div className="flex items-start justify-between flex-wrap gap-4 mb-2">
           <div>
             <h1 className="text-4xl font-bold">Explore Knowledge</h1>
             <p className="text-gray-400 text-sm mt-2">
-              More than 1,000 courses to build your skills designed for the future
-              of industry and technology.
+              Découvrez tous les cours disponibles sur EasyLearn.
             </p>
           </div>
-          <div className="flex gap-6 text-center">
-            <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm px-5 py-3 rounded-xl">
-              <p className="text-xl font-bold text-purple-400">{MOCK_COURSES.length}</p>
-              <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">Total Courses</p>
+          {!isLoading && !error && (
+            <div className="flex gap-6 text-center">
+              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm px-5 py-3 rounded-xl">
+                <p className="text-xl font-bold text-purple-400">{courses.length}</p>
+                <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">Total Courses</p>
+              </div>
             </div>
-            <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm px-5 py-3 rounded-xl">
-              <p className="text-xl font-bold text-purple-400">1,234</p>
-              <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">Available</p>
-            </div>
-          </div>
+          )}
         </div>
+
+        {/* Search */}
         <div className="mt-6 relative w-full max-w-md">
-          <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
-            🔍
-          </span>
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">🔍</span>
           <input
             type="text"
-            placeholder="Search courses..."
+            placeholder="Rechercher un cours..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full bg-[#1a1a2e] dark:bg-white dark:text-gray-900 dark:shadow-sm text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeFilter === filter
-                  ? "bg-purple-600 text-white"
-                  : "bg-[#1a1a2e] dark:bg-gray-200 text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-gray-900"
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MOCK_COURSES.filter((course) => {
-            const matchSearch = course.title.toLowerCase().includes(search.toLowerCase());
-            const matchFilter =
-              activeFilter === "All Courses" ||
-              course.category === activeFilter ||
-              course.level === activeFilter.toUpperCase();
-            return matchSearch && matchFilter;
-          }).length === 0 ? (
-            <p className="col-span-3 text-center text-gray-500 py-20">
-              Aucun cours trouvé.
-            </p>
-          ) : (
-            MOCK_COURSES.filter((course) => {
-              const matchSearch = course.title.toLowerCase().includes(search.toLowerCase());
-              const matchFilter =
-                activeFilter === "All Courses" ||
-                course.category === activeFilter ||
-                course.level === activeFilter.toUpperCase();
-              return matchSearch && matchFilter;
-            }).map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))
+
+        {/* Content */}
+        <div className="mt-8">
+          {isLoading && (
+            <div className="flex items-center justify-center py-20">
+              <div className="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+
+          {error && (
+            <div className="flex flex-col items-center gap-3 py-20">
+              <p className="text-red-400 text-sm">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="text-xs text-purple-400 hover:text-purple-300"
+              >
+                Réessayer
+              </button>
+            </div>
+          )}
+
+          {!isLoading && !error && filtered.length === 0 && (
+            <p className="text-center text-gray-500 py-20">Aucun cours trouvé.</p>
+          )}
+
+          {!isLoading && !error && filtered.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filtered.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
+            </div>
           )}
         </div>
       </div>
