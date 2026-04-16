@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import HeroSection from "./_components/HeroSection";
+import HeroSection from "./HeroSection";
 import Footer from "@/components/layout/Footer";
 
 export default function Home() {
