@@ -1,7 +1,7 @@
 from pydantic import BaseModel, field_validator
 
 
-SUPPORTED_LANGUAGES = {"python"}
+SUPPORTED_LANGUAGES = {"python", "javascript"}
 
 
 class CodeExecutionRequest(BaseModel):
