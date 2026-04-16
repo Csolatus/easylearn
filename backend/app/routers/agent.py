@@ -11,6 +11,7 @@ from app.schemas.agent import (
     ConversationRequest,
     ConversationResponse,
     ExchangeResponse,
+    ExerciseInstructionsResponse,
     HealthResponse,
 )
 from app.services import agent_service
@@ -83,6 +84,23 @@ async def getMessages(
         )
 
     return await agent_service.getMessages(db, conversation_id)
+
+
+@router.get(
+    "/exercises/{exercise_id}/instructions",
+    response_model=ExerciseInstructionsResponse,
+)
+async def getExerciseInstructions(
+    exercise_id: UUID,
+    db: AsyncSession = Depends(getDb),
+):
+    instructions = await agent_service.getExerciseInstructions(db, exercise_id)
+    if not instructions:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Exercice introuvable.",
+        )
+    return instructions
 
 
 @router.get("/health", response_model=HealthResponse)
