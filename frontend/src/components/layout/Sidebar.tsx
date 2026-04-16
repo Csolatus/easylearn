@@ -1,3 +1,1 @@
-export default function Sidebar() {
-  return null;
-}
+export { default } from "@/components/nav/AppSidebar";
