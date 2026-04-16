@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
 import { Modal } from "@/components/ui/Modal";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
@@ -15,12 +16,6 @@ type Teacher = {
   status: TeacherStatus;
 };
 
-const MOCK_TEACHERS: Teacher[] = [
-  { id: "1", name: "Sophie Bernard", email: "sophie.bernard@ecole.fr", classes: 3, status: "active" },
-  { id: "2", name: "Marc Dupont", email: "marc.dupont@ecole.fr", classes: 1, status: "active" },
-  { id: "3", name: "Isabelle Moreau", email: "isabelle.moreau@ecole.fr", classes: 0, status: "invited" },
-  { id: "4", name: "Julien Faure", email: "julien.faure@ecole.fr", classes: 2, status: "suspended" },
-];
 
 const STATUS_FILTERS = ["Tous", "Actif", "Invité", "Suspendu"] as const;
 type FilterLabel = (typeof STATUS_FILTERS)[number];
@@ -51,7 +46,8 @@ const STATUS_DOT: Record<TeacherStatus, string> = {
 };
 
 export default function ProfesseursPage() {
-  const [teachers, setTeachers] = useState<Teacher[]>(MOCK_TEACHERS);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState<FilterLabel>("Tous");
 
@@ -67,6 +63,14 @@ export default function ProfesseursPage() {
 
   const token = useAuthStore((s) => s.token);
   const activeSchool = useSchoolStore((s) => s.activeSchool);
+
+  useEffect(() => {
+    if (!activeSchool?.id) { setIsLoading(false); return; }
+    api.get<Teacher[]>(`/schools/${activeSchool.id}/teachers`)
+      .then((data) => setTeachers(data))
+      .catch(() => {})
+      .finally(() => setIsLoading(false));
+  }, [activeSchool]);
 
   const exportCSV = () => {
     const headers = ["Nom", "Email", "Classes", "Statut"];
@@ -251,7 +255,13 @@ export default function ProfesseursPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10 dark:divide-gray-200">
-              {filtered.length === 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-8 text-center">
+                    <div className="flex justify-center"><div className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" /></div>
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="px-6 py-8 text-center text-sm text-gray-500">
                     Aucun professeur trouvé.

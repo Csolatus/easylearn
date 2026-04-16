@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import getDb
-from app.dependencies.auth import superAdminOnly
+from app.dependencies.auth import requireRoles, superAdminOnly
 from app.schemas.school import SchoolCreate, SchoolResponse, SchoolUpdate
 from app.services import school_service
 
@@ -38,12 +38,21 @@ async def getSchool(
     return school
 
 
+@router.get("/{school_id}/students")
+async def listSchoolStudents(
+    school_id: str,
+    db: AsyncSession = Depends(getDb),
+    _: dict = Depends(requireRoles("school_admin", "super_admin")),
+):
+    return await school_service.listSchoolStudents(school_id, db)
+
+
 @router.patch("/{school_id}", response_model=SchoolResponse)
 async def updateSchool(
     school_id: str,
     data: SchoolUpdate,
     db: AsyncSession = Depends(getDb),
-    _: dict = Depends(superAdminOnly),
+    _: dict = Depends(requireRoles("school_admin", "super_admin")),
 ):
     school = await school_service.updateSchool(school_id, data, db)
     if school is None:

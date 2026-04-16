@@ -1,12 +1,38 @@
 "use client";
 
 import { useState } from "react";
+import { api } from "@/lib/api";
+import { useSchoolStore } from "@/store/schoolStore";
 
 export default function ParametresPage() {
-  const [schoolName, setSchoolName] = useState("EFREI Paris");
-  const [email, setEmail] = useState("contact@efrei.fr");
-  const [website, setWebsite] = useState("https://www.efrei.fr");
-  const [address, setAddress] = useState("30-32 Avenue de la République, 94800 Villejuif");
+  const activeSchool = useSchoolStore((s) => s.activeSchool);
+  const setActiveSchool = useSchoolStore((s) => s.setActiveSchool);
+  const [schoolName, setSchoolName] = useState(activeSchool?.name ?? "");
+  const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [address, setAddress] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  async function handleSave() {
+    if (!activeSchool?.id || !schoolName.trim()) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const updated = await api.patch<{ id: string; name: string; is_active: boolean; created_at: string }>(
+        `/schools/${activeSchool.id}`,
+        { name: schoolName.trim() }
+      );
+      setActiveSchool({ ...activeSchool, name: updated.name });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Erreur lors de la sauvegarde.");
+    } finally {
+      setSaving(false);
+    }
+  }
   const [logo, setLogo] = useState<string | null>(null);
   const [accentColor, setAccentColor] = useState("#ea580c");
 
@@ -145,11 +171,16 @@ export default function ParametresPage() {
               />
             ))}
           </div>
+          {saveError && (
+            <p className="text-xs text-red-400 bg-red-500/10 px-3 py-2 rounded-lg">{saveError}</p>
+          )}
           <button
-            className="self-start px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors"
-            style={{ backgroundColor: accentColor }}
+            onClick={handleSave}
+            disabled={saving || !activeSchool}
+            className="self-start px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors disabled:opacity-50"
+            style={{ backgroundColor: saved ? "#16a34a" : accentColor }}
           >
-            Sauvegarder les paramètres
+            {saving ? "Sauvegarde..." : saved ? "✓ Sauvegardé" : "Sauvegarder les paramètres"}
           </button>
         </div>
       </div>

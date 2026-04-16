@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { User } from "@/types/user";
+import { decodeJwtPayload } from "@/lib/auth";
 
 type AuthState = {
   user: User | null;
@@ -8,15 +9,6 @@ type AuthState = {
   login: (token: string) => void;
   logout: () => void;
 };
-
-function decodeJwtPayload(token: string): Record<string, string> | null {
-  try {
-    const payload = token.split(".")[1];
-    return JSON.parse(atob(payload));
-  } catch {
-    return null;
-  }
-}
 
 export const useAuthStore = create<AuthState>()(
   persist(

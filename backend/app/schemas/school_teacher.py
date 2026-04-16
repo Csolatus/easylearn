@@ -15,3 +15,11 @@ class SchoolTeacherResponse(BaseModel):
     status: str
     invited_at: datetime
     joined_at: datetime | None
+
+
+class TeacherInSchoolResponse(BaseModel):
+    id: UUID  # school_teachers.id — used for suspend/remove
+    email: str
+    name: str
+    status: str
+    classes: int = 0
