@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import ProgressBar from "@/components/course/ProgressBar";
+import StatCard from "@/components/ui/StatCard";
 
 type Tab = "etudiants" | "cours" | "stats";
 
@@ -159,26 +160,10 @@ export default function ClassDetailPage() {
 
             {/* KPIs */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-green-400">{data.completion}%</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">Complétion</p>
-                <p className="text-gray-500 text-xs mt-0.5">moyenne globale</p>
-              </div>
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-yellow-400">{avgScore}/100</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">Score moyen</p>
-                <p className="text-gray-500 text-xs mt-0.5">tous exercices</p>
-              </div>
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-teal-400">{totalSubmissions}</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">Soumissions</p>
-                <p className="text-gray-500 text-xs mt-0.5">total de la classe</p>
-              </div>
-              <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-                <p className="text-2xl font-bold text-red-400">{struggling.length}</p>
-                <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">En difficulté</p>
-                <p className="text-gray-500 text-xs mt-0.5">complétion &lt;50% ou score &lt;60</p>
-              </div>
+              <StatCard label="Complétion" value={`${data.completion}%`} color="text-green-400" sub="moyenne globale" />
+              <StatCard label="Score moyen" value={`${avgScore}/100`} color="text-yellow-400" sub="tous exercices" />
+              <StatCard label="Soumissions" value={String(totalSubmissions)} color="text-teal-400" sub="total de la classe" />
+              <StatCard label="En difficulté" value={String(struggling.length)} color="text-red-400" sub="complétion <50% ou score <60" />
             </div>
 
             {/* Bar chart complétion par cours */}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import StatCard from "@/components/ui/StatCard";
+import ProgressBar from "@/components/course/ProgressBar";
 
 const COURSES = [
   { name: "JS Avancé", enrolled: 24, completed: 17, avgScore: 78, submissions: 142 },
@@ -53,26 +55,6 @@ const PERIOD_KPIS: Record<Period, { submissions: string; completion: string; sco
   "30j": { submissions: "482",  completion: "64%", score: "72/100", active: "84" },
   "3m":  { submissions: "1212", completion: "61%", score: "70/100", active: "87" },
 };
-
-function StatCard({
-  label,
-  value,
-  sub,
-  color,
-}: {
-  label: string;
-  value: string;
-  sub: string;
-  color: string;
-}) {
-  return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-      <p className={`text-2xl font-bold ${color}`}>{value}</p>
-      <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">{label}</p>
-      <p className="text-gray-500 text-xs mt-0.5">{sub}</p>
-    </div>
-  );
-}
 
 export default function StatsPage() {
   const [activeTab, setActiveTab] = useState<"cours" | "etudiants">("cours");
@@ -215,12 +197,7 @@ export default function StatsPage() {
                       <td className="py-3 text-gray-400 dark:text-gray-500">{student.class}</td>
                       <td className="py-3">
                         <div className="flex items-center gap-2">
-                          <div className="w-20 h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-green-500 rounded-full"
-                              style={{ width: `${student.completion}%` }}
-                            />
-                          </div>
+                          <ProgressBar value={student.completion} color="green" className="w-20" />
                           <span className="text-gray-400">{student.completion}%</span>
                         </div>
                       </td>

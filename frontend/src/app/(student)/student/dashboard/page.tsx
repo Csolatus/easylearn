@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import ProgressBar from "@/components/course/ProgressBar";
+import StatCard from "@/components/ui/StatCard";
 
 const MY_COURSES = [
   { id: 1, title: "Advanced Modern JavaScript", instructor: "Marc Dupont", progress: 68, lessons: 42, nextLesson: "Async Generators" },
@@ -37,10 +38,7 @@ export default function StudentDashboard() {
         {/* Stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {STATS.map((s) => (
-            <div key={s.label} className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-5">
-              <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-              <p className="text-white dark:text-gray-900 text-sm font-medium mt-1">{s.label}</p>
-            </div>
+            <StatCard key={s.label} label={s.label} value={s.value} color={s.color} />
           ))}
         </div>
 
