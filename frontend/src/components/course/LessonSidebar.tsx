@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import ProgressBar from "./ProgressBar";
+import { TYPE_STYLES, TYPE_ICONS } from "@/lib/constants/lessonTypes";
 
 export type Lesson = {
   id: number;
@@ -21,18 +22,6 @@ type Props = {
   onLessonChange: (id: number) => void;
   accentColor?: "purple" | "green";
   showProgress?: boolean;
-};
-
-const TYPE_STYLES: Record<Lesson["type"], string> = {
-  theory: "bg-blue-500/20 text-blue-400",
-  quiz: "bg-yellow-500/20 text-yellow-400",
-  code: "bg-green-500/20 text-green-400",
-};
-
-const TYPE_ICONS: Record<Lesson["type"], string> = {
-  theory: "📝",
-  quiz: "🧠",
-  code: "💻",
 };
 
 const ACCENT_ACTIVE: Record<NonNullable<Props["accentColor"]>, string> = {

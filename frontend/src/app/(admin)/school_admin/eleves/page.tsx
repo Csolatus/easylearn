@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { exportCsv } from "@/lib/utils/exportCsv";
 
 const FILTERS = ["Tous", "Actif", "Inactif"];
 
@@ -18,16 +19,11 @@ export default function ElevesPage() {
   const [activeFilter, setActiveFilter] = useState("Tous");
 
   const exportCSV = () => {
-    const headers = ["Nom", "Email", "Cours", "Progression", "Statut"];
-    const rows = filtered.map((s) => [s.name, s.email, s.cours, `${s.progression}%`, s.statut]);
-    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "eleves.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    exportCsv(
+      ["Nom", "Email", "Cours", "Progression", "Statut"],
+      filtered.map((s) => [s.name, s.email, s.cours, `${s.progression}%`, s.statut]),
+      "eleves.csv"
+    );
   };
 
   const filtered = MOCK_STUDENTS.filter((s) => {

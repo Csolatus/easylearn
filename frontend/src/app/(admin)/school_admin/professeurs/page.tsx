@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { exportCsv } from "@/lib/utils/exportCsv";
 import { Modal } from "@/components/ui/Modal";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
@@ -69,16 +70,11 @@ export default function ProfesseursPage() {
   const activeSchool = useSchoolStore((s) => s.activeSchool);
 
   const exportCSV = () => {
-    const headers = ["Nom", "Email", "Classes", "Statut"];
-    const rows = filtered.map((t) => [t.name, t.email, t.classes, STATUS_LABELS[t.status]]);
-    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "professeurs.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    exportCsv(
+      ["Nom", "Email", "Classes", "Statut"],
+      filtered.map((t) => [t.name, t.email, t.classes, STATUS_LABELS[t.status]]),
+      "professeurs.csv"
+    );
   };
 
   const filtered = teachers.filter((t) => {

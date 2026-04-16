@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import TheoryTab from "@/components/course/TheoryTab";
 import QuizTab from "@/components/course/QuizTab";
 import PracticeTab from "@/components/course/PracticeTab";
+import { TYPE_STYLES, TYPE_ICONS } from "@/lib/constants/lessonTypes";
 
 const MOCK_QUIZ = [
   {
@@ -56,18 +57,6 @@ const INITIAL_LESSONS = [
   { id: 4, title: "Quiz — Les bases", type: "quiz", done: false },
   { id: 5, title: "Exercice pratique", type: "code", done: false },
 ];
-
-const TYPE_STYLES: Record<string, string> = {
-  theory: "bg-blue-500/20 text-blue-400",
-  quiz: "bg-yellow-500/20 text-yellow-400",
-  code: "bg-green-500/20 text-green-400",
-};
-
-const TYPE_ICONS: Record<string, string> = {
-  theory: "📝",
-  quiz: "🧠",
-  code: "💻",
-};
 
 const TABS = ["Théorie", "Pratique", "Quiz"];
 

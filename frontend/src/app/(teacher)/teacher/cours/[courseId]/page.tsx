@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import MarkdownRenderer from "@/components/course/MarkdownRenderer";
+import { TYPE_STYLES, TYPE_ICONS } from "@/lib/constants/lessonTypes";
 
 const MOCK_LESSONS = [
   { id: 1, title: "Introduction & Setup", type: "theory", done: true },
@@ -13,17 +14,6 @@ const MOCK_LESSONS = [
   { id: 5, title: "Exercice pratique", type: "code", done: false },
 ];
 
-const TYPE_STYLES: Record<string, string> = {
-  theory: "bg-blue-500/20 text-blue-400",
-  quiz: "bg-yellow-500/20 text-yellow-400",
-  code: "bg-green-500/20 text-green-400",
-};
-
-const TYPE_ICONS: Record<string, string> = {
-  theory: "📝",
-  quiz: "🧠",
-  code: "💻",
-};
 
 const EDITOR_TABS = ["Théorie", "Pratique", "Quiz"];
 

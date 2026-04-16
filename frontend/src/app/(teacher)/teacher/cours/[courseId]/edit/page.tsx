@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { TYPE_STYLES, TYPE_LABELS } from "@/lib/constants/lessonTypes";
 
 const LESSONS = [
   { id: 1, title: "Introduction & Setup", type: "theory", duration: "15min" },
@@ -11,17 +12,6 @@ const LESSONS = [
   { id: 4, title: "Exercice pratique", type: "practice", duration: "30min" },
 ];
 
-const TYPE_STYLES: Record<string, string> = {
-  theory: "bg-blue-500/20 text-blue-400",
-  quiz: "bg-yellow-500/20 text-yellow-400",
-  practice: "bg-green-500/20 text-green-400",
-};
-
-const TYPE_LABELS: Record<string, string> = {
-  theory: "Théorie",
-  quiz: "Quiz",
-  practice: "Exercice",
-};
 
 export default function CourseEditPage() {
   const { courseId } = useParams<{ courseId: string }>();
