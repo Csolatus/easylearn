@@ -3,22 +3,26 @@
 import { useState } from "react";
 
 export default function RegisterPage() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState<"student" | "teacher">("student");
-  const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+  const [errors, setErrors] = useState<{ firstName?: string; lastName?: string; email?: string; password?: string; confirmPassword?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validate = () => {
-    const newErrors: { email?: string; password?: string; confirmPassword?: string } = {};
+    const newErrors: { firstName?: string; lastName?: string; email?: string; password?: string; confirmPassword?: string } = {};
+    if (!firstName.trim()) newErrors.firstName = "Le prénom est requis";
+    if (!lastName.trim()) newErrors.lastName = "Le nom est requis";
     if (!email) newErrors.email = "L'email est requis";
     else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email invalide";
     if (!password) newErrors.password = "Le mot de passe est requis";
-    else if (password.length < 6) newErrors.password = "Minimum 6 caractères";
+    else if (password.length < 8) newErrors.password = "Minimum 8 caractères";
     if (!confirmPassword) newErrors.confirmPassword = "Veuillez confirmer le mot de passe";
     else if (password !== confirmPassword) newErrors.confirmPassword = "Les mots de passe ne correspondent pas";
     return newErrors;
@@ -38,7 +42,7 @@ export default function RegisterPage() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({ first_name: firstName, last_name: lastName, email, password, role }),
       });
       if (!res.ok) throw new Error("Erreur lors de la création du compte");
       const data = await res.json();
@@ -107,6 +111,35 @@ export default function RegisterPage() {
                 >
                   🧑‍🏫 Professeur
                 </button>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
+                  Prénom
+                </label>
+                <input
+                  type="text"
+                  placeholder="Jean"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 text-white dark:text-gray-900 placeholder-gray-500 text-sm focus:outline-none focus:border-indigo-500"
+                />
+                {errors.firstName && <p className="text-red-400 text-xs">{errors.firstName}</p>}
+              </div>
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">
+                  Nom
+                </label>
+                <input
+                  type="text"
+                  placeholder="Dupont"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 text-white dark:text-gray-900 placeholder-gray-500 text-sm focus:outline-none focus:border-indigo-500"
+                />
+                {errors.lastName && <p className="text-red-400 text-xs">{errors.lastName}</p>}
               </div>
             </div>
 
