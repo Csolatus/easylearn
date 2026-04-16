@@ -29,7 +29,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <div className="fixed top-4 right-4 z-50">
+        <div className="fixed bottom-20 right-6 z-50">
           <ThemeToggle />
         </div>
         {children}
