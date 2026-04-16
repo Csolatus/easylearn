@@ -1,4 +1,6 @@
+import json
 import os
+from collections.abc import AsyncGenerator
 from uuid import UUID
 
 import httpx
@@ -116,6 +118,32 @@ async def askOllama(history: list[dict], user_message: str) -> str:
         res.raise_for_status()
 
     return res.json()["message"]["content"]
+
+
+async def askOllamaStream(history: list[dict], user_message: str) -> AsyncGenerator[str, None]:
+    messages = []
+    if SYSTEM_PROMPT:
+        messages.append({"role": "system", "content": SYSTEM_PROMPT})
+    messages.extend(history)
+    messages.append({"role": "user", "content": user_message})
+
+    payload = {"model": MODEL_NAME, "messages": messages, "stream": True}
+
+    async with httpx.AsyncClient(timeout=120.0) as client:
+        async with client.stream("POST", OLLAMA_URL, json=payload) as res:
+            res.raise_for_status()
+            async for line in res.aiter_lines():
+                if not line:
+                    continue
+                try:
+                    data = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                token = data.get("message", {}).get("content", "")
+                if token:
+                    yield token
+                if data.get("done"):
+                    break
 
 
 async def checkHealth() -> bool:

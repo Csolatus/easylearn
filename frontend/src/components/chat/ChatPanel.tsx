@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useStreamingText } from "./useStreamingText";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { api, ApiError } from "@/lib/api";
+import { fetchStream } from "@/lib/sse";
 
 type Message = {
   id: number;
@@ -36,17 +36,17 @@ export default function ChatPanel({ isOpen }: Props) {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { start: startStream, stop: stopStream } = useStreamingText();
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
-    return () => stopStream();
-  }, [stopStream]);
+    return () => { abortRef.current?.abort(); };
+  }, []);
 
-  const sendMessage = async (text: string) => {
+  const sendMessage = useCallback(async (text: string) => {
     if (!text.trim() || isStreaming || !user) return;
 
     const userMsg: Message = { id: Date.now(), role: "user", content: text.trim() };
@@ -68,23 +68,42 @@ export default function ChatPanel({ isOpen }: Props) {
         setConversationId(convId);
       }
 
-      const res = await api.agent.chat(convId, user.id, text.trim());
+      const controller = new AbortController();
+      abortRef.current = controller;
 
-      startStream({
-        text: res.response,
-        delayMs: 18,
-        onToken: (char) => {
-          setMessages((prev) =>
-            prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + char } : m))
-          );
-        },
-        onDone: () => {
-          setMessages((prev) =>
-            prev.map((m) => (m.id === assistantId ? { ...m, streaming: false } : m))
-          );
-          setIsStreaming(false);
-        },
-      });
+      await fetchStream(
+        `/agent/conversations/${convId}/stream`,
+        { student_id: user.id, message: text.trim() },
+        {
+          signal: controller.signal,
+          onToken: (token) => {
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === assistantId ? { ...m, content: m.content + token } : m
+              )
+            );
+          },
+          onDone: () => {
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === assistantId ? { ...m, streaming: false } : m
+              )
+            );
+            setIsStreaming(false);
+          },
+          onError: (err) => {
+            if (err.name === "AbortError") return;
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === assistantId
+                  ? { ...m, content: err.message || "Une erreur est survenue.", streaming: false }
+                  : m
+              )
+            );
+            setIsStreaming(false);
+          },
+        }
+      );
     } catch (err) {
       const message =
         err instanceof ApiError && err.status === 503
@@ -100,7 +119,7 @@ export default function ChatPanel({ isOpen }: Props) {
       );
       setIsStreaming(false);
     }
-  };
+  }, [isStreaming, user, conversationId]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
