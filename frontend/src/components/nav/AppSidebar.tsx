@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
 import { decodeJwtPayload } from "@/lib/auth";
+import { useAuth } from "@/hooks/useAuth";
 import { NAV_CONFIG } from "./navConfig";
 
 function getRoleFromCookie(): string {
@@ -22,6 +23,7 @@ function getRoleFromCookie(): string {
 export default function AppSidebar() {
   const pathname = usePathname();
   const { user } = useAuthStore();
+  const { logout } = useAuth();
   const { schools, activeSchool, setActiveSchool, fetchSchools } = useSchoolStore();
 
   useEffect(() => { fetchSchools(); }, [fetchSchools]);
@@ -106,6 +108,12 @@ export default function AppSidebar() {
         >
           <span>❓</span> Help
         </Link>
+        <button
+          onClick={logout}
+          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors w-full text-left"
+        >
+          <span>🚪</span> Déconnexion
+        </button>
       </div>
 
       {/* CTA button */}
