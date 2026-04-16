@@ -171,13 +171,20 @@ CREATE TABLE course_progress (
 -- IA GÉNÉRATIVE
 -- ============================================================
 
-CREATE TABLE ai_generations (
+CREATE TABLE conversations (
     id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     student_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    course_id  UUID NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
-    prompt     TEXT NOT NULL,
-    output     TEXT,
-    pending    BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE ai_generations (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+    student_id      UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    course_id       UUID REFERENCES courses(id) ON DELETE CASCADE,
+    prompt          TEXT NOT NULL,
+    output          TEXT,
+    pending         BOOLEAN DEFAULT TRUE,
+    created_at      TIMESTAMP DEFAULT NOW(),
+    updated_at      TIMESTAMP DEFAULT NOW()
 );
