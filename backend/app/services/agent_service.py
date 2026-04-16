@@ -91,6 +91,17 @@ async def getMessages(db: AsyncSession, conversation_id: UUID) -> list[dict]:
     ]
 
 
+async def getExerciseInstructions(db: AsyncSession, exercise_id: UUID) -> dict | None:
+    result = await db.execute(
+        text("SELECT id, instructions FROM practical_exercises WHERE id = :id"),
+        {"id": str(exercise_id)},
+    )
+    row = result.fetchone()
+    if not row:
+        return None
+    return {"exercise_id": row.id, "instructions": row.instructions}
+
+
 async def askOllama(history: list[dict], user_message: str) -> str:
     messages = []
     if SYSTEM_PROMPT:
