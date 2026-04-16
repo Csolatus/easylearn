@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { decodeJwtPayload } from "@/lib/auth";
 
 const ROLE_DASHBOARDS: Record<string, string> = {
   student: "/student/dashboard",
@@ -14,15 +15,6 @@ const ROLE_PREFIXES: Record<string, string> = {
   school_admin: "/school_admin",
   super_admin: "/super_admin",
 };
-
-function decodeJwtPayload(token: string): Record<string, string> | null {
-  try {
-    const payload = token.split(".")[1];
-    return JSON.parse(atob(payload));
-  } catch {
-    return null;
-  }
-}
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
