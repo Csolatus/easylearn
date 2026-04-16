@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
+import { decodeJwtPayload } from "@/lib/auth";
 
 const ROLE_DASHBOARDS: Record<string, string> = {
   student: "/student/dashboard",
@@ -51,8 +52,8 @@ export default function LoginPage() {
       if (!res.ok) throw new Error("Email ou mot de passe incorrect");
       const data = await res.json();
       login(data.access_token);
-      const payload = JSON.parse(atob(data.access_token.split(".")[1]));
-      router.push(ROLE_DASHBOARDS[payload.role] ?? "/");
+      const payload = decodeJwtPayload(data.access_token);
+      router.push(ROLE_DASHBOARDS[payload?.role ?? ""] ?? "/");
     } catch (err) {
       setApiError(err instanceof Error ? err.message : "Une erreur est survenue");
     } finally {
