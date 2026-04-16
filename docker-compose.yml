@@ -25,7 +25,7 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - JWT_ALGORITHM=${JWT_ALGORITHM}
       - JWT_EXPIRE_MINUTES=${JWT_EXPIRE_MINUTES}
-      - OLLAMA_HOST=host.docker.internal
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434  # host.docker.internal pointe vers ta machine locale sur Windows/Mac
       - OLLAMA_MODEL=${OLLAMA_MODEL}
       - OLLAMA_SYSTEM_PROMPT=${OLLAMA_SYSTEM_PROMPT}
       - PISTON_API_URL=${PISTON_API_URL}
