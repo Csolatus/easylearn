@@ -1,93 +1,256 @@
 # EasyLearn
 
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=nextdotjs)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)
 
+EasyLearn is a Learning Management System built during the EFREI Hackathon 2025–2026. The idea was straightforward: most existing LMS platforms are limited to passive content. We wanted students to be able to read a lesson, take a quiz, write and run code, and ask questions to an AI assistant — all without leaving the same page.
+
+The platform supports four roles — student, teacher, school admin and super admin — and is designed to run in a multi-school environment.
+
+---
+
+## Table of contents
+
+1. [What the platform does](#what-the-platform-does)
+2. [Tech stack](#tech-stack)
+3. [Architecture](#architecture)
+4. [Getting started](#getting-started)
+5. [Environment variables](#environment-variables)
+6. [Pages by role](#pages-by-role)
+7. [API](#api)
+8. [Database](#database)
+9. [Technical decisions](#technical-decisions)
+
+---
+
+## What the platform does
+
+Depending on the user's role, the experience is quite different.
+
+A **student** follows courses lesson by lesson. Each lesson has three tabs: theory (Markdown content), a multiple-choice quiz, and a coding exercise with an editor embedded directly in the page. If they get stuck, they can open the AI assistant which responds in streaming and tries to guide them without giving away the answer.
+
+A **teacher** creates courses, structures lessons, defines quizzes and coding exercises. They manage their classes via an invitation code, assign courses to classes, and monitor student progress through analytics.
+
+A **school admin** oversees an entire institution: they invite teachers, control which courses are accessible within their school (via a whitelist), and track enrolled students.
+
+The **super admin** has a global view of all schools on the platform. They can create, activate or suspend institutions.
+
+---
+
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 16, React 19, TypeScript 5 |
+| UI | HeroUI v3, Tailwind CSS v4 |
+| State management | Zustand v5 with `persist` middleware |
+| Code editor | CodeMirror 6 — JS, Python, SQL |
+| Backend | FastAPI 0.115, Uvicorn, Python 3.11 |
+| Database | PostgreSQL 16 via SQLAlchemy 2.0 async + asyncpg |
+| Authentication | JWT (`python-jose`), bcrypt |
+| AI assistant | Ollama (self-hosted), SSE streaming |
+| Code sandbox | Piston API (self-hosted) |
+| Testing | pytest (backend), Jest 30 + Testing Library (frontend) |
+| Infrastructure | Docker Compose |
+
+---
+
+## Architecture
+
+Five Docker services, one shared bridge network (`easylearn-network`), and that's it.
+
+| Service | Port | Role |
+|---|---|---|
+| `frontend` | 3000 | Next.js interface |
+| `backend` | 8000 | FastAPI REST API |
+| `postgres` | 5432 | Database |
+| `piston` | 2000 | Code execution sandbox |
+| `piston-setup` | — | One-shot: installs Python 3.10 and Node 18.15 into Piston on first startup |
+
+On the frontend side, the application is split into separate spaces using Next.js route groups. Each role has its own space and cannot access other roles' routes.
+
+```
+app/
+  (auth)/          login, register
+  (student)/       dashboard, catalogue, cours, profil
+  (teacher)/       dashboard, cours, classes, stats
+  (admin)/         dashboard, eleves, professeurs, catalogue, parametres
+  (super-admin)/   dashboard, ecoles
+```
+
+The `middleware.ts` intercepts every request, decodes the JWT and redirects the user to the right space based on their role. If the token is missing or invalid, it redirects to `/login`.
+
+---
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### Requirements
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- Docker and Docker Compose
+- [Ollama](https://ollama.ai) installed and running on the host machine (required for the AI assistant)
 
-## Add your files
+### Setup
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+```bash
+git clone https://gitlab.com/Csolatus/easylearn.git
+cd easylearn
 
+cp .env.example .env
+# Fill in the values in .env (see next section)
+
+docker-compose up --build
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/Csolatus/easylearn.git
-git branch -M main
-git push -uf origin main
+
+Once running:
+
+| | URL |
+|---|---|
+| Application | http://localhost:3000 |
+| API | http://localhost:8000 |
+| Swagger | http://localhost:8000/docs |
+
+> On first startup, `piston-setup` installs the runtimes into the Piston container via its API. This takes about 30 seconds — the backend service waits automatically for Piston to be ready.
+
+---
+
+## Environment variables
+
+```env
+# Database
+POSTGRES_USER=easylearn
+POSTGRES_PASSWORD=easylearn
+POSTGRES_DB=easylearn
+DATABASE_URL=postgresql+asyncpg://easylearn:easylearn@postgres:5432/easylearn
+
+# Authentication
+SECRET_KEY=change-this-value-in-production
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=60
+
+# Ollama
+OLLAMA_BASE_URL=http://host.docker.internal:11434
+OLLAMA_MODEL=llama3
+OLLAMA_SYSTEM_PROMPT="You are a supportive educational mentor. Guide the student without directly giving them the answer."
+
+# Piston
+PISTON_API_URL=http://piston:2000
+
+# Frontend
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-## Integrate with your tools
+---
 
-* [Set up project integrations](https://gitlab.com/Csolatus/easylearn/-/settings/integrations)
+## Pages by role
 
-## Collaborate with your team
+### Student
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+| Page | URL |
+|---|---|
+| Dashboard | `/student/dashboard` |
+| Course catalogue | `/student/catalogue` |
+| Course overview | `/student/cours/[courseId]` |
+| Lesson — theory, quiz, practice | `/student/cours/[courseId]/[lessonId]` |
+| Profile | `/student/profil` |
 
-## Test and Deploy
+### Teacher
 
-Use the built-in continuous integration in GitLab.
+| Page | URL |
+|---|---|
+| Dashboard | `/teacher/dashboard` |
+| My courses | `/teacher/cours` |
+| Course editor | `/teacher/cours/[courseId]/edit` |
+| My classes | `/teacher/classes` |
+| Class detail | `/teacher/classes/[classId]` |
+| Statistics | `/teacher/stats` |
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+### School admin
 
-***
+| Page | URL |
+|---|---|
+| Dashboard | `/school_admin/dashboard` |
+| Catalogue (whitelist) | `/school_admin/catalogue` |
+| Students | `/school_admin/eleves` |
+| Teachers | `/school_admin/professeurs` |
+| Settings | `/school_admin/parametres` |
 
-# Editing this README
+### Super admin
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+| Page | URL |
+|---|---|
+| Dashboard | `/super_admin/dashboard` |
+| Schools management | `/super_admin/ecoles` |
 
-## Suggestions for a good README
+---
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## API
 
-## Name
-Choose a self-explaining name for your project.
+Full documentation is available via Swagger at `http://localhost:8000/docs`.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+| Domain | Prefix | What it covers |
+|---|---|---|
+| Authentication | `/auth` | register, login, me, logout |
+| Schools | `/schools` | CRUD schools, teacher invitations, course whitelist |
+| Classrooms | `/classrooms` | CRUD classrooms, course assignment |
+| Courses & Lessons | `/courses` | CRUD courses and lessons, school filtering |
+| Quiz | `/lessons/{id}/quiz` | Creation, submission, results |
+| Progress | `/lessons/{id}/complete` | Mark lesson complete, student activity |
+| Analytics | `/analytics` | School and teacher statistics |
+| Code execution | `/execute` | Run code via Piston |
+| AI assistant | `/agent` | Conversations, messages, SSE streaming |
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Database
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+The full schema is in [`database/init.sql`](./database/init.sql). It is applied automatically on first startup via `docker-entrypoint-initdb.d` — no manual migration needed.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+| Table | Description |
+|---|---|
+| `users` | All users, role: `student`, `teacher`, `school_admin`, `super_admin` |
+| `schools` | Educational institutions |
+| `school_teachers` | Teacher/school relationship, status: `invited`, `active`, `suspended`, `removed` |
+| `classrooms` | Classes with a unique invitation code |
+| `student_classrooms` | Student enrollment in a classroom |
+| `courses` | Courses, visibility: `public`, `school`, `private` |
+| `classroom_courses` | Course assigned to a classroom |
+| `school_course_whitelists` | Courses allowed within a school |
+| `lessons` | Lessons ordered by `ordre`, Markdown content |
+| `practical_exercises` | Coding exercise attached to a lesson |
+| `coding_sessions` | Student's current code, auto-saved |
+| `quizzes / questions / choices` | Quiz structure |
+| `quiz_results / student_answers` | Student submissions and answers |
+| `course_progress` | Completion per lesson, unique per `(student, lesson)` |
+| `conversations / ai_generations` | AI assistant conversation history |
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+---
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## Technical decisions
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+**Raw SQL instead of ORM**
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+We use SQLAlchemy only for async connection management, but all queries are written in raw SQL via `text()`. In a hackathon where the schema evolves quickly, this is often faster than fighting an ORM. It also gives full control over what gets sent to PostgreSQL.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+**Teachers are not tied to a school**
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+A teacher exists at the platform level. They can be invited into one or several schools, and their status in each school is independent (`invited`, `active`, `suspended`, `removed`). This means they don't lose their courses if they leave an institution, and they can easily be invited elsewhere.
 
-## License
-For open source projects, say how it is licensed.
+**AI responds in streaming**
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Ollama's responses are sent token by token to the browser via Server-Sent Events. The full response is only saved to the database once the stream is complete. This avoids persisting partial responses and makes the experience feel much more fluid on the student's end.
+
+**Piston for code execution**
+
+We didn't want arbitrary code running on the main server. Piston runs in its own container, with no network access and no access to the host filesystem. The interface is simple: send the language and the code, get back the output.
+
+**No migrations**
+
+The schema is defined once in `init.sql`. In a hackathon context, this simplifies setup and avoids managing an additional migration tool. The trade-off is that any schema change requires recreating the Docker volume.
+
+---
+
+*EFREI Hackathon 2025–2026*
