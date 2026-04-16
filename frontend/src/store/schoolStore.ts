@@ -1,13 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { useAuthStore } from "@/store/authStore";
+import { api } from "@/lib/api";
+import type { School } from "@/types/api";
 
-export type School = {
-  id: string;
-  name: string;
-  is_active?: boolean;
-  created_at?: string;
-};
+export type { School };
 
 type SchoolState = {
   schools: School[];
@@ -28,20 +24,13 @@ export const useSchoolStore = create<SchoolState>()(
 
       fetchSchools: async () => {
         if (get().isLoaded) return;
-        const token = useAuthStore.getState().token;
-        if (!token) return;
         try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schools`, {
-            headers: { Authorization: `Bearer ${token}` },
+          const schools = await api.get<School[]>("/schools");
+          set({
+            schools,
+            activeSchool: get().activeSchool ?? schools[0] ?? null,
+            isLoaded: true,
           });
-          if (res.ok) {
-            const schools: School[] = await res.json();
-            set({
-              schools,
-              activeSchool: get().activeSchool ?? schools[0] ?? null,
-              isLoaded: true,
-            });
-          }
         } catch {
           // keep existing state on error
         }
