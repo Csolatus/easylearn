@@ -110,6 +110,26 @@ async def removeTeacher(invitation_id: str, db: AsyncSession) -> dict | None:
     return row._mapping if row else None
 
 
+async def listSchoolTeachers(school_id: str, db: AsyncSession) -> list[dict]:
+    result = await db.execute(
+        text(
+            "SELECT st.id, u.email, "
+            "  CONCAT(u.first_name, ' ', u.last_name) AS name, "
+            "  st.status "
+            "FROM school_teachers st "
+            "JOIN users u ON u.id = st.teacher_id "
+            "WHERE st.school_id = :school_id "
+            "  AND st.status IN ('active', 'invited', 'suspended') "
+            "ORDER BY st.invited_at DESC"
+        ),
+        {"school_id": school_id},
+    )
+    return [
+        {"id": r.id, "email": r.email, "name": r.name, "status": r.status, "classes": 0}
+        for r in result.fetchall()
+    ]
+
+
 async def listMyInvitations(teacher_id: str, db: AsyncSession) -> list[dict]:
     result = await db.execute(
         text(
