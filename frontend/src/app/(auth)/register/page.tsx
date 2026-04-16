@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import AuthHeader from "@/components/layout/AuthHeader";
+import AuthFooter from "@/components/layout/AuthFooter";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -72,15 +74,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0a0f] dark:bg-gray-50">
-      <div className="flex items-center justify-between px-8 py-4 border-b border-white/5 dark:border-gray-200">
-        <span className="text-white dark:text-gray-900 font-bold text-sm">EasyLearn</span>
-        <div className="flex items-center gap-1 text-sm text-gray-400 dark:text-gray-500">
-          <span>Déjà inscrit ?</span>
-          <a href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
-            Se connecter
-          </a>
-        </div>
-      </div>
+      <AuthHeader questionText="Déjà inscrit ?" linkText="Se connecter" linkHref="/login" />
 
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md bg-[#111118] dark:bg-white dark:shadow-xl border border-white/8 dark:border-gray-200 rounded-2xl p-8 shadow-2xl">
@@ -253,16 +247,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <footer className="py-6 flex flex-col items-center gap-3">
-        <div className="flex items-center gap-6 text-xs text-gray-600 dark:text-gray-400">
-          <a href="#" className="hover:text-gray-400 dark:hover:text-gray-600 transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-gray-400 dark:hover:text-gray-600 transition-colors">Need help?</a>
-          <a href="#" className="hover:text-gray-400 dark:hover:text-gray-600 transition-colors">Legal notice</a>
-        </div>
-        <p className="text-xs text-gray-700 dark:text-gray-400">
-          © 2024 EasyLearn. All rights reserved.
-        </p>
-      </footer>
+      <AuthFooter />
     </div>
   );
 }
