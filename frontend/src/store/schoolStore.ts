@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { api } from "@/lib/api";
+import type { School } from "@/types/api";
 
 export type School = {
   id: string;
@@ -11,6 +13,7 @@ export type School = {
 type SchoolState = {
   schools: School[];
   activeSchool: School | null;
+  isLoaded: boolean;
   setActiveSchool: (school: School) => void;
   setSchools: (schools: School[]) => void;
   fetchSchools: (token: string) => Promise<void>;
