@@ -74,8 +74,10 @@ export default function ParametresPage() {
         <div className="px-6 py-6 flex items-center gap-6">
           <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-white/20 dark:border-gray-300 bg-white/5 dark:bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
             {logo ? (
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt="Logo" className="w-full h-full object-cover rounded-2xl" />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={logo} alt="Logo" className="w-full h-full object-cover rounded-2xl" />
+              </>
             ) : (
               <span className="text-3xl">🏛️</span>
             )}
