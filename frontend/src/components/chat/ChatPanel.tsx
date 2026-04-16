@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useStreamingText } from "./useStreamingText";
+import { useAuthStore } from "@/store/authStore";
+import { api, ApiError } from "@/lib/api";
 
 type Message = {
   id: number;
@@ -22,6 +24,8 @@ type Props = {
 };
 
 export default function ChatPanel({ isOpen }: Props) {
+  const user = useAuthStore((s) => s.user);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 0,
@@ -38,8 +42,12 @@ export default function ChatPanel({ isOpen }: Props) {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = (text: string) => {
-    if (!text.trim() || isStreaming) return;
+  useEffect(() => {
+    return () => stopStream();
+  }, [stopStream]);
+
+  const sendMessage = async (text: string) => {
+    if (!text.trim() || isStreaming || !user) return;
 
     const userMsg: Message = { id: Date.now(), role: "user", content: text.trim() };
     setMessages((prev) => [...prev, userMsg]);
@@ -47,29 +55,52 @@ export default function ChatPanel({ isOpen }: Props) {
     setIsStreaming(true);
 
     const assistantId = Date.now() + 1;
-    setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "", streaming: true }]);
+    setMessages((prev) => [
+      ...prev,
+      { id: assistantId, role: "assistant", content: "", streaming: true },
+    ]);
 
-    const response = generateResponse(text.trim());
-    startStream({
-      text: response,
-      delayMs: 18,
-      onToken: (char) => {
-        setMessages((prev) =>
-          prev.map((m) => m.id === assistantId ? { ...m, content: m.content + char } : m)
-        );
-      },
-      onDone: () => {
-        setMessages((prev) =>
-          prev.map((m) => m.id === assistantId ? { ...m, streaming: false } : m)
-        );
-        setIsStreaming(false);
-      },
-    });
+    try {
+      let convId = conversationId;
+      if (!convId) {
+        const conv = await api.agent.createConversation(user.id);
+        convId = conv.conversation_id;
+        setConversationId(convId);
+      }
+
+      const res = await api.agent.chat(convId, user.id, text.trim());
+
+      startStream({
+        text: res.response,
+        delayMs: 18,
+        onToken: (char) => {
+          setMessages((prev) =>
+            prev.map((m) => (m.id === assistantId ? { ...m, content: m.content + char } : m))
+          );
+        },
+        onDone: () => {
+          setMessages((prev) =>
+            prev.map((m) => (m.id === assistantId ? { ...m, streaming: false } : m))
+          );
+          setIsStreaming(false);
+        },
+      });
+    } catch (err) {
+      const message =
+        err instanceof ApiError && err.status === 503
+          ? "L'agent IA est indisponible. Vérifiez qu'Ollama est démarré."
+          : err instanceof Error
+          ? err.message
+          : "Une erreur est survenue.";
+
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantId ? { ...m, content: message, streaming: false } : m
+        )
+      );
+      setIsStreaming(false);
+    }
   };
-
-  useEffect(() => {
-    return () => stopStream();
-  }, [stopStream]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -164,17 +195,4 @@ export default function ChatPanel({ isOpen }: Props) {
       </div>
     </div>
   );
-}
-
-function generateResponse(input: string): string {
-  const lower = input.toLowerCase();
-  if (lower.includes("closure"))
-    return "Une closure est une fonction qui se souvient des variables de son environnement lexical, même après que la fonction parente a terminé son exécution. C'est l'un des concepts les plus puissants de JavaScript !";
-  if (lower.includes("higher-order") || lower.includes("higher order"))
-    return "Une higher-order function est une fonction qui prend une autre fonction en argument, ou qui retourne une fonction. Exemples courants : map(), filter(), reduce().";
-  if (lower.includes("mémoïsation") || lower.includes("memoiz"))
-    return "La mémoïsation consiste à mettre en cache le résultat d'une fonction pour éviter de recalculer la même chose plusieurs fois. Très utile pour optimiser les fonctions coûteuses !";
-  if (lower.includes("async") || lower.includes("await"))
-    return "async/await est du sucre syntaxique sur les Promises. Une fonction async retourne toujours une Promise, et await suspend l'exécution jusqu'à ce que la Promise soit résolue.";
-  return "C'est une excellente question ! En JavaScript, ce concept est fondamental pour maîtriser le langage. Je te recommande de pratiquer dans l'onglet Pratique pour mieux comprendre.";
 }
