@@ -1,15 +1,22 @@
-export type JwtPayload = {
-  sub: string;
-  email: string;
-  role: string;
-  exp?: number;
-};
+import { useAuthStore } from "@/store/authStore";
+import { api } from "@/lib/api";
 
-export function decodeJwtPayload(token: string): JwtPayload | null {
+/**
+ * Appelle GET /auth/me et met à jour le store avec les données fraîches du serveur.
+ * À appeler au montage des layouts protégés pour synchroniser first_name/last_name.
+ */
+export async function refreshCurrentUser(): Promise<void> {
   try {
-    const payload = token.split(".")[1];
-    return JSON.parse(atob(payload)) as JwtPayload;
+    const user = await api.auth.me();
+    useAuthStore.getState().setUser(user);
   } catch {
-    return null;
+    useAuthStore.getState().logout();
   }
+}
+
+/**
+ * Retourne true si l'utilisateur est authentifié (token présent en store).
+ */
+export function isAuthenticated(): boolean {
+  return useAuthStore.getState().token !== null;
 }
