@@ -1,10 +1,15 @@
 import { useAuthStore } from "@/store/authStore";
 import { api } from "@/lib/api";
 
-/**
- * Appelle GET /auth/me et met à jour le store avec les données fraîches du serveur.
- * À appeler au montage des layouts protégés pour synchroniser first_name/last_name.
- */
+export function decodeJwtPayload(token: string): Record<string, string> | null {
+  try {
+    const payload = token.split(".")[1];
+    return JSON.parse(atob(payload));
+  } catch {
+    return null;
+  }
+}
+
 export async function refreshCurrentUser(): Promise<void> {
   try {
     const user = await api.auth.me();
@@ -14,9 +19,6 @@ export async function refreshCurrentUser(): Promise<void> {
   }
 }
 
-/**
- * Retourne true si l'utilisateur est authentifié (token présent en store).
- */
 export function isAuthenticated(): boolean {
   return useAuthStore.getState().token !== null;
 }

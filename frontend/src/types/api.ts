@@ -79,6 +79,14 @@ export type ClassroomUpdate = {
 
 // ── Schools ───────────────────────────────────────────────────────────────────
 
+export type School = {
+  id: string;
+  name: string;
+  is_active: boolean;
+  created_at: string;
+};
+
+/** @deprecated use School */
 export type SchoolResponse = {
   id: string;
   name: string;
