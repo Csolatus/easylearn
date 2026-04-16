@@ -302,7 +302,7 @@ export const agent = {
     ),
 };
 
-// ── Named export grouping all domains ─────────────────────────────────────────
+// ── Generic HTTP helpers (used by some pages directly) ────────────────────────
 
 export const api = {
   auth,
@@ -314,4 +314,16 @@ export const api = {
   progress,
   analytics,
   agent,
+
+  get: <T>(path: string, opts?: { schoolId?: string }) =>
+    request<T>(path, { method: "GET", ...opts }),
+
+  post: <T>(path: string, body?: unknown, opts?: { schoolId?: string }) =>
+    request<T>(path, { method: "POST", body, ...opts }),
+
+  patch: <T>(path: string, body?: unknown, opts?: { schoolId?: string }) =>
+    request<T>(path, { method: "PATCH", body, ...opts }),
+
+  delete: <T = void>(path: string, opts?: { schoolId?: string }) =>
+    request<T>(path, { method: "DELETE", ...opts }),
 };
