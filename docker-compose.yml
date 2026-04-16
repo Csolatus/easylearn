@@ -68,6 +68,8 @@ services:
 
   piston:
     image: ghcr.io/engineer-man/piston
+    profiles:
+      - piston
     ports:
       - "2000:2000"
     healthcheck:
@@ -82,6 +84,8 @@ services:
 
   piston-setup:
     image: curlimages/curl:latest
+    profiles:
+      - piston
     depends_on:
       piston:
         condition: service_healthy
