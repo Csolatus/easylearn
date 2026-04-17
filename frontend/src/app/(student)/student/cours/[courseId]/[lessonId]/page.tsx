@@ -40,14 +40,19 @@ export default function LessonPage() {
   const [quizScore, setQuizScore] = useState<number | null>(null);
   const [quizSubmitting, setQuizSubmitting] = useState(false);
 
+  // Reset tab state immediately when the lesson changes so the stale "Quiz"
+  // tab from the previous lesson is never shown during the loading phase.
   useEffect(() => {
-    if (!courseId || !lessonId) return;
-    setIsLoading(true);
-    setError(null);
     setActiveTab("Théorie");
     setSelectedChoices({});
     setQuizScore(null);
     setQuizData(null);
+  }, [lessonId]);
+
+  useEffect(() => {
+    if (!courseId || !lessonId) return;
+    setIsLoading(true);
+    setError(null);
 
     const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -136,7 +141,7 @@ export default function LessonPage() {
     return idx >= 0 ? idx + 1 : 1;
   })();
 
-  const tabs = ["Théorie", ...(quizData ? ["Quiz"] : []), "Pratique"];
+  const tabs = ["Théorie", "Pratique", ...(quizData ? ["Quiz"] : [])];
   const currentLessonIdx = lessons.findIndex((l) => l.id === lessonId);
   const prevLesson = currentLessonIdx > 0 ? lessons[currentLessonIdx - 1] : null;
   const nextLesson = currentLessonIdx >= 0 && currentLessonIdx < lessons.length - 1 ? lessons[currentLessonIdx + 1] : null;
