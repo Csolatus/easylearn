@@ -83,7 +83,7 @@ export default function RegisterForm() {
                 { label: "Prénom", value: firstName, set: setFirstName, placeholder: "Jean", error: errors.firstName },
                 { label: "Nom", value: lastName, set: setLastName, placeholder: "Dupont", error: errors.lastName },
               ].map(({ label, value, set, placeholder, error }) => (
-                <div key={label} className="flex flex-col gap-2 flex-1">
+                <div key={label} className="flex flex-col gap-2 flex-1 min-w-0">
                   <label className="text-xs font-semibold tracking-widest text-gray-400 dark:text-gray-500 uppercase">{label}</label>
                   <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
                     <input type="text" placeholder={placeholder} value={value} onChange={(e) => set(e.target.value)} className="flex-1 bg-transparent text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none" />
