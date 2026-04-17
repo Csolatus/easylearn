@@ -10,7 +10,7 @@ type Props = {
 
 export default function LessonBottomNav({ courseId, prevLesson, nextLesson }: Props) {
   return (
-    <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-background dark:bg-white shrink-0">
+    <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-background shrink-0">
       {prevLesson ? (
         <Link
           href={`/student/cours/${courseId}/${prevLesson.id}`}

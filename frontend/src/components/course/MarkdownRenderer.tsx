@@ -56,7 +56,7 @@ const components: Components = {
       );
     }
     return (
-      <code className="bg-white/10 dark:bg-gray-200 text-purple-400 dark:text-purple-600 px-1.5 py-0.5 rounded font-mono text-xs">
+      <code className="bg-white/10 text-purple-400 px-1.5 py-0.5 rounded font-mono text-xs">
         {children}
       </code>
     );

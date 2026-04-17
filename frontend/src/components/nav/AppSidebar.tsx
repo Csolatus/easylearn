@@ -90,20 +90,6 @@ export default function AppSidebar() {
 
       {/* Bottom links */}
       <div className="flex flex-col gap-1 mt-4">
-        {config.settingsHref && (
-          <Link
-            href={config.settingsHref}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-muted hover:text-foreground hover:bg-surface transition-colors"
-          >
-            <span>⚙️</span> Settings
-          </Link>
-        )}
-        <Link
-          href={`/${role}/help`}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-muted hover:text-foreground hover:bg-surface transition-colors"
-        >
-          <span>❓</span> Help
-        </Link>
         <button
           onClick={logout}
           className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-danger hover:opacity-80 hover:bg-danger/10 transition-colors w-full text-left"

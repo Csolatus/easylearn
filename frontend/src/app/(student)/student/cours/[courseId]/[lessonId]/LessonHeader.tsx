@@ -7,7 +7,7 @@ type Props = {
 
 export default function LessonHeader({ lessonTitle, courseTitle, isCompleted, onMarkComplete }: Props) {
   return (
-    <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-background dark:bg-white shrink-0">
+    <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-background shrink-0">
       <div>
         <h1 className="text-sm font-semibold text-foreground">{lessonTitle}</h1>
         <p className="text-xs text-muted mt-0.5">{courseTitle}</p>

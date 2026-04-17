@@ -32,7 +32,7 @@ export default function Navbar({
   const initial = user?.email?.[0]?.toUpperCase() ?? "?";
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background dark:bg-white sticky top-0 z-40">
+    <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background sticky top-0 z-40">
       {/* Search */}
       <div className="relative w-full max-w-xs">
         <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">

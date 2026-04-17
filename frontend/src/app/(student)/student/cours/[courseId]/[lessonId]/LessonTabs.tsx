@@ -6,7 +6,7 @@ type Props = {
 
 export default function LessonTabs({ tabs, activeTab, onTabChange }: Props) {
   return (
-    <div className="flex border-b border-border bg-white/5 shrink-0">
+    <div className="flex border-b border-border bg-background shrink-0">
       {tabs.map((tab) => (
         <button
           key={tab}

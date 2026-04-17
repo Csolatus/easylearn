@@ -26,7 +26,7 @@ export default function QuizBuilder({ questions, loading, onAddQuestion, onUpdat
               value={q.statement}
               onChange={(e) => onUpdateQuestion(qi, e.target.value)}
               placeholder="Écrivez votre question..."
-              className="flex-1 bg-white/5 dark:bg-white border border-white/10 dark:border-gray-300 text-foreground rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+              className="flex-1 bg-white/5 border border-border text-foreground rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
             />
             <button onClick={() => onRemoveQuestion(qi)} className="text-gray-500 hover:text-red-400 text-sm transition-colors shrink-0" aria-label="Supprimer la question">✕</button>
           </div>
@@ -42,7 +42,7 @@ export default function QuizBuilder({ questions, loading, onAddQuestion, onUpdat
                   value={choice.text}
                   onChange={(e) => onUpdateChoice(qi, ci, e.target.value)}
                   placeholder={`Option ${ci + 1}`}
-                  className="flex-1 bg-white/5 dark:bg-white border border-white/10 dark:border-gray-300 text-foreground rounded-xl px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+                  className="flex-1 bg-white/5 border border-border text-foreground rounded-xl px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
                 />
               </div>
             ))}

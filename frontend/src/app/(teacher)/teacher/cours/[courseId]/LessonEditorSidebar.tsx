@@ -57,7 +57,7 @@ export default function LessonEditorSidebar({
               onKeyDown={(e) => e.key === "Enter" && onAddLesson()}
               placeholder="Titre de la leçon"
               autoFocus
-              className="bg-white/5 dark:bg-white border border-white/20 dark:border-gray-300 text-foreground rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-green-500 placeholder-gray-600"
+              className="bg-transparent border border-border text-foreground rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-green-500 placeholder-gray-600"
             />
             {addLessonError && <p className="text-xs text-red-400">{addLessonError}</p>}
             <div className="flex gap-2">
