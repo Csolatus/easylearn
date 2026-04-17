@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check, X } from "lucide-react";
 import CodeEditor from "@/components/editor/CodeEditor";
 import { useAuthStore } from "@/store/authStore";
 
@@ -172,8 +173,8 @@ export default function PracticeTab({
                       : "text-gray-300"
                   }`}
                 >
-                  {line.type === "success" && <span className="shrink-0 mt-0.5">✓</span>}
-                  {line.type === "error" && <span className="shrink-0 mt-0.5">✗</span>}
+                  {line.type === "success" && <Check size={12} className="shrink-0 mt-0.5" />}
+                  {line.type === "error" && <X size={12} className="shrink-0 mt-0.5" />}
                   {line.type === "info" && <span className="shrink-0 mt-0.5">›</span>}
                   {line.type === "log" && (
                     <span className="shrink-0 mt-0.5 text-gray-600">$</span>

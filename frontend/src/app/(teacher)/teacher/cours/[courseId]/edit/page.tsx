@@ -96,7 +96,7 @@ export default function CourseEditPage() {
           </div>
           <button onClick={handleSave} disabled={saving || !title.trim()}
             className={`text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors disabled:opacity-50 ${saved ? "bg-emerald-600 text-white" : "bg-green-600 hover:bg-green-700 text-white"}`}>
-            {saving ? "Sauvegarde..." : saved ? "✓ Sauvegardé" : "Sauvegarder"}
+            {saving ? "Sauvegarde..." : saved ? "Sauvegardé" : "Sauvegarder"}
           </button>
         </div>
 

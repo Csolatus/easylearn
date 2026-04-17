@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { FileText, Brain, Monitor, Check } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import ProgressBar from "./ProgressBar";
 
 export type Lesson = {
@@ -29,10 +31,10 @@ const TYPE_STYLES: Record<Lesson["type"], string> = {
   code: "bg-green-500/20 text-green-400",
 };
 
-const TYPE_ICONS: Record<Lesson["type"], string> = {
-  theory: "📝",
-  quiz: "🧠",
-  code: "💻",
+const TYPE_ICONS: Record<Lesson["type"], LucideIcon> = {
+  theory: FileText,
+  quiz: Brain,
+  code: Monitor,
 };
 
 const ACCENT_ACTIVE: Record<NonNullable<Props["accentColor"]>, string> = {
@@ -91,27 +93,32 @@ export default function LessonSidebar({
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">
           Leçons
         </p>
-        {lessons.map((lesson) => (
-          <button
-            key={lesson.id}
-            onClick={() => onLessonChange(lesson.id)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
-              activeLesson === lesson.id
-                ? ACCENT_ACTIVE[accentColor]
-                : "text-gray-400 dark:text-gray-500 hover:bg-white/5 dark:hover:bg-gray-100"
-            }`}
-          >
-            <span
-              className={`text-xs px-1.5 py-0.5 rounded font-medium shrink-0 ${TYPE_STYLES[lesson.type]}`}
+        {lessons.map((lesson) => {
+          const TypeIcon = TYPE_ICONS[lesson.type];
+          return (
+            <button
+              key={lesson.id}
+              onClick={() => onLessonChange(lesson.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
+                activeLesson === lesson.id
+                  ? ACCENT_ACTIVE[accentColor]
+                  : "text-gray-400 dark:text-gray-500 hover:bg-white/5 dark:hover:bg-gray-100"
+              }`}
             >
-              {TYPE_ICONS[lesson.type]}
-            </span>
-            <span className="text-xs truncate">{lesson.title}</span>
-            {lesson.done && (
-              <span className="ml-auto text-green-500 text-xs shrink-0">✓</span>
-            )}
-          </button>
-        ))}
+              <span
+                className={`p-1 rounded shrink-0 ${TYPE_STYLES[lesson.type]}`}
+              >
+                <TypeIcon size={10} />
+              </span>
+              <span className="text-xs truncate">{lesson.title}</span>
+              {lesson.done && (
+                <span className="ml-auto text-green-500 shrink-0">
+                  <Check size={12} />
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </aside>
   );

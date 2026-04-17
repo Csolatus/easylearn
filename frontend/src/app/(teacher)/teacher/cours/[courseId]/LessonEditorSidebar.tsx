@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Pencil } from "lucide-react";
 
 type Lesson = { id: string; title: string };
 
@@ -30,7 +31,7 @@ export default function LessonEditorSidebar({
         </Link>
         <p className="text-xs font-semibold text-white dark:text-gray-900 mt-2 truncate">{courseTitle ?? "Chargement..."}</p>
         <Link href={`/teacher/cours/${courseId}/edit`} className="text-xs text-green-400 hover:text-green-300 transition-colors mt-0.5 inline-block">
-          ✏️ Paramètres du cours
+          <Pencil size={12} className="inline mr-1" /> Paramètres du cours
         </Link>
       </div>
 

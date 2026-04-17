@@ -1,3 +1,13 @@
+import { Globe, School, Lock } from "lucide-react";
+
+const VISIBILITY_ICON: Record<string, React.ReactNode> = {
+  public: <Globe size={14} />,
+  school: <School size={14} />,
+  private: <Lock size={14} />,
+};
+
+const VISIBILITY_LABEL: Record<string, string> = { public: "Public", school: "École", private: "Privé" };
+
 type Props = {
   title: string;
   visibility: "public" | "school" | "private";
@@ -28,7 +38,7 @@ export default function CourseInfoForm({ title, visibility, onTitleChange, onVis
                 visibility === v ? "border-green-500 bg-green-500/10 text-green-400" : "border-white/10 dark:border-gray-200 text-gray-400 hover:border-green-500/50"
               }`}
             >
-              {v === "public" ? "🌍 Public" : v === "school" ? "🏫 École" : "🔒 Privé"}
+              {VISIBILITY_ICON[v]} {VISIBILITY_LABEL[v]}
             </button>
           ))}
         </div>

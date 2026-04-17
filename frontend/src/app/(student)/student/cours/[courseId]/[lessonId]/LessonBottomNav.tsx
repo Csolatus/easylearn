@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Check } from "lucide-react";
 
 type Lesson = { id: string; title: string };
 
@@ -33,7 +34,7 @@ export default function LessonBottomNav({ courseId, prevLesson, nextLesson }: Pr
           href="/student/catalogue"
           className="flex items-center gap-2 px-5 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition-colors"
         >
-          ✓ Terminer le cours
+          <Check size={14} /> Terminer le cours
         </Link>
       )}
     </div>

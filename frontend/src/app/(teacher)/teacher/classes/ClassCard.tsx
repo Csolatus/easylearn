@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { School } from "lucide-react";
 
 type School = { id: string; name: string };
 type Classroom = { id: string; name: string; school_id: string | null; invite_code: string; is_archived: boolean; created_at: string };
@@ -13,7 +14,7 @@ export default function ClassCard({ classroom, schools }: Props) {
     >
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-green-600/20 flex items-center justify-center text-lg">🏫</div>
+          <div className="w-10 h-10 rounded-xl bg-green-600/20 flex items-center justify-center text-green-400"><School size={18} /></div>
           <div>
             <p className="font-semibold text-white dark:text-gray-900">{classroom.name}</p>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 font-mono">Code : {classroom.invite_code}</p>

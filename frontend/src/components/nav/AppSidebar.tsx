@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Settings, HelpCircle, LogOut, School } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
 import { decodeJwtPayload } from "@/lib/auth";
@@ -51,7 +52,7 @@ export default function AppSidebar() {
         <div className="mb-4 px-1">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-1.5">École active</p>
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200">
-            <span className="text-xs">🏫</span>
+            <School size={12} className="text-gray-400 shrink-0" />
             <select
               className="flex-1 bg-transparent text-white dark:text-gray-900 text-xs font-medium focus:outline-none cursor-pointer"
               value={activeSchool?.id ?? ""}
@@ -76,20 +77,23 @@ export default function AppSidebar() {
 
       {/* Nav items */}
       <nav className="flex flex-col gap-1 flex-1">
-        {config.navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors ${
-              pathname === item.href || pathname.startsWith(item.href + "/")
-                ? `${config.accent} text-white font-medium`
-                : "text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100"
-            }`}
-          >
-            <span>{item.icon}</span>
-            {item.label}
-          </Link>
-        ))}
+        {config.navItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors ${
+                pathname === item.href || pathname.startsWith(item.href + "/")
+                  ? `${config.accent} text-white font-medium`
+                  : "text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100"
+              }`}
+            >
+              <Icon size={16} />
+              {item.label}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* Bottom links */}
@@ -99,20 +103,20 @@ export default function AppSidebar() {
             href={config.settingsHref}
             className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
           >
-            <span>⚙️</span> Settings
+            <Settings size={16} /> Settings
           </Link>
         )}
         <Link
           href={`/${role}/help`}
           className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
         >
-          <span>❓</span> Help
+          <HelpCircle size={16} /> Help
         </Link>
         <button
           onClick={logout}
           className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors w-full text-left"
         >
-          <span>🚪</span> Déconnexion
+          <LogOut size={16} /> Déconnexion
         </button>
       </div>
 

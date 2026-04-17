@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Landmark } from "lucide-react";
 import type { School } from "@/store/schoolStore";
 
 interface Props {
@@ -34,7 +35,7 @@ export function RecentSchoolsTable({ schools }: Props) {
                 <tr key={school.id} className="hover:bg-white/5 dark:hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-sm">🏛️</div>
+                      <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-red-400 shrink-0"><Landmark size={14} /></div>
                       <span className="font-medium text-white dark:text-gray-900">{school.name}</span>
                     </div>
                   </td>

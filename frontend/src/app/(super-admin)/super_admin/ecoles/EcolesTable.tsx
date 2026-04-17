@@ -1,5 +1,6 @@
 "use client";
 
+import { Landmark } from "lucide-react";
 import type { School } from "@/types/api";
 
 interface Props {
@@ -35,7 +36,7 @@ export function EcolesTable({ filtered, suspending, onSuspend }: Props) {
                 <tr key={school.id} className="hover:bg-white/5 dark:hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-sm shrink-0">🏛️</div>
+                      <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-red-400 shrink-0"><Landmark size={14} /></div>
                       <div>
                         <p className="font-medium text-white dark:text-gray-900">{school.name}</p>
                         {school.email && (
