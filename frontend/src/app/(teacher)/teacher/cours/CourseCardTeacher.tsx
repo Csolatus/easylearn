@@ -1,0 +1,63 @@
+import Link from "next/link";
+import { BookOpen, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
+
+type Course = { id: string; title: string; visibility: string; updated_at: string };
+
+const VISIBILITY_BADGE: Record<string, string> = {
+  public:  "bg-green-500/10 text-green-400 dark:text-green-600",
+  school:  "bg-blue-500/10 text-blue-400 dark:text-blue-600",
+  private: "bg-gray-500/10 text-muted",
+};
+
+const VISIBILITY_LABEL: Record<string, string> = { public: "Public", school: "École", private: "Privé" };
+
+type Props = { course: Course; onDelete: (id: string) => void };
+
+export default function CourseCardTeacher({ course, onDelete }: Props) {
+  const [confirm, setConfirm] = useState(false);
+
+  return (
+    <div className="rounded-2xl border border-border bg-surface shadow-md overflow-hidden flex flex-col group">
+      <div className="relative h-32 bg-gradient-to-br from-green-900/60 to-teal-900/60 flex items-center justify-center">
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 30% 50%, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+        <span className={`absolute top-3 right-3 text-xs px-2.5 py-1 rounded-full font-medium ${VISIBILITY_BADGE[course.visibility]}`}>
+          {VISIBILITY_LABEL[course.visibility]}
+        </span>
+        <BookOpen size={36} className="text-white/30" />
+      </div>
+      <div className="p-5 flex flex-col gap-3 flex-1">
+        <h3 className="font-bold text-foreground text-base leading-snug">{course.title}</h3>
+        <p className="text-xs text-muted mt-auto">Mis à jour le {new Date(course.updated_at).toLocaleDateString("fr-FR")}</p>
+        <div className="flex gap-2 pt-1">
+          <Link href={`/teacher/cours/${course.id}`} className="flex-1 text-center bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2.5 rounded-xl transition-colors">
+            <Pencil size={12} className="inline mr-1" /> Modifier
+          </Link>
+          {confirm ? (
+            <div className="flex gap-1">
+              <button
+                onClick={() => onDelete(course.id)}
+                className="px-3 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition-colors"
+              >
+                Confirmer
+              </button>
+              <button
+                onClick={() => setConfirm(false)}
+                className="px-3 py-2 rounded-xl border border-border text-muted hover:text-foreground text-xs transition-colors"
+              >
+                Annuler
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setConfirm(true)}
+              className="px-3 py-2 rounded-xl border border-border text-muted hover:text-red-400 hover:border-red-500/40 transition-colors"
+            >
+              <Trash2 size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
