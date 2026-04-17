@@ -12,6 +12,8 @@ export type TerminalLine = {
 type Props = {
   initialCode: string;
   language?: string;
+  exerciseId?: string;
+  instructions?: string;
   objective?: string;
   objectiveProgress?: number;
 };
@@ -26,6 +28,8 @@ const LANG_DISPLAY: Record<string, string> = {
 export default function PracticeTab({
   initialCode,
   language = "javascript",
+  exerciseId,
+  instructions,
   objective,
   objectiveProgress,
 }: Props) {
@@ -45,7 +49,7 @@ export default function PracticeTab({
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ language, code }),
+        body: JSON.stringify({ language, code, ...(exerciseId ? { exercise_id: exerciseId } : {}) }),
       });
 
       if (!res.ok) {
@@ -77,6 +81,12 @@ export default function PracticeTab({
 
       if (result.exit_code !== 0 && result.exit_code != null) {
         lines.push({ type: "error", text: `Processus terminé avec le code ${result.exit_code}` });
+      }
+
+      if (result.success === true) {
+        lines.push({ type: "success", text: "Exercice réussi ! Résultat correct." });
+      } else if (result.success === false) {
+        lines.push({ type: "error", text: "Résultat incorrect. Vérifiez votre code et réessayez." });
       }
 
       setTerminalLines(lines);
@@ -174,15 +184,15 @@ export default function PracticeTab({
             )}
           </div>
 
-          {/* Objective */}
-          {objective && (
+          {/* Instructions / Objective */}
+          {(instructions || objective) && (
             <div className="border-t border-white/10 dark:border-gray-700 px-4 py-3 shrink-0">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-semibold text-gray-400 dark:text-gray-300">
-                  Objectif du Lab
+                  {instructions ? "Consigne" : "Objectif du Lab"}
                 </span>
               </div>
-              <p className="text-xs text-gray-500 leading-relaxed mb-2">{objective}</p>
+              <p className="text-xs text-gray-500 leading-relaxed mb-2">{instructions ?? objective}</p>
               {objectiveProgress != null && (
                 <div className="flex items-center gap-2">
                   <div className="flex-1 h-1.5 bg-white/10 dark:bg-gray-700 rounded-full overflow-hidden">
