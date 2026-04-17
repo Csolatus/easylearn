@@ -38,6 +38,16 @@ export default function CoursPage() {
       .finally(() => setIsLoading(false));
   }, [token]);
 
+  async function handleDeleteCourse(id: string) {
+    try {
+      const res = await fetch(`${API}/courses/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (res.ok) setCourses((prev) => prev.filter((c) => c.id !== id));
+    } catch { /* silent */ }
+  }
+
   async function handleCreateCourse() {
     if (!title.trim()) { setWizardError("Le titre est requis."); return; }
     setWizardError(null); setSubmitting(true);
@@ -91,7 +101,7 @@ export default function CoursPage() {
       )}
       {!isLoading && filtered.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {filtered.map((course) => <CourseCardTeacher key={course.id} course={course} />)}
+          {filtered.map((course) => <CourseCardTeacher key={course.id} course={course} onDelete={handleDeleteCourse} />)}
         </div>
       )}
 

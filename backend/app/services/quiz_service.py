@@ -156,7 +156,7 @@ async def submitQuiz(
         if choice and choice.is_correct:
             correct_count += 1
 
-    score = (correct_count / total_questions) * 100
+    score = correct_count / total_questions
 
     result_row = await db.execute(
         text(

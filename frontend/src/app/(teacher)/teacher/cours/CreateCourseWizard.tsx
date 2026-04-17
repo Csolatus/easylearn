@@ -1,4 +1,4 @@
-import { X, Globe, School, Lock, Check } from "lucide-react";
+import { X, Globe, School, Lock, Check, ArrowLeft, ArrowRight } from "lucide-react";
 
 const VISIBILITY_LABEL: Record<string, string> = { public: "Public", school: "École", private: "Privé" };
 const VISIBILITY_ICON: Record<string, React.ReactNode> = {
@@ -33,7 +33,7 @@ export default function CreateCourseWizard({
             <h2 className="text-sm font-semibold text-foreground">Nouveau cours</h2>
             <p className="text-xs text-muted mt-0.5">Étape {step} sur 2</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-foreground transition-colors text-lg">✕</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-foreground transition-colors"><X size={18} /></button>
         </div>
 
         <div className="px-6 py-2 flex gap-2">
