@@ -46,7 +46,7 @@ export default function TeacherDashboard() {
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
         <div>
           <h1 className="text-3xl font-bold text-foreground">
-            Bonjour{user?.email ? `, ${user.email.split("@")[0]}` : ""} 👋
+            Bonjour{user?.email ? `, ${user.email.split("@")[0]}` : ""}
           </h1>
           <p className="text-muted text-sm mt-1">Vue d&apos;ensemble de vos cours et classes.</p>
         </div>

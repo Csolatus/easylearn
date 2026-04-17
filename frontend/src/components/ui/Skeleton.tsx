@@ -1,8 +1,9 @@
-import { SkeletonRoot } from "@heroui/react";
-import type { ComponentProps } from "react";
+type SkeletonProps = {
+  className?: string;
+};
 
-type SkeletonProps = ComponentProps<typeof SkeletonRoot>;
-
-export function Skeleton({ className = "", ...props }: SkeletonProps) {
-  return <SkeletonRoot className={className} {...props} />;
+export function Skeleton({ className = "" }: SkeletonProps) {
+  return (
+    <div className={`animate-pulse bg-white/10 dark:bg-gray-700 rounded-xl ${className}`} />
+  );
 }

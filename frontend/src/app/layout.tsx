@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ThemeToggle from "@/components/ui/ThemeToggle";
-import { ToastProvider } from "@heroui/react";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -29,10 +27,6 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <ToastProvider />
-        <div className="fixed bottom-28 right-6 z-50">
-          <ThemeToggle />
-        </div>
         {children}
       </body>
     </html>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ButtonRoot } from "@heroui/react";
+import { Download } from "lucide-react";
 
 type Props = {
   headers: string[];
@@ -21,8 +21,11 @@ export default function CsvExportButton({ headers, rows, filename }: Props) {
   };
 
   return (
-    <ButtonRoot variant="outline" size="sm" onPress={handleExport}>
-      📥 Exporter CSV
-    </ButtonRoot>
+    <button
+      onClick={handleExport}
+      className="inline-flex items-center gap-2 px-3 py-1.5 text-xs rounded-xl border border-white/20 dark:border-gray-400 text-foreground hover:bg-white/5 transition-colors"
+    >
+      <Download size={14} /> Exporter CSV
+    </button>
   );
 }

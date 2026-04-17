@@ -43,7 +43,7 @@ export default function AppBottomNav() {
               : "text-muted hover:text-foreground"
           }`}
         >
-          <span className="text-lg">{item.icon}</span>
+          <item.icon size={20} />
           {item.label}
         </Link>
       ))}
