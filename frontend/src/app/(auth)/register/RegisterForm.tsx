@@ -118,7 +118,9 @@ export default function RegisterForm() {
                   Email
                 </LabelRoot>
                 <InputGroupRoot>
-                  <InputGroupPrefix>@</InputGroupPrefix>
+                  <InputGroupPrefix>
+                    <Mail size={14} className="text-muted" />
+                  </InputGroupPrefix>
                   <InputGroupInput
                     type="email"
                     placeholder="name@example.com"
@@ -138,7 +140,9 @@ export default function RegisterForm() {
                     {label}
                   </LabelRoot>
                   <InputGroupRoot>
-                    <InputGroupPrefix>🔒</InputGroupPrefix>
+                    <InputGroupPrefix>
+                      <Lock size={14} className="text-muted" />
+                    </InputGroupPrefix>
                     <InputGroupInput
                       type={show ? "text" : "password"}
                       placeholder="••••••••"
@@ -149,9 +153,9 @@ export default function RegisterForm() {
                       <button
                         type="button"
                         onClick={toggle}
-                        className="text-muted hover:text-foreground transition-colors text-sm"
+                        className="text-muted hover:text-foreground transition-colors p-1"
                       >
-                        {show ? "🙈" : "👁️"}
+                        {show ? <EyeOff size={14} /> : <Eye size={14} />}
                       </button>
                     </InputGroupSuffix>
                   </InputGroupRoot>

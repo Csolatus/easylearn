@@ -74,8 +74,8 @@ export default function LoginForm() {
         <CardRoot variant="secondary" className="w-full max-w-md">
           <CardContent>
             <div className="flex flex-col items-center mb-8">
-              <div className="w-14 h-14 bg-accent rounded-2xl flex items-center justify-center text-2xl mb-4">
-                🎓
+              <div className="w-14 h-14 bg-accent rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-accent/20">
+                <GraduationCap size={28} />
               </div>
               <h1 className="text-2xl font-bold text-foreground mb-1">Welcome Back</h1>
               <p className="text-muted text-sm text-center">Accédez à votre espace EasyLearn</p>
@@ -150,6 +150,15 @@ export default function LoginForm() {
                   Créer un compte
                 </a>
               </p>
+            </form>
+          </CardContent>
+        </CardRoot>
+      </div>
+      <AuthFooter />
+    </div>
+  );
+}
+ </p>
             </form>
           </CardContent>
         </CardRoot>

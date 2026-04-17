@@ -35,8 +35,8 @@ export default function Navbar({
     <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background sticky top-0 z-40">
       {/* Search */}
       <div className="relative w-full max-w-xs">
-        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">
-          🔍
+        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
+          <Search size={14} />
         </span>
         <input
           type="text"
@@ -58,6 +58,10 @@ export default function Navbar({
           {initial}
         </div>
       </div>
+    </header>
+  );
+}
+   </div>
     </header>
   );
 }

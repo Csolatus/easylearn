@@ -36,8 +36,9 @@ export default function AppHeader({ role }: Props) {
         </SearchFieldGroup>
       </SearchFieldRoot>
       <div className="flex items-center gap-4">
-        <button className="relative text-muted hover:text-foreground transition-colors">
-          🔔
+        <button className="relative text-muted hover:text-foreground transition-colors p-1">
+          <Bell size={20} />
+          <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-background" />
         </button>
         <div className={`w-8 h-8 rounded-full ${AVATAR_COLORS[role]} flex items-center justify-center text-sm font-bold text-white`}>
           {initial}

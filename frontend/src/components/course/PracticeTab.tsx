@@ -128,9 +128,15 @@ export default function PracticeTab({
           <button
             onClick={handleRun}
             disabled={isRunning}
-            className="text-xs px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-semibold transition-colors"
+            className="text-xs px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-semibold transition-colors flex items-center gap-2"
           >
-            {isRunning ? "..." : "▶ Exécuter"}
+            {isRunning ? (
+              "..."
+            ) : (
+              <>
+                <Play size={12} /> Exécuter
+              </>
+            )}
           </button>
         </div>
       </div>

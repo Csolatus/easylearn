@@ -138,8 +138,8 @@ export default function ChatPanel({ isOpen }: Props) {
     >
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-border shrink-0">
-        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm shrink-0">
-          ✦
+        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white shrink-0">
+          <Sparkles size={16} />
         </div>
         <div>
           <p className="text-sm font-semibold text-foreground">Assistant IA</p>

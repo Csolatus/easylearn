@@ -1,4 +1,5 @@
 import { CardRoot, CardContent, ChipRoot, ChipLabel } from "@heroui/react";
+import { BookOpen } from "lucide-react";
 
 const VISIBILITY_LABELS: Record<string, string> = {
   public:  "Public",
