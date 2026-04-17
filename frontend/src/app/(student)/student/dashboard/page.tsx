@@ -57,7 +57,7 @@ export default function StudentDashboard() {
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
         <div>
           <h1 className="text-3xl font-bold text-white dark:text-gray-900">
-            Bonjour{user?.email ? `, ${user.email.split("@")[0]}` : ""} 👋
+            Bonjour{user?.email ? `, ${user.email.split("@")[0]}` : ""}
           </h1>
           <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Continuez là où vous en étiez.</p>
         </div>
