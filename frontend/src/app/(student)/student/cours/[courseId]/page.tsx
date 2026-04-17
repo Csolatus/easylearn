@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import Spinner from "@/components/ui/Spinner";
 import CourseOverviewHeader from "./CourseOverviewHeader";
@@ -16,6 +16,7 @@ type LessonProgress = { lesson_id: string; completed: boolean };
 
 export default function CourseOverviewPage() {
   const { courseId } = useParams<{ courseId: string }>();
+  const router = useRouter();
   const token = useAuthStore((s) => s.token);
 
   const [course, setCourse] = useState<BackendCourse | null>(null);
@@ -58,6 +59,15 @@ export default function CourseOverviewPage() {
       .catch((err) => setError(err.message))
       .finally(() => setIsLoading(false));
   }, [courseId, token]);
+
+  // Redirect directly to the first incomplete lesson (or first lesson) so
+  // clicking a course from the catalogue lands on the theory content in one step.
+  const firstIncompleteId = lessons.find((l) => !completedIds.has(l.id))?.id ?? lessons[0]?.id;
+  useEffect(() => {
+    if (!isLoading && firstIncompleteId) {
+      router.replace(`/student/cours/${courseId}/${firstIncompleteId}`);
+    }
+  }, [isLoading, firstIncompleteId, courseId, router]);
 
   if (isLoading) {
     return (
