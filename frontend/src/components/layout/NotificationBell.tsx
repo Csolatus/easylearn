@@ -1,5 +1,7 @@
 "use client";
 
+import { Bell } from "lucide-react";
+
 type Props = {
   count?: number;
   accentColor?: "purple" | "green" | "blue";
@@ -21,7 +23,7 @@ export default function NotificationBell({ count = 0, accentColor = "purple", on
       aria-label={`Notifications${count > 0 ? ` (${count})` : ""}`}
       className="relative text-muted hover:text-foreground transition-colors"
     >
-      🔔
+      <Bell size={18} />
       {count > 0 && (
         <span
           className={`absolute -top-1 -right-1 w-2 h-2 ${dotColor} rounded-full`}

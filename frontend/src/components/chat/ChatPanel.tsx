@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { Sparkles } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { api, ApiError } from "@/lib/api";
 import { fetchStream } from "@/lib/sse";

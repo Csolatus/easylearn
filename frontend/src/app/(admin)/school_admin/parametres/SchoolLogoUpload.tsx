@@ -1,5 +1,7 @@
 "use client";
 
+import { Landmark, FolderOpen } from "lucide-react";
+
 interface Props {
   logo: string | null;
   onLogoChange: (url: string) => void;
@@ -18,7 +20,7 @@ export function SchoolLogoUpload({ logo, onLogoChange, onLogoRemove }: Props) {
             // eslint-disable-next-line @next/next/no-img-element
             <img src={logo} alt="Logo" className="w-full h-full object-cover rounded-2xl" />
           ) : (
-            <span className="text-3xl">🏛️</span>
+            <Landmark size={28} className="text-gray-400" />
           )}
         </div>
         <div className="flex flex-col gap-3">
@@ -26,8 +28,8 @@ export function SchoolLogoUpload({ logo, onLogoChange, onLogoRemove }: Props) {
             Format recommandé : PNG ou SVG, 256x256px minimum
           </p>
           <div className="flex gap-3">
-            <label className="cursor-pointer px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white transition-colors">
-              📁 Choisir un fichier
+            <label className="cursor-pointer px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white transition-colors flex items-center gap-2">
+              <FolderOpen size={14} /> Choisir un fichier
               <input
                 type="file"
                 accept="image/*"

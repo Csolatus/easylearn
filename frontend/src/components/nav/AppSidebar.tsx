@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Settings, HelpCircle, LogOut, School } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
 import { decodeJwtPayload } from "@/lib/auth";
@@ -94,7 +95,7 @@ export default function AppSidebar() {
           onClick={logout}
           className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-danger hover:opacity-80 hover:bg-danger/10 transition-colors w-full text-left"
         >
-          <span>🚪</span> Déconnexion
+          <LogOut size={16} /> Déconnexion
         </button>
       </div>
 

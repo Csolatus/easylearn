@@ -1,4 +1,11 @@
+import { X, Globe, School, Lock, Check } from "lucide-react";
+
 const VISIBILITY_LABEL: Record<string, string> = { public: "Public", school: "École", private: "Privé" };
+const VISIBILITY_ICON: Record<string, React.ReactNode> = {
+  public: <Globe size={18} />,
+  school: <School size={18} />,
+  private: <Lock size={18} />,
+};
 
 type Props = {
   step: number;
@@ -62,7 +69,7 @@ export default function CreateCourseWizard({
                     visibility === v ? "border-green-500 bg-green-500/10 text-green-400" : "border-border text-gray-400 dark:text-gray-600 hover:border-green-500/50"
                   }`}
                 >
-                  <span className="text-lg">{v === "public" ? "🌍" : v === "school" ? "🏫" : "🔒"}</span>
+                  <span>{VISIBILITY_ICON[v]}</span>
                   <div>
                     <p className="text-sm font-medium">{VISIBILITY_LABEL[v]}</p>
                     <p className="text-xs opacity-70">
@@ -86,7 +93,7 @@ export default function CreateCourseWizard({
             </button>
           ) : (
             <button onClick={onCreate} disabled={submitting} className="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors">
-              {submitting ? "Création..." : "✅ Créer le cours"}
+              {submitting ? "Création..." : <span className="flex items-center gap-2"><Check size={14} /> Créer le cours</span>}
             </button>
           )}
         </div>

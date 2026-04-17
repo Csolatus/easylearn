@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { FileText, Brain, Monitor, Check } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import ProgressBar from "./ProgressBar";
 
 export type Lesson = {
@@ -29,10 +31,10 @@ const TYPE_STYLES: Record<Lesson["type"], string> = {
   code: "bg-green-500/20 text-green-400",
 };
 
-const TYPE_ICONS: Record<Lesson["type"], string> = {
-  theory: "📝",
-  quiz: "🧠",
-  code: "💻",
+const TYPE_ICONS: Record<Lesson["type"], LucideIcon> = {
+  theory: FileText,
+  quiz: Brain,
+  code: Monitor,
 };
 
 const ACCENT_ACTIVE: Record<NonNullable<Props["accentColor"]>, string> = {
@@ -104,14 +106,20 @@ export default function LessonSidebar({
             <span
               className={`text-xs px-1.5 py-0.5 rounded font-medium shrink-0 ${TYPE_STYLES[lesson.type]}`}
             >
-              {TYPE_ICONS[lesson.type]}
-            </span>
-            <span className="text-xs truncate">{lesson.title}</span>
-            {lesson.done && (
-              <span className="ml-auto text-green-500 text-xs shrink-0">✓</span>
-            )}
-          </button>
-        ))}
+              <span
+                className={`p-1 rounded shrink-0 ${TYPE_STYLES[lesson.type]}`}
+              >
+                <TypeIcon size={10} />
+              </span>
+              <span className="text-xs truncate">{lesson.title}</span>
+              {lesson.done && (
+                <span className="ml-auto text-green-500 shrink-0">
+                  <Check size={12} />
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </aside>
   );

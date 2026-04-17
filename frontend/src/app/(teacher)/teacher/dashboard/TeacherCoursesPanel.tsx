@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Users } from "lucide-react";
 import Spinner from "@/components/ui/Spinner";
 
 type CourseAnalytics = {

@@ -17,6 +17,8 @@ export default function ThemeToggle() {
     localStorage.setItem("theme", next ? "dark" : "light");
   };
 
+  if (!mounted) return <div className="w-9 h-9" />;
+
   return (
     <ButtonRoot
       onPress={toggle}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Library } from "lucide-react";
 import Spinner from "@/components/ui/Spinner";
 import EmptyState from "@/components/ui/EmptyState";
 

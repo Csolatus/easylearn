@@ -8,6 +8,7 @@ class CodeExecutionRequest(BaseModel):
     code: str
     language: str = "python"
     stdin: str = ""
+    exercise_id: str | None = None
 
     @field_validator("language")
     @classmethod
@@ -22,3 +23,10 @@ class CodeExecutionResponse(BaseModel):
     stdout: str
     stderr: str
     exit_code: int | None
+    success: bool | None = None
+
+
+class PracticalExerciseResponse(BaseModel):
+    id: str
+    instructions: str
+    expected_output: str

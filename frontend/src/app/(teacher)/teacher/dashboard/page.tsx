@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { School, BookOpen, FileText, Target } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import TeacherStatsRow from "./TeacherStatsRow";
 import TeacherCoursesPanel from "./TeacherCoursesPanel";
@@ -34,10 +35,10 @@ export default function TeacherDashboard() {
 
   const activeClasses = classes.filter((c) => !c.is_archived);
   const stats = [
-    { label: "Classes actives", value: isLoading ? "…" : String(activeClasses.length), icon: "🏫", color: "from-green-600 to-green-400" },
-    { label: "Cours créés", value: isLoading ? "…" : String(analytics?.total_courses ?? 0), icon: "📖", color: "from-teal-600 to-teal-400" },
-    { label: "Leçons créées", value: isLoading ? "…" : String(analytics?.total_lessons ?? 0), icon: "📝", color: "from-emerald-600 to-emerald-400" },
-    { label: "Score quiz moyen", value: isLoading ? "…" : `${Math.round(analytics?.avg_quiz_score_pct ?? 0)}%`, icon: "🎯", color: "from-cyan-600 to-cyan-400" },
+    { label: "Classes actives", value: isLoading ? "…" : String(activeClasses.length), icon: <School size={24} />, color: "from-green-600 to-green-400" },
+    { label: "Cours créés", value: isLoading ? "…" : String(analytics?.total_courses ?? 0), icon: <BookOpen size={24} />, color: "from-teal-600 to-teal-400" },
+    { label: "Leçons créées", value: isLoading ? "…" : String(analytics?.total_lessons ?? 0), icon: <FileText size={24} />, color: "from-emerald-600 to-emerald-400" },
+    { label: "Score quiz moyen", value: isLoading ? "…" : `${Math.round(analytics?.avg_quiz_score_pct ?? 0)}%`, icon: <Target size={24} />, color: "from-cyan-600 to-cyan-400" },
   ];
 
   return (

@@ -40,7 +40,7 @@ export default function ClassCoursesTab({ courses, assignedIds, toggling, onTogg
                     isAssigned ? "bg-green-500/20 text-green-400 hover:bg-red-500/20 hover:text-red-400" : "bg-white/5 text-gray-400 hover:bg-green-500/20 hover:text-green-400"
                   }`}
                 >
-                  {toggling === course.id ? "…" : isAssigned ? "Assigné ✓" : "Assigner"}
+                  {toggling === course.id ? "…" : isAssigned ? "Assigné" : "Assigner"}
                 </button>
               </div>
             );

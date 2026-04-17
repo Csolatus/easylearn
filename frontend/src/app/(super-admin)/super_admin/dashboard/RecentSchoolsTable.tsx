@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Landmark } from "lucide-react";
 import type { School } from "@/store/schoolStore";
 
 interface Props {

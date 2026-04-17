@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Check, X, RefreshCw } from "lucide-react";
 
 export type QuizQuestion = {
   id: number;
@@ -55,10 +56,10 @@ export default function QuizTab({ questions, onComplete }: Props) {
           <div className="text-center">
             <p className="text-foreground font-semibold text-lg">
               {score === questions.length
-                ? "Parfait ! 🎉"
+                ? "Parfait !"
                 : score >= questions.length / 2
-                ? "Bien joué ! 👍"
-                : "À retravailler 💪"}
+                ? "Bien joué !"
+                : "À retravailler"}
             </p>
             <p className="text-muted text-sm mt-1">
               {score} bonne{score > 1 ? "s" : ""} réponse{score > 1 ? "s" : ""} sur{" "}
@@ -95,8 +96,14 @@ export default function QuizTab({ questions, onComplete }: Props) {
                             : "text-gray-500"
                         }`}
                       >
-                        <span>
-                          {oi === q.answer ? "✓" : oi === chosen && !isCorrect ? "✗" : "·"}
+                        <span className="shrink-0">
+                          {oi === q.answer ? (
+                            <Check size={12} />
+                          ) : oi === chosen && !isCorrect ? (
+                            <X size={12} />
+                          ) : (
+                            <span className="w-3 inline-block">·</span>
+                          )}
                         </span>
                         {opt}
                       </div>
@@ -109,9 +116,10 @@ export default function QuizTab({ questions, onComplete }: Props) {
 
           <button
             onClick={handleReset}
-            className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors"
           >
-            🔄 Recommencer
+            <RefreshCw size={14} />
+            Recommencer
           </button>
         </div>
       </div>

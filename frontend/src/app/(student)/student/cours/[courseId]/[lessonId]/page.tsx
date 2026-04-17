@@ -20,6 +20,7 @@ type BackendChoice = { id: string; text: string; is_correct?: boolean | null };
 type BackendQuestion = { id: string; statement: string; ordre: number; choices: BackendChoice[] };
 type BackendQuiz = { id: string; lesson_id: string; questions: BackendQuestion[] };
 type LessonProgress = { lesson_id: string; completed: boolean };
+type PracticalExercise = { id: string; instructions: string; expected_output: string };
 
 const DEFAULT_CODE = `// Sandbox — écrivez votre code ici\nconsole.log("Hello, EasyLearn!");\n`;
 
@@ -32,6 +33,7 @@ export default function LessonPage() {
   const [lessons, setLessons] = useState<BackendLesson[]>([]);
   const [currentLesson, setCurrentLesson] = useState<BackendLesson | null>(null);
   const [quizData, setQuizData] = useState<BackendQuiz | null>(null);
+  const [exercise, setExercise] = useState<PracticalExercise | null>(null);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,12 +49,7 @@ export default function LessonPage() {
     setSelectedChoices({});
     setQuizScore(null);
     setQuizData(null);
-  }, [lessonId]);
-
-  useEffect(() => {
-    if (!courseId || !lessonId) return;
-    setIsLoading(true);
-    setError(null);
+    setExercise(null);
 
     const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -85,12 +82,19 @@ export default function LessonPage() {
         setCurrentLesson(lessonData);
         setCompletedIds(completed);
 
-        return fetch(`${API}/lessons/${lessonId}/quiz`, { headers });
+        return Promise.all([
+          fetch(`${API}/lessons/${lessonId}/quiz`, { headers }),
+          fetch(`${API}/lessons/${lessonId}/exercise`, { headers }),
+        ]);
       })
-      .then(async (quizRes) => {
+      .then(async ([quizRes, exerciseRes]) => {
         if (quizRes.ok) {
           const quiz: BackendQuiz = await quizRes.json();
           if (quiz.questions.length > 0) setQuizData(quiz);
+        }
+        if (exerciseRes.ok) {
+          const ex: PracticalExercise = await exerciseRes.json();
+          setExercise(ex);
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Une erreur est survenue"))
@@ -216,7 +220,12 @@ export default function LessonPage() {
             />
           )}
           {activeTab === "Pratique" && (
-            <PracticeTab initialCode={DEFAULT_CODE} language="javascript" />
+            <PracticeTab
+              initialCode={DEFAULT_CODE}
+              language={course.title.toLowerCase().includes("python") ? "python" : "javascript"}
+              exerciseId={exercise?.id}
+              instructions={exercise?.instructions}
+            />
           )}
         </div>
 

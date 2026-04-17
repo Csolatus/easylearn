@@ -5,6 +5,11 @@ type Props = {
   onChange: (role: "student" | "teacher") => void;
 };
 
+const ROLE_CONFIG = {
+  student: { label: "Élève", icon: GraduationCap },
+  teacher: { label: "Professeur", icon: UserRound },
+} as const;
+
 export default function RoleSelector({ role, onChange }: Props) {
   return (
     <div className="flex flex-col gap-2">

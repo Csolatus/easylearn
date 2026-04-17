@@ -1,3 +1,5 @@
+import { FileText, X } from "lucide-react";
+
 type Lesson = { id: string; title: string; docs: string | null; ordre: number };
 
 type Props = {
@@ -38,8 +40,8 @@ export default function LessonSettingsList({
             <button
               onClick={() => onDeleteLesson(lesson.id)}
               disabled={deletingLesson === lesson.id}
-              className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 text-xs transition-all disabled:opacity-30"
-            >✕</button>
+              className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 transition-all disabled:opacity-30"
+            ><X size={14} /></button>
           </div>
         ))}
       </div>

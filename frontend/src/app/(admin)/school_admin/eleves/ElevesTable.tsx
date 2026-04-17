@@ -1,5 +1,7 @@
 "use client";
 
+import { Download } from "lucide-react";
+
 type Student = {
   id: string;
   name: string;
@@ -26,7 +28,7 @@ export function ElevesTable({ students, filtered, isLoading, hasActiveSchool, on
           disabled={filtered.length === 0}
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white transition-colors"
         >
-          📥 Exporter CSV
+          <Download size={14} /> Exporter CSV
         </button>
       </div>
       <div className="overflow-x-auto">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BookOpen, Pencil } from "lucide-react";
 
 type Course = { id: string; title: string; visibility: string; updated_at: string };
 
@@ -20,14 +21,14 @@ export default function CourseCardTeacher({ course }: Props) {
         <span className={`absolute top-3 right-3 text-xs px-2.5 py-1 rounded-full font-medium ${VISIBILITY_BADGE[course.visibility]}`}>
           {VISIBILITY_LABEL[course.visibility]}
         </span>
-        <span className="text-4xl">📖</span>
+        <BookOpen size={36} className="text-white/30" />
       </div>
       <div className="p-5 flex flex-col gap-3 flex-1">
         <h3 className="font-bold text-foreground text-base leading-snug">{course.title}</h3>
         <p className="text-xs text-muted mt-auto">Mis à jour le {new Date(course.updated_at).toLocaleDateString("fr-FR")}</p>
         <div className="flex gap-2 pt-1">
           <Link href={`/teacher/cours/${course.id}`} className="flex-1 text-center bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2.5 rounded-xl transition-colors">
-            ✏️ Modifier
+            <Pencil size={12} className="inline mr-1" /> Modifier
           </Link>
         </div>
       </div>

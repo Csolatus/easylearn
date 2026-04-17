@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { School } from "lucide-react";
 import Spinner from "@/components/ui/Spinner";
 
 type Classroom = { id: string; name: string; invite_code: string; is_archived: boolean };

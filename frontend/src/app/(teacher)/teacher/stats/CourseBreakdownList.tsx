@@ -1,3 +1,5 @@
+import { Users, Library } from "lucide-react";
+
 type CourseAnalytics = { course_id: string; title: string; total_lessons: number; completed_lessons: number; unique_students: number; avg_quiz_score_pct: number };
 
 type Props = { courses: CourseAnalytics[] };

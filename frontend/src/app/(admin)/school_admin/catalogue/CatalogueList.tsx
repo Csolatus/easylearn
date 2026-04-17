@@ -1,5 +1,7 @@
 "use client";
 
+import { BookOpen } from "lucide-react";
+
 type Course = {
   id: string;
   title: string;
@@ -38,8 +40,8 @@ export function CatalogueList({ courses, whitelist, toggling, hasActiveSchool, w
                 key={course.id}
                 className="flex items-center gap-4 px-6 py-4 hover:bg-surface transition-colors"
               >
-                <div className="w-9 h-9 rounded-xl bg-orange-600/20 flex items-center justify-center text-lg shrink-0">
-                  📖
+                <div className="w-9 h-9 rounded-xl bg-orange-600/20 flex items-center justify-center text-orange-400 shrink-0">
+                  <BookOpen size={16} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">{course.title}</p>
@@ -55,7 +57,7 @@ export function CatalogueList({ courses, whitelist, toggling, hasActiveSchool, w
                         : "bg-white/5 text-gray-400 hover:bg-orange-500/20 hover:text-orange-400"
                     }`}
                   >
-                    {toggling === course.id ? "…" : isWhitelisted ? "Autorisé ✓" : "Autoriser"}
+                    {toggling === course.id ? "…" : isWhitelisted ? "Autorisé" : "Autoriser"}
                   </button>
                 )}
               </div>

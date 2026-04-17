@@ -1,8 +1,10 @@
+import { CheckCircle, FileText, Pin } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type { ActivityItem } from "@/types/api";
 
-const ACTIVITY_ICONS: Record<string, string> = {
-  lesson_complete: "✅",
-  quiz_submit: "📝",
+const ACTIVITY_ICONS: Record<string, LucideIcon> = {
+  lesson_complete: CheckCircle,
+  quiz_submit: FileText,
 };
 
 const ACTIVITY_LABELS: Record<string, string> = {
@@ -30,8 +32,8 @@ export default function RecentActivity({ activity }: Props) {
               {item.course_title} · {new Date(item.timestamp).toLocaleDateString("fr-FR")}
             </p>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

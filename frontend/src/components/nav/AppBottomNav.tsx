@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LogOut } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useAuth } from "@/hooks/useAuth";
 import { NAV_CONFIG } from "./navConfig";
@@ -50,7 +51,7 @@ export default function AppBottomNav() {
         onClick={logout}
         className="flex flex-col items-center gap-1 text-xs text-danger hover:opacity-80 transition-opacity"
       >
-        <span className="text-lg">🚪</span>
+        <LogOut size={20} />
         Sortir
       </button>
     </nav>

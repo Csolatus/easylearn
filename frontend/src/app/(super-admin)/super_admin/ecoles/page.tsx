@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { EcolesTable } from "./EcolesTable";
 import { CreateSchoolModal } from "./CreateSchoolModal";
+import { Search } from "lucide-react";
 import type { School } from "@/types/api";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -101,7 +102,7 @@ export default function EcolesPage() {
         </div>
 
         <div className="relative w-full max-w-sm">
-          <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">🔍</span>
+          <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none"><Search size={14} /></span>
           <input
             type="text"
             placeholder="Rechercher..."

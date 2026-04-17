@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BookOpen, CheckCircle, FileText, Globe } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import ProfileCard from "./ProfileCard";
 import ProfileStatsCards from "./ProfileStatsCards";
@@ -43,10 +44,10 @@ export default function StudentProfilPage() {
   const initial = displayName[0]?.toUpperCase() ?? "E";
 
   const stats = [
-    { label: "Cours suivis", value: isLoading ? "…" : String(enrolled.length), icon: "📖", bg: "bg-purple-500/10", border: "border-purple-500/20", text: "text-purple-400" },
-    { label: "Cours complétés", value: isLoading ? "…" : String(finished), icon: "✅", bg: "bg-green-500/10", border: "border-green-500/20", text: "text-green-400" },
-    { label: "Leçons complétées", value: isLoading ? "…" : String(totalCompleted), icon: "📝", bg: "bg-blue-500/10", border: "border-blue-500/20", text: "text-blue-400" },
-    { label: "Cours disponibles", value: isLoading ? "…" : String(allCount), icon: "🌐", bg: "bg-yellow-500/10", border: "border-yellow-500/20", text: "text-yellow-400" },
+    { label: "Cours suivis", value: isLoading ? "…" : String(enrolled.length), icon: <BookOpen size={20} />, bg: "bg-purple-500/10", border: "border-purple-500/20", text: "text-purple-400" },
+    { label: "Cours complétés", value: isLoading ? "…" : String(finished), icon: <CheckCircle size={20} />, bg: "bg-green-500/10", border: "border-green-500/20", text: "text-green-400" },
+    { label: "Leçons complétées", value: isLoading ? "…" : String(totalCompleted), icon: <FileText size={20} />, bg: "bg-blue-500/10", border: "border-blue-500/20", text: "text-blue-400" },
+    { label: "Cours disponibles", value: isLoading ? "…" : String(allCount), icon: <Globe size={20} />, bg: "bg-yellow-500/10", border: "border-yellow-500/20", text: "text-yellow-400" },
   ];
 
   return (

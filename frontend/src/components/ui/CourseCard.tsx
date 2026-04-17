@@ -27,8 +27,8 @@ export default function CourseCard({ title, visibility, updatedAt, onClick, acti
       onClick={onClick}
       className={onClick ? "cursor-pointer" : ""}
     >
-      <div className="h-20 bg-gradient-to-br from-purple-900/40 to-blue-900/40 flex items-center justify-center text-3xl">
-        📖
+      <div className="h-20 bg-gradient-to-br from-purple-900/40 to-blue-900/40 flex items-center justify-center text-gray-400">
+        <BookOpen size={32} />
       </div>
       <CardContent>
         <div className="flex items-start justify-between gap-2 mb-2">
