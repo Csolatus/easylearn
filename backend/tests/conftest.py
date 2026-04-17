@@ -30,3 +30,42 @@ async def client():
         transport=ASGITransport(app=app), base_url="http://test"
     ) as c:
         yield c
+
+
+async def _register_and_login(client: AsyncClient, email: str, role: str) -> str:
+    await client.post("/auth/register", json={
+        "first_name": "Test",
+        "last_name": role.capitalize(),
+        "email": email,
+        "password": "securepassword",
+        "role": role,
+    })
+    response = await client.post("/auth/login", json={
+        "email": email,
+        "password": "securepassword",
+    })
+    return response.json()["access_token"]
+
+
+@pytest_asyncio.fixture
+async def student_token(client):
+    return await _register_and_login(client, "student_fixture@example.com", "student")
+
+
+@pytest_asyncio.fixture
+async def teacher_token(client):
+    return await _register_and_login(client, "teacher_fixture@example.com", "teacher")
+
+
+@pytest_asyncio.fixture
+async def admin_token(client):
+    return await _register_and_login(client, "admin_fixture@example.com", "school_admin")
+
+
+@pytest_asyncio.fixture
+async def super_admin_token(client):
+    return await _register_and_login(client, "superadmin_fixture@example.com", "super_admin")
+
+
+def auth_headers(token: str) -> dict:
+    return {"Authorization": f"Bearer {token}"}
