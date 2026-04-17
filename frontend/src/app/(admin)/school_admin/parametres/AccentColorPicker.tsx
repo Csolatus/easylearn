@@ -64,7 +64,7 @@ export function AccentColorPicker({ accentColor, onColorChange, onSave, saving, 
           className="self-start px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-colors disabled:opacity-50"
           style={{ backgroundColor: saved ? "#16a34a" : accentColor }}
         >
-          {saving ? "Sauvegarde..." : saved ? "✓ Sauvegardé" : "Sauvegarder les paramètres"}
+          {saving ? "Sauvegarde..." : saved ? "Sauvegardé" : "Sauvegarder les paramètres"}
         </button>
       </div>
     </div>

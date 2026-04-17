@@ -1,5 +1,7 @@
 "use client";
 
+import { Search } from "lucide-react";
+
 const STATUS_FILTERS = ["Tous", "Actif", "Invité", "Suspendu"] as const;
 type FilterLabel = (typeof STATUS_FILTERS)[number];
 
@@ -14,7 +16,7 @@ export function ProfesseursToolbar({ search, onSearch, activeFilter, onFilter }:
   return (
     <div className="flex flex-col sm:flex-row gap-3">
       <div className="relative flex-1 max-w-sm">
-        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">🔍</span>
+        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none"><Search size={14} /></span>
         <input
           type="text"
           placeholder="Rechercher un professeur..."
