@@ -1,3 +1,5 @@
+import { RefreshCw, ThumbsUp, Dumbbell, PartyPopper } from "lucide-react";
+
 type Choice = { id: string; text: string };
 type Question = { id: string; statement: string; ordre: number; choices: Choice[] };
 
@@ -28,7 +30,12 @@ export default function QuizTab({ questions, selectedChoices, quizScore, quizSub
           </div>
           <div className="text-center">
             <p className="text-foreground font-semibold text-lg">
-              {quizScore >= 0.8 ? "Parfait ! 🎉" : quizScore >= 0.5 ? "Bien joué ! 👍" : "À retravailler 💪"}
+              {quizScore >= 0.8
+              ? <span className="flex items-center gap-1.5 justify-center"><PartyPopper size={18} /> Parfait !</span>
+              : quizScore >= 0.5
+              ? <span className="flex items-center gap-1.5 justify-center"><ThumbsUp size={18} /> Bien joué !</span>
+              : <span className="flex items-center gap-1.5 justify-center"><Dumbbell size={18} /> À retravailler</span>
+            }
             </p>
             <p className="text-muted text-sm mt-1">
               {scoreCount} bonne{scoreCount !== 1 ? "s" : ""} réponse{scoreCount !== 1 ? "s" : ""} sur {totalQuestions}
@@ -36,9 +43,10 @@ export default function QuizTab({ questions, selectedChoices, quizScore, quizSub
           </div>
           <button
             onClick={onRetry}
-            className="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold transition-colors"
           >
-            🔄 Recommencer
+            <RefreshCw size={14} />
+            Recommencer
           </button>
         </div>
       </div>

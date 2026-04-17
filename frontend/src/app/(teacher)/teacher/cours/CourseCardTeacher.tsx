@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BookOpen, Pencil } from "lucide-react";
+import { BookOpen, Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 type Course = { id: string; title: string; visibility: string; updated_at: string };
 
@@ -11,9 +12,11 @@ const VISIBILITY_BADGE: Record<string, string> = {
 
 const VISIBILITY_LABEL: Record<string, string> = { public: "Public", school: "École", private: "Privé" };
 
-type Props = { course: Course };
+type Props = { course: Course; onDelete: (id: string) => void };
 
-export default function CourseCardTeacher({ course }: Props) {
+export default function CourseCardTeacher({ course, onDelete }: Props) {
+  const [confirm, setConfirm] = useState(false);
+
   return (
     <div className="rounded-2xl border border-border bg-surface shadow-md overflow-hidden flex flex-col group">
       <div className="relative h-32 bg-gradient-to-br from-green-900/60 to-teal-900/60 flex items-center justify-center">
@@ -30,6 +33,29 @@ export default function CourseCardTeacher({ course }: Props) {
           <Link href={`/teacher/cours/${course.id}`} className="flex-1 text-center bg-green-600 hover:bg-green-700 text-white text-xs font-semibold py-2.5 rounded-xl transition-colors">
             <Pencil size={12} className="inline mr-1" /> Modifier
           </Link>
+          {confirm ? (
+            <div className="flex gap-1">
+              <button
+                onClick={() => onDelete(course.id)}
+                className="px-3 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-semibold transition-colors"
+              >
+                Confirmer
+              </button>
+              <button
+                onClick={() => setConfirm(false)}
+                className="px-3 py-2 rounded-xl border border-border text-muted hover:text-foreground text-xs transition-colors"
+              >
+                Annuler
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setConfirm(true)}
+              className="px-3 py-2 rounded-xl border border-border text-muted hover:text-red-400 hover:border-red-500/40 transition-colors"
+            >
+              <Trash2 size={14} />
+            </button>
+          )}
         </div>
       </div>
     </div>

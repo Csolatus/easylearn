@@ -30,3 +30,13 @@ class PracticalExerciseResponse(BaseModel):
     id: str
     instructions: str
     expected_output: str
+
+
+class PracticalExerciseCreate(BaseModel):
+    instructions: str
+    expected_output: str
+
+
+class PracticalExerciseUpdate(BaseModel):
+    instructions: str | None = None
+    expected_output: str | None = None
