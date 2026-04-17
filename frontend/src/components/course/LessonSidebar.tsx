@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FileText, Brain, Monitor, Check } from "lucide-react";
+import { FileText, Brain, Monitor, Check, ArrowLeft } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import ProgressBar from "./ProgressBar";
 
@@ -47,7 +47,7 @@ export default function LessonSidebar({
   courseTitle,
   courseSubtitle,
   backHref,
-  backLabel = "← Retour",
+  backLabel = "Retour",
   lessons,
   activeLesson,
   onLessonChange,
@@ -63,9 +63,9 @@ export default function LessonSidebar({
       <div className="px-4 py-4 border-b border-border">
         <Link
           href={backHref}
-          className="text-xs text-muted hover:text-foreground transition-colors"
+          className="text-xs text-muted hover:text-foreground transition-colors flex items-center gap-1"
         >
-          {backLabel}
+          <ArrowLeft size={12} /> {backLabel}
         </Link>
         <p className="text-xs font-semibold text-foreground mt-2">
           Cours #{courseId}
@@ -93,28 +93,25 @@ export default function LessonSidebar({
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">
           Leçons
         </p>
-        {lessons.map((lesson) => (
-          <button
-            key={lesson.id}
-            onClick={() => onLessonChange(lesson.id)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
-              activeLesson === lesson.id
-                ? ACCENT_ACTIVE[accentColor]
-                : "text-muted hover:bg-surface"
-            }`}
-          >
-            <span
-              className={`text-xs px-1.5 py-0.5 rounded font-medium shrink-0 ${TYPE_STYLES[lesson.type]}`}
+        {lessons.map((lesson) => {
+          const TypeIcon = TYPE_ICONS[lesson.type];
+          return (
+            <button
+              key={lesson.id}
+              onClick={() => onLessonChange(lesson.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
+                activeLesson === lesson.id
+                  ? ACCENT_ACTIVE[accentColor]
+                  : "text-muted hover:bg-surface"
+              }`}
             >
-              <span
-                className={`p-1 rounded shrink-0 ${TYPE_STYLES[lesson.type]}`}
-              >
-                <TypeIcon size={10} />
+              <span className={`p-1 rounded shrink-0 ${TYPE_STYLES[lesson.type]}`}>
+                <TypeIcon size={12} />
               </span>
-              <span className="text-xs truncate">{lesson.title}</span>
+              <span className="text-xs truncate flex-1">{lesson.title}</span>
               {lesson.done && (
                 <span className="ml-auto text-green-500 shrink-0">
-                  <Check size={12} />
+                  <Check size={14} />
                 </span>
               )}
             </button>

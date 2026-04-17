@@ -30,7 +30,7 @@ export default function TeacherClassesPanel({ classes, isLoading }: Props) {
       {!isLoading && active.map((cls) => (
         <Link key={cls.id} href={`/teacher/classes/${cls.id}`}
           className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 dark:hover:bg-gray-100 transition-colors">
-          <div className="w-9 h-9 rounded-xl bg-green-600/20 flex items-center justify-center shrink-0">🏫</div>
+          <div className="w-9 h-9 rounded-xl bg-green-600/20 flex items-center justify-center shrink-0 text-green-400"><School size={16} /></div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-foreground truncate">{cls.name}</p>
             <p className="text-xs text-gray-500 font-mono mt-0.5">{cls.invite_code}</p>

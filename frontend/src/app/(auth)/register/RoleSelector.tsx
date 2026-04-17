@@ -1,4 +1,3 @@
-import { ButtonRoot } from "@heroui/react";
 import { GraduationCap, Users } from "lucide-react";
 
 type Props = {
@@ -19,16 +18,19 @@ export default function RoleSelector({ role, onChange }: Props) {
         {(["student", "teacher"] as const).map((r) => {
           const { label, icon: Icon } = ROLE_CONFIG[r];
           return (
-            <ButtonRoot
+            <button
               key={r}
               type="button"
-              variant={role === r ? "primary" : "outline"}
-              className="flex-1"
-              onPress={() => onChange(r)}
+              onClick={() => onChange(r)}
+              className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                role === r
+                  ? "bg-accent text-white"
+                  : "border border-white/20 dark:border-gray-400 text-foreground hover:bg-white/5"
+              }`}
             >
-              <Icon size={16} className="mr-2" />
+              <Icon size={16} />
               {label}
-            </ButtonRoot>
+            </button>
           );
         })}
       </div>

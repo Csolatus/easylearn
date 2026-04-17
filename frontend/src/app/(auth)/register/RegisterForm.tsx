@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  CardRoot, CardContent,
-  InputGroupRoot, InputGroupInput, InputGroupPrefix, InputGroupSuffix,
-  ButtonRoot,
-  AlertRoot, AlertTitle,
-  LabelRoot,
-} from "@heroui/react";
+import { Lock, Mail, Eye, EyeOff, GraduationCap } from "lucide-react";
 import AuthHeader from "@/components/layout/AuthHeader";
 import AuthFooter from "@/components/layout/AuthFooter";
 import RoleSelector from "./RoleSelector";
@@ -72,110 +66,97 @@ export default function RegisterForm() {
     <div className="min-h-screen flex flex-col bg-background">
       <AuthHeader questionText="Déjà inscrit ?" linkText="Se connecter" linkHref="/login" />
       <div className="flex-1 flex items-center justify-center px-4 py-12">
-        <CardRoot variant="secondary" className="w-full max-w-md">
-          <CardContent>
-            <div className="flex flex-col items-center mb-8">
-              <div className="w-14 h-14 bg-accent rounded-2xl flex items-center justify-center text-2xl mb-4">
-                🎓
-              </div>
-              <h1 className="text-2xl font-bold text-foreground mb-1">Créer un compte</h1>
-              <p className="text-muted text-sm text-center">Rejoignez EasyLearn dès maintenant</p>
+        <div className="w-full max-w-md bg-white/5 dark:bg-gray-800 border border-white/10 dark:border-gray-400 rounded-2xl shadow-xl p-8">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-14 h-14 bg-accent rounded-2xl flex items-center justify-center text-2xl mb-4">
+              <GraduationCap size={28} />
             </div>
+            <h1 className="text-2xl font-bold text-foreground mb-1">Créer un compte</h1>
+            <p className="text-muted text-sm text-center">Rejoignez EasyLearn dès maintenant</p>
+          </div>
 
-            {apiError && (
-              <AlertRoot status="danger" className="mb-4">
-                <AlertTitle>{apiError}</AlertTitle>
-              </AlertRoot>
-            )}
+          {apiError && (
+            <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {apiError}
+            </div>
+          )}
 
-            <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-              <RoleSelector role={role} onChange={setRole} />
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+            <RoleSelector role={role} onChange={setRole} />
 
-              <div className="flex gap-3">
-                {[
-                  { label: "Prénom", value: firstName, set: setFirstName, placeholder: "Jean", error: errors.firstName },
-                  { label: "Nom", value: lastName, set: setLastName, placeholder: "Dupont", error: errors.lastName },
-                ].map(({ label, value, set, placeholder, error }) => (
-                  <div key={label} className="flex flex-col gap-1.5 flex-1 min-w-0">
-                    <LabelRoot className="text-xs font-semibold tracking-widest text-muted uppercase">
-                      {label}
-                    </LabelRoot>
-                    <InputGroupRoot>
-                      <InputGroupInput
-                        type="text"
-                        placeholder={placeholder}
-                        value={value}
-                        onChange={(e) => set(e.target.value)}
-                      />
-                    </InputGroupRoot>
-                    {error && <p className="text-danger text-xs">{error}</p>}
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <LabelRoot className="text-xs font-semibold tracking-widest text-muted uppercase">
-                  Email
-                </LabelRoot>
-                <InputGroupRoot>
-                  <InputGroupPrefix>
-                    <Mail size={14} className="text-muted" />
-                  </InputGroupPrefix>
-                  <InputGroupInput
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </InputGroupRoot>
-                {errors.email && <p className="text-danger text-xs">{errors.email}</p>}
-              </div>
-
+            <div className="flex gap-3">
               {[
-                { label: "Mot de passe", value: password, set: setPassword, show: showPassword, toggle: () => setShowPassword(!showPassword), error: errors.password },
-                { label: "Confirmer le mot de passe", value: confirmPassword, set: setConfirmPassword, show: showConfirmPassword, toggle: () => setShowConfirmPassword(!showConfirmPassword), error: errors.confirmPassword },
-              ].map(({ label, value, set, show, toggle, error }) => (
-                <div key={label} className="flex flex-col gap-1.5">
-                  <LabelRoot className="text-xs font-semibold tracking-widest text-muted uppercase">
-                    {label}
-                  </LabelRoot>
-                  <InputGroupRoot>
-                    <InputGroupPrefix>
-                      <Lock size={14} className="text-muted" />
-                    </InputGroupPrefix>
-                    <InputGroupInput
-                      type={show ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={value}
-                      onChange={(e) => set(e.target.value)}
-                    />
-                    <InputGroupSuffix>
-                      <button
-                        type="button"
-                        onClick={toggle}
-                        className="text-muted hover:text-foreground transition-colors p-1"
-                      >
-                        {show ? <EyeOff size={14} /> : <Eye size={14} />}
-                      </button>
-                    </InputGroupSuffix>
-                  </InputGroupRoot>
-                  {error && <p className="text-danger text-xs">{error}</p>}
+                { label: "Prénom", value: firstName, set: setFirstName, placeholder: "Jean", error: errors.firstName },
+                { label: "Nom", value: lastName, set: setLastName, placeholder: "Dupont", error: errors.lastName },
+              ].map(({ label, value, set, placeholder, error }) => (
+                <div key={label} className="flex flex-col gap-1.5 flex-1 min-w-0">
+                  <label className="text-xs font-semibold tracking-widest text-muted uppercase">{label}</label>
+                  <input
+                    type="text"
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={(e) => set(e.target.value)}
+                    className="bg-surface border border-white/10 dark:border-gray-400 rounded-xl px-3 py-2.5 text-sm text-foreground placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent"
+                  />
+                  {error && <p className="text-red-400 text-xs">{error}</p>}
                 </div>
               ))}
+            </div>
 
-              <ButtonRoot type="submit" variant="primary" isDisabled={isLoading} className="w-full">
-                {isLoading ? "Inscription..." : "Créer mon compte →"}
-              </ButtonRoot>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold tracking-widest text-muted uppercase">Email</label>
+              <div className="flex items-center bg-surface border border-white/10 dark:border-gray-400 rounded-xl focus-within:ring-2 focus-within:ring-accent overflow-hidden">
+                <span className="pl-3 text-muted"><Mail size={14} /></span>
+                <input
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 bg-transparent px-3 py-2.5 text-sm text-foreground placeholder-gray-500 focus:outline-none"
+                />
+              </div>
+              {errors.email && <p className="text-red-400 text-xs">{errors.email}</p>}
+            </div>
 
-              <p className="text-center text-sm text-muted mt-2">
-                Déjà un compte ?{" "}
-                <a href="/login" className="text-accent hover:opacity-80 font-medium transition-opacity">
-                  Se connecter
-                </a>
-              </p>
-            </form>
-          </CardContent>
-        </CardRoot>
+            {[
+              { label: "Mot de passe", value: password, set: setPassword, show: showPassword, toggle: () => setShowPassword(!showPassword), error: errors.password },
+              { label: "Confirmer le mot de passe", value: confirmPassword, set: setConfirmPassword, show: showConfirmPassword, toggle: () => setShowConfirmPassword(!showConfirmPassword), error: errors.confirmPassword },
+            ].map(({ label, value, set, show, toggle, error }) => (
+              <div key={label} className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold tracking-widest text-muted uppercase">{label}</label>
+                <div className="flex items-center bg-surface border border-white/10 dark:border-gray-400 rounded-xl focus-within:ring-2 focus-within:ring-accent overflow-hidden">
+                  <span className="pl-3 text-muted"><Lock size={14} /></span>
+                  <input
+                    type={show ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={value}
+                    onChange={(e) => set(e.target.value)}
+                    className="flex-1 bg-transparent px-3 py-2.5 text-sm text-foreground placeholder-gray-500 focus:outline-none"
+                  />
+                  <button type="button" onClick={toggle} className="pr-3 text-muted hover:text-foreground transition-colors">
+                    {show ? <EyeOff size={14} /> : <Eye size={14} />}
+                  </button>
+                </div>
+                {error && <p className="text-red-400 text-xs">{error}</p>}
+              </div>
+            ))}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2.5 rounded-xl bg-accent hover:opacity-90 disabled:opacity-50 text-white font-semibold text-sm transition-opacity"
+            >
+              {isLoading ? "Inscription..." : "Créer mon compte →"}
+            </button>
+
+            <p className="text-center text-sm text-muted mt-2">
+              Déjà un compte ?{" "}
+              <a href="/login" className="text-accent hover:opacity-80 font-medium transition-opacity">
+                Se connecter
+              </a>
+            </p>
+          </form>
+        </div>
       </div>
       <AuthFooter />
     </div>

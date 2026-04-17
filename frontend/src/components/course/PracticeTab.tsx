@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, Play, X } from "lucide-react";
 import CodeEditor from "@/components/editor/CodeEditor";
 import { useAuthStore } from "@/store/authStore";
 

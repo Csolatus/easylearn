@@ -83,7 +83,7 @@ export default function AppSidebar() {
                 : "text-muted hover:text-foreground hover:bg-surface"
             }`}
           >
-            <span>{item.icon}</span>
+            <item.icon size={16} />
             {item.label}
           </Link>
         ))}

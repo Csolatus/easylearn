@@ -1,7 +1,6 @@
-import { InputGroupRoot, InputGroupInput, InputGroupPrefix, InputGroupSuffix, LabelRoot } from "@heroui/react";
 import type { ComponentProps, ReactNode } from "react";
 
-type InputProps = ComponentProps<typeof InputGroupInput> & {
+type InputProps = ComponentProps<"input"> & {
   label?: string;
   error?: string;
   prefix?: ReactNode;
@@ -12,16 +11,23 @@ export function Input({ label, error, prefix, suffix, className = "", ...props }
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <LabelRoot className="text-xs font-semibold tracking-widest text-muted uppercase">
+        <label className="text-xs font-semibold tracking-widest text-muted uppercase">
           {label}
-        </LabelRoot>
+        </label>
       )}
-      <InputGroupRoot>
-        {prefix && <InputGroupPrefix>{prefix}</InputGroupPrefix>}
-        <InputGroupInput className={className} {...props} />
-        {suffix && <InputGroupSuffix>{suffix}</InputGroupSuffix>}
-      </InputGroupRoot>
-      {error && <p className="text-danger text-xs">{error}</p>}
+      <div className="flex items-center bg-surface border border-white/10 dark:border-gray-400 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-accent">
+        {prefix && (
+          <span className="pl-3 text-muted flex items-center shrink-0">{prefix}</span>
+        )}
+        <input
+          className={`flex-1 bg-transparent px-3 py-2.5 text-sm text-foreground placeholder-gray-500 focus:outline-none ${className}`}
+          {...props}
+        />
+        {suffix && (
+          <span className="pr-3 flex items-center shrink-0">{suffix}</span>
+        )}
+      </div>
+      {error && <p className="text-red-400 text-xs">{error}</p>}
     </div>
   );
 }
