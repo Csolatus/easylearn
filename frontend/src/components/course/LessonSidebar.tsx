@@ -1,0 +1,123 @@
+"use client";
+
+import Link from "next/link";
+import { FileText, Brain, Monitor, Check, ArrowLeft } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import ProgressBar from "./ProgressBar";
+
+export type Lesson = {
+  id: number;
+  title: string;
+  type: "theory" | "quiz" | "code";
+  done: boolean;
+};
+
+type Props = {
+  courseId: string;
+  courseTitle: string;
+  courseSubtitle?: string;
+  backHref: string;
+  backLabel?: string;
+  lessons: Lesson[];
+  activeLesson: number;
+  onLessonChange: (id: number) => void;
+  accentColor?: "purple" | "green";
+  showProgress?: boolean;
+};
+
+const TYPE_STYLES: Record<Lesson["type"], string> = {
+  theory: "bg-blue-500/20 text-blue-400",
+  quiz: "bg-yellow-500/20 text-yellow-400",
+  code: "bg-green-500/20 text-green-400",
+};
+
+const TYPE_ICONS: Record<Lesson["type"], LucideIcon> = {
+  theory: FileText,
+  quiz: Brain,
+  code: Monitor,
+};
+
+const ACCENT_ACTIVE: Record<NonNullable<Props["accentColor"]>, string> = {
+  purple: "bg-purple-600/20 text-purple-400",
+  green: "bg-green-600/20 text-green-400",
+};
+
+export default function LessonSidebar({
+  courseId,
+  courseTitle,
+  courseSubtitle,
+  backHref,
+  backLabel = "Retour",
+  lessons,
+  activeLesson,
+  onLessonChange,
+  accentColor = "purple",
+  showProgress = true,
+}: Props) {
+  const doneCount = lessons.filter((l) => l.done).length;
+  const progressValue = lessons.length > 0 ? (doneCount / lessons.length) * 100 : 0;
+
+  return (
+    <aside className="w-64 shrink-0 border-r border-border bg-surface flex flex-col overflow-y-auto">
+      {/* Header */}
+      <div className="px-4 py-4 border-b border-border">
+        <Link
+          href={backHref}
+          className="text-xs text-muted hover:text-foreground transition-colors flex items-center gap-1"
+        >
+          <ArrowLeft size={12} /> {backLabel}
+        </Link>
+        <p className="text-xs font-semibold text-foreground mt-2">
+          Cours #{courseId}
+        </p>
+        {courseSubtitle && (
+          <p className="text-xs text-gray-500 mt-0.5">{courseSubtitle}</p>
+        )}
+        <p className="text-xs text-gray-400 dark:text-gray-600 mt-0.5 font-medium">{courseTitle}</p>
+
+        {showProgress && (
+          <div className="mt-3">
+            <div className="flex justify-between text-xs text-gray-500 mb-1.5">
+              <span>Progression</span>
+              <span>
+                {doneCount}/{lessons.length} leçons
+              </span>
+            </div>
+            <ProgressBar value={progressValue} color={accentColor} />
+          </div>
+        )}
+      </div>
+
+      {/* Lesson list */}
+      <div className="px-3 py-3 flex-1">
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-2">
+          Leçons
+        </p>
+        {lessons.map((lesson) => {
+          const TypeIcon = TYPE_ICONS[lesson.type];
+          return (
+            <button
+              key={lesson.id}
+              onClick={() => onLessonChange(lesson.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
+                activeLesson === lesson.id
+                  ? ACCENT_ACTIVE[accentColor]
+                  : "text-muted hover:bg-surface"
+              }`}
+            >
+              <span className={`p-1 rounded shrink-0 ${TYPE_STYLES[lesson.type]}`}>
+                <TypeIcon size={12} />
+              </span>
+              <span className="text-xs truncate flex-1">{lesson.title}</span>
+              {lesson.done && (
+                <span className="ml-auto text-green-500 shrink-0">
+                  <Check size={14} />
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </aside>
+  );
+}
