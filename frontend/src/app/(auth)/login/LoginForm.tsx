@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { GraduationCap, Lock, Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { decodeJwtPayload } from "@/lib/auth";
 import AuthHeader from "@/components/layout/AuthHeader";
@@ -66,8 +67,8 @@ export default function LoginForm() {
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md bg-[#111118] dark:bg-white dark:shadow-xl border border-white/8 dark:border-gray-200 rounded-2xl p-8 shadow-2xl">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-lg shadow-indigo-500/30">
-              🎓
+            <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30">
+              <GraduationCap size={28} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold text-white dark:text-gray-900 mb-1">Welcome Back</h1>
             <p className="text-gray-400 dark:text-gray-500 text-sm text-center">
@@ -115,7 +116,7 @@ export default function LoginForm() {
                 </button>
               </div>
               <div className="flex items-center gap-3 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 rounded-xl px-4 py-3 focus-within:border-indigo-500 transition-colors">
-                <span className="text-gray-500 text-sm">🔒</span>
+                <Lock size={14} className="text-gray-500 shrink-0" />
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
@@ -123,8 +124,8 @@ export default function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="flex-1 bg-transparent text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 text-sm focus:outline-none"
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-gray-500 hover:text-gray-300 dark:hover:text-gray-600 transition-colors text-sm">
-                  {showPassword ? "🙈" : "👁️"}
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-gray-500 hover:text-gray-300 dark:hover:text-gray-600 transition-colors">
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
               {errors.password && <p className="text-red-400 text-xs">{errors.password}</p>}
