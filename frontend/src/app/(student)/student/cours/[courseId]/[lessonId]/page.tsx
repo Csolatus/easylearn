@@ -152,7 +152,7 @@ export default function LessonPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-[#0a0a0f]">
+      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <Spinner color="border-purple-500" />
           <p className="text-gray-400 text-sm">Chargement de la leçon...</p>
@@ -163,7 +163,7 @@ export default function LessonPage() {
 
   if (error || !currentLesson || !course) {
     return (
-      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-[#0a0a0f]">
+      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <p className="text-red-400 text-sm">{error ?? "Leçon introuvable"}</p>
           <button onClick={() => router.push("/student/catalogue")} className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">

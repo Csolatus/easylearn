@@ -27,10 +27,10 @@ export default function QuizTab({ questions, selectedChoices, quizScore, quizSub
             {scoreCount}/{totalQuestions}
           </div>
           <div className="text-center">
-            <p className="text-white dark:text-gray-900 font-semibold text-lg">
+            <p className="text-foreground font-semibold text-lg">
               {quizScore >= 0.8 ? "Parfait ! 🎉" : quizScore >= 0.5 ? "Bien joué ! 👍" : "À retravailler 💪"}
             </p>
-            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+            <p className="text-muted text-sm mt-1">
               {scoreCount} bonne{scoreCount !== 1 ? "s" : ""} réponse{scoreCount !== 1 ? "s" : ""} sur {totalQuestions}
             </p>
           </div>
@@ -55,8 +55,8 @@ export default function QuizTab({ questions, selectedChoices, quizScore, quizSub
           .slice()
           .sort((a, b) => a.ordre - b.ordre)
           .map((q, qi) => (
-            <div key={q.id} className="rounded-xl border border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 p-4 flex flex-col gap-3">
-              <p className="text-sm font-medium text-white dark:text-gray-900">
+            <div key={q.id} className="rounded-xl border border-border bg-white/5 p-4 flex flex-col gap-3">
+              <p className="text-sm font-medium text-foreground">
                 <span className="text-gray-500 mr-2">Q{qi + 1}.</span>
                 {q.statement}
               </p>
@@ -68,7 +68,7 @@ export default function QuizTab({ questions, selectedChoices, quizScore, quizSub
                     className={`text-left text-sm px-4 py-2.5 rounded-xl border transition-colors ${
                       selectedChoices[q.id] === c.id
                         ? "border-purple-500 bg-purple-500/20 text-purple-300 dark:text-purple-700"
-                        : "border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100"
+                        : "border-border text-gray-400 dark:text-gray-600 hover:bg-surface"
                     }`}
                   >
                     <span className="text-gray-500 mr-2">{String.fromCharCode(65 + ci)}.</span>

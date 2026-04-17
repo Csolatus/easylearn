@@ -14,8 +14,8 @@ export function AdminPerformancePanel({ analytics }: Props) {
   const quiz = Math.round(analytics.avg_quiz_score_pct);
 
   return (
-    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md p-6">
-      <h2 className="text-sm font-semibold text-white dark:text-gray-900 mb-6">Performance globale</h2>
+    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-surface shadow-md p-6">
+      <h2 className="text-sm font-semibold text-foreground mb-6">Performance globale</h2>
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
           <span className="text-xs text-gray-500 w-40">Complétion leçons</span>

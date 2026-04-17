@@ -27,13 +27,13 @@ export default function CreateCourseWizard({
 }: Props) {
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-[#111118] dark:bg-white rounded-2xl border border-white/10 dark:border-gray-300 shadow-2xl">
-        <div className="px-6 py-5 border-b border-white/10 dark:border-gray-200 flex items-center justify-between">
+      <div className="w-full max-w-md bg-surface rounded-2xl border border-white/10 dark:border-gray-300 shadow-2xl">
+        <div className="px-6 py-5 border-b border-border flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-white dark:text-gray-900">Nouveau cours</h2>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Étape {step} sur 2</p>
+            <h2 className="text-sm font-semibold text-foreground">Nouveau cours</h2>
+            <p className="text-xs text-muted mt-0.5">Étape {step} sur 2</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors"><X size={18} /></button>
+          <button onClick={onClose} className="text-gray-400 hover:text-foreground transition-colors text-lg">✕</button>
         </div>
 
         <div className="px-6 py-2 flex gap-2">
@@ -45,13 +45,13 @@ export default function CreateCourseWizard({
         {step === 1 && (
           <div className="px-6 py-5 flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Titre du cours</label>
+              <label className="text-xs font-semibold text-muted uppercase tracking-wider">Titre du cours</label>
               <input
                 value={title}
                 onChange={(e) => onTitleChange(e.target.value)}
                 placeholder="ex: Introduction à React"
                 autoFocus
-                className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+                className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-foreground rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
               />
             </div>
           </div>
@@ -59,14 +59,14 @@ export default function CreateCourseWizard({
 
         {step === 2 && (
           <div className="px-6 py-5 flex flex-col gap-4">
-            <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Visibilité</p>
+            <p className="text-xs font-semibold text-muted uppercase tracking-wider">Visibilité</p>
             <div className="flex flex-col gap-3">
               {(["private", "school", "public"] as const).map((v) => (
                 <button
                   key={v}
                   onClick={() => onVisibilityChange(v)}
                   className={`flex items-center gap-3 py-3 px-4 rounded-xl border text-left transition-colors ${
-                    visibility === v ? "border-green-500 bg-green-500/10 text-green-400" : "border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:border-green-500/50"
+                    visibility === v ? "border-green-500 bg-green-500/10 text-green-400" : "border-border text-gray-400 dark:text-gray-600 hover:border-green-500/50"
                   }`}
                 >
                   <span>{VISIBILITY_ICON[v]}</span>
@@ -83,8 +83,8 @@ export default function CreateCourseWizard({
           </div>
         )}
 
-        <div className="px-6 py-4 border-t border-white/10 dark:border-gray-200 flex justify-between">
-          <button onClick={step === 1 ? onClose : onBack} className="text-sm text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors">
+        <div className="px-6 py-4 border-t border-border flex justify-between">
+          <button onClick={step === 1 ? onClose : onBack} className="text-sm text-gray-400 hover:text-foreground transition-colors">
             {step === 1 ? "Annuler" : "← Retour"}
           </button>
           {step === 1 ? (

@@ -48,13 +48,13 @@ export function InviteTeacherModal({ isOpen, onClose, inviteEmail, onEmailChange
       }
     >
       {inviteSuccess ? (
-        <p className="text-sm text-gray-400 dark:text-gray-500">
-          Une invitation a été envoyée à <span className="text-white dark:text-gray-900 font-medium">{inviteEmail}</span>.
+        <p className="text-sm text-muted">
+          Une invitation a été envoyée à <span className="text-foreground font-medium">{inviteEmail}</span>.
           Le professeur apparaîtra dans la liste avec le statut <span className="text-yellow-400 font-medium">Invité</span> jusqu&apos;à acceptation.
         </p>
       ) : (
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-gray-400 dark:text-gray-500">
+          <p className="text-sm text-muted">
             Le professeur recevra une invitation par email pour rejoindre votre école.
           </p>
           <div className="flex flex-col gap-1.5">
@@ -68,7 +68,7 @@ export function InviteTeacherModal({ isOpen, onClose, inviteEmail, onEmailChange
               onChange={(e) => onEmailChange(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onInvite()}
               autoFocus
-              className="bg-[#0f0f1a] dark:bg-gray-100 dark:text-gray-900 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="bg-background dark:bg-gray-100 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
           </div>
           {inviteError && (

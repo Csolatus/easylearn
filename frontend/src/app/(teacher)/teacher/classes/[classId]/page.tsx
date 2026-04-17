@@ -62,10 +62,10 @@ export default function ClassDetailPage() {
   }
 
   if (isLoading) return <div className="flex justify-center py-20"><Spinner color="border-green-500" /></div>;
-  if (!classroom) return <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 flex items-center justify-center"><p className="text-gray-400">Classe introuvable.</p></div>;
+  if (!classroom) return <div className="min-h-screen bg-background flex items-center justify-center"><p className="text-gray-400">Classe introuvable.</p></div>;
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
+    <div className="min-h-screen bg-background px-8 py-10">
       <div className="max-w-5xl mx-auto flex flex-col gap-8">
         <ClassDetailHeader classroom={classroom} copied={copied} onCopyCode={copyCode} />
 

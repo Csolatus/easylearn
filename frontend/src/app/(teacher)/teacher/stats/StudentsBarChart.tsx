@@ -6,8 +6,8 @@ export default function StudentsBarChart({ courses }: Props) {
   const maxStudents = Math.max(1, ...courses.map((c) => c.unique_students));
 
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6">
-      <h2 className="font-semibold text-white dark:text-gray-900 mb-6">Étudiants uniques par cours</h2>
+    <div className="bg-surface rounded-2xl p-6">
+      <h2 className="font-semibold text-foreground mb-6">Étudiants uniques par cours</h2>
       <div className="flex items-end gap-3 h-36">
         {courses.map((c) => (
           <div key={c.course_id} className="flex flex-col items-center gap-2 flex-1 min-w-0">

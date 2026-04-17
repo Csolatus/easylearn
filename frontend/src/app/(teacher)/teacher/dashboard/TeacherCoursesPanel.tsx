@@ -15,9 +15,9 @@ type Props = { courses: CourseAnalytics[] | null; isLoading: boolean };
 
 export default function TeacherCoursesPanel({ courses, isLoading }: Props) {
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
+    <div className="bg-surface rounded-2xl p-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-white dark:text-gray-900">Mes cours</h2>
+        <h2 className="font-semibold text-foreground">Mes cours</h2>
         <Link href="/teacher/cours" className="text-green-400 hover:text-green-300 text-xs">Voir tout →</Link>
       </div>
 
@@ -36,10 +36,10 @@ export default function TeacherCoursesPanel({ courses, isLoading }: Props) {
         const pct = course.total_lessons > 0 ? Math.round((course.completed_lessons / course.total_lessons) * 100) : 0;
         return (
           <Link key={course.course_id} href={`/teacher/cours/${course.course_id}`}
-            className="flex flex-col gap-2 p-3 rounded-xl bg-white/5 dark:bg-gray-50 hover:bg-white/10 dark:hover:bg-gray-100 transition-colors">
+            className="flex flex-col gap-2 p-3 rounded-xl bg-white/5 hover:bg-white/10 dark:hover:bg-gray-100 transition-colors">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-white dark:text-gray-900">{course.title}</p>
-              <span className="flex items-center gap-1 text-xs text-gray-400"><Users size={12} /> {course.unique_students}</span>
+              <p className="text-sm font-medium text-foreground">{course.title}</p>
+              <span className="text-xs text-gray-400">👥 {course.unique_students}</span>
             </div>
             <div className="h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
               <div className="h-full bg-green-500 rounded-full" style={{ width: `${pct}%` }} />

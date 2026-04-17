@@ -24,14 +24,14 @@ export default function LessonList({ courseId, lessons, completedIds }: Props) {
           <Link
             key={lesson.id}
             href={`/student/cours/${courseId}/${lesson.id}`}
-            className="flex items-center gap-4 px-4 py-3.5 rounded-xl bg-[#1a1a2e] dark:bg-white dark:shadow-sm hover:bg-white/10 dark:hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-4 px-4 py-3.5 rounded-xl bg-surface hover:bg-white/10 dark:hover:bg-gray-50 transition-colors"
           >
             <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
               done ? "bg-green-500/20 text-green-400" : "bg-white/10 dark:bg-gray-200 text-gray-400"
             }`}>
               {done ? <Check size={12} /> : idx + 1}
             </span>
-            <span className="text-sm text-white dark:text-gray-900 flex-1">{lesson.title}</span>
+            <span className="text-sm text-foreground flex-1">{lesson.title}</span>
             <span className="text-gray-600 dark:text-gray-400 text-xs">→</span>
           </Link>
         );

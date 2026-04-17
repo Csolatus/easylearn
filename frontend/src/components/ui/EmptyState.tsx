@@ -1,7 +1,14 @@
-type Props = { message: string };
+import { EmptyStateRoot } from "@heroui/react";
+import type { ComponentProps } from "react";
 
-export default function EmptyState({ message }: Props) {
+type EmptyStateProps = ComponentProps<typeof EmptyStateRoot> & {
+  message: string;
+};
+
+export default function EmptyState({ message, ...props }: EmptyStateProps) {
   return (
-    <div className="text-center text-gray-500 py-12">{message}</div>
+    <EmptyStateRoot {...props}>
+      <p className="text-muted text-sm">{message}</p>
+    </EmptyStateRoot>
   );
 }

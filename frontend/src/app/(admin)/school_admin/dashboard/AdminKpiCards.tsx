@@ -31,7 +31,7 @@ export function AdminKpiCards({ analytics, isLoading }: Props) {
             <p className={`text-2xl font-bold ${card.text}`}>
               {isLoading ? "…" : String(analytics?.[card.key] ?? 0)}
             </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{card.label}</p>
+            <p className="text-xs text-muted mt-0.5">{card.label}</p>
           </div>
         </div>
       ))}
@@ -41,7 +41,7 @@ export function AdminKpiCards({ analytics, isLoading }: Props) {
           <p className="text-2xl font-bold text-yellow-400">
             {isLoading ? "…" : `${Math.round(analytics?.avg_lesson_completion_pct ?? 0)}%`}
           </p>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Taux de complétion</p>
+          <p className="text-xs text-muted mt-0.5">Taux de complétion</p>
         </div>
       </div>
     </div>

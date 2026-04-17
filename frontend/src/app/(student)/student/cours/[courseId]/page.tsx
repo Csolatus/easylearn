@@ -71,7 +71,7 @@ export default function CourseOverviewPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-[#0a0a0f]">
+      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-background">
         <Spinner color="border-purple-500" />
       </div>
     );
@@ -79,7 +79,7 @@ export default function CourseOverviewPage() {
 
   if (error || !course) {
     return (
-      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-[#0a0a0f]">
+      <div className="flex h-[calc(100vh-65px)] items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
           <p className="text-red-400 text-sm">{error ?? "Cours introuvable"}</p>
           <Link href="/student/catalogue" className="text-xs text-indigo-400 hover:text-indigo-300">
@@ -96,9 +96,9 @@ export default function CourseOverviewPage() {
   const resumeLesson = firstIncomplete ?? lessons[0];
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
+    <div className="min-h-screen bg-background px-8 py-10">
       <div className="max-w-3xl mx-auto flex flex-col gap-8">
-        <Link href="/student/catalogue" className="text-xs text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors w-fit">
+        <Link href="/student/catalogue" className="text-xs text-gray-400 hover:text-foreground transition-colors w-fit">
           ← Retour au catalogue
         </Link>
         <CourseOverviewHeader

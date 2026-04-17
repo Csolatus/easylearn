@@ -1,16 +1,8 @@
-import { Skeleton as HeroSkeleton } from "@heroui/react";
+import { SkeletonRoot } from "@heroui/react";
 import type { ComponentProps } from "react";
 
-type SkeletonProps = ComponentProps<typeof HeroSkeleton> & {
-  className?: string;
-};
+type SkeletonProps = ComponentProps<typeof SkeletonRoot>;
 
-export function Skeleton({ className = "", animationType = "pulse", ...props }: SkeletonProps) {
-  return (
-    <HeroSkeleton
-      animationType={animationType}
-      className={`rounded-xl bg-white/10 dark:bg-gray-200 ${className}`}
-      {...props}
-    />
-  );
+export function Skeleton({ className = "", ...props }: SkeletonProps) {
+  return <SkeletonRoot className={className} {...props} />;
 }

@@ -11,11 +11,11 @@ type Props = {
 
 export default function LessonBottomNav({ courseId, prevLesson, nextLesson }: Props) {
   return (
-    <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 dark:border-gray-200 bg-[#0f0f1a] dark:bg-white shrink-0">
+    <div className="flex items-center justify-between px-6 py-4 border-t border-border bg-background shrink-0">
       {prevLesson ? (
         <Link
           href={`/student/cours/${courseId}/${prevLesson.id}`}
-          className="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 transition-colors"
+          className="flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors"
         >
           ← {prevLesson.title}
         </Link>

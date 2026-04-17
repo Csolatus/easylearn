@@ -35,26 +35,26 @@ export default function AppSidebar() {
   if (!config) return null;
 
   return (
-    <aside className="hidden md:flex flex-col w-56 min-h-screen bg-[#0d0d1a] dark:bg-white dark:border-gray-200 px-4 py-6 border-r border-white/5 sticky top-0 self-start overflow-y-auto">
+    <aside className="hidden md:flex flex-col w-56 min-h-screen bg-surface border-r border-border px-4 py-6 sticky top-0 self-start overflow-y-auto">
       {/* Logo */}
       <div className="flex items-center gap-2 mb-8 px-2">
         <div className={`w-8 h-8 ${config.accent} rounded-lg flex items-center justify-center text-sm font-bold text-white shrink-0`}>
           E
         </div>
         <div>
-          <p className="text-sm font-semibold text-white dark:text-gray-900">EasyLearn</p>
-          <p className="text-xs text-gray-500">{config.portalLabel}</p>
+          <p className="text-sm font-semibold text-foreground">EasyLearn</p>
+          <p className="text-xs text-muted">{config.portalLabel}</p>
         </div>
       </div>
 
       {/* School switcher — teachers only */}
       {role === "teacher" && (
         <div className="mb-4 px-1">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-1.5">École active</p>
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200">
-            <School size={12} className="text-gray-400 shrink-0" />
+          <p className="text-xs font-semibold text-muted uppercase tracking-wider px-2 mb-1.5">École active</p>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-background border border-border">
+            <span className="text-xs">🏫</span>
             <select
-              className="flex-1 bg-transparent text-white dark:text-gray-900 text-xs font-medium focus:outline-none cursor-pointer"
+              className="flex-1 bg-transparent text-foreground text-xs font-medium focus:outline-none cursor-pointer"
               value={activeSchool?.id ?? ""}
               onChange={(e) => {
                 const selected = schools.find((s) => s.id === e.target.value);
@@ -62,11 +62,7 @@ export default function AppSidebar() {
               }}
             >
               {schools.map((school) => (
-                <option
-                  key={school.id}
-                  value={school.id}
-                  className="bg-[#0d0d1a] dark:bg-white text-white dark:text-gray-900"
-                >
+                <option key={school.id} value={school.id}>
                   {school.name}
                 </option>
               ))}
@@ -77,44 +73,27 @@ export default function AppSidebar() {
 
       {/* Nav items */}
       <nav className="flex flex-col gap-1 flex-1">
-        {config.navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors ${
-                pathname === item.href || pathname.startsWith(item.href + "/")
-                  ? `${config.accent} text-white font-medium`
-                  : "text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100"
-              }`}
-            >
-              <Icon size={16} />
-              {item.label}
-            </Link>
-          );
-        })}
+        {config.navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors ${
+              pathname === item.href || pathname.startsWith(item.href + "/")
+                ? `${config.accent} text-white font-medium`
+                : "text-muted hover:text-foreground hover:bg-surface"
+            }`}
+          >
+            <span>{item.icon}</span>
+            {item.label}
+          </Link>
+        ))}
       </nav>
 
       {/* Bottom links */}
       <div className="flex flex-col gap-1 mt-4">
-        {config.settingsHref && (
-          <Link
-            href={config.settingsHref}
-            className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
-          >
-            <Settings size={16} /> Settings
-          </Link>
-        )}
-        <Link
-          href={`/${role}/help`}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
-        >
-          <HelpCircle size={16} /> Help
-        </Link>
         <button
           onClick={logout}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors w-full text-left"
+          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-danger hover:opacity-80 hover:bg-danger/10 transition-colors w-full text-left"
         >
           <LogOut size={16} /> Déconnexion
         </button>

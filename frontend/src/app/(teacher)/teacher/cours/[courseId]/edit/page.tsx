@@ -90,9 +90,9 @@ export default function CourseEditPage() {
       <div className="max-w-4xl mx-auto flex flex-col gap-8">
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div>
-            <Link href="/teacher/cours" className="text-gray-400 hover:text-white dark:hover:text-gray-900 text-xs transition-colors mb-3 inline-block">← Retour aux cours</Link>
-            <h1 className="text-3xl font-bold text-white dark:text-gray-900">Modifier le cours</h1>
-            {course && <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">{course.id}</p>}
+            <Link href="/teacher/cours" className="text-gray-400 hover:text-foreground text-xs transition-colors mb-3 inline-block">← Retour aux cours</Link>
+            <h1 className="text-3xl font-bold text-foreground">Modifier le cours</h1>
+            {course && <p className="text-muted text-sm mt-1">{course.id}</p>}
           </div>
           <button onClick={handleSave} disabled={saving || !title.trim()}
             className={`text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors disabled:opacity-50 ${saved ? "bg-emerald-600 text-white" : "bg-green-600 hover:bg-green-700 text-white"}`}>

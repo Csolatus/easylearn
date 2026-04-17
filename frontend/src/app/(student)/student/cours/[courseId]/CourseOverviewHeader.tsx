@@ -14,10 +14,10 @@ export default function CourseOverviewHeader({ courseId, title, visibility, done
   const btnLabel = doneCount === 0 ? "Commencer →" : doneCount === totalCount ? "✓ Terminé" : "Continuer →";
 
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
+    <div className="bg-surface rounded-2xl p-6 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white dark:text-gray-900">{title}</h1>
+          <h1 className="text-2xl font-bold text-foreground">{title}</h1>
           <span className={`mt-2 inline-block text-xs font-bold px-2 py-0.5 rounded-full ${
             visibility === "public" ? "bg-green-500/20 text-green-400" : "bg-blue-500/20 text-blue-400"
           }`}>
