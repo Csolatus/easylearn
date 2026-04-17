@@ -1,5 +1,3 @@
-import { TabsRoot, TabList, Tab } from "@heroui/react";
-
 type TabItem = { key: string; label: string };
 
 type Props = {
@@ -10,14 +8,20 @@ type Props = {
 
 export default function Tabs({ tabs, active, onChange }: Props) {
   return (
-    <TabsRoot selectedKey={active} onSelectionChange={(key) => onChange(key as string)}>
-      <TabList>
-        {tabs.map((tab) => (
-          <Tab key={tab.key} id={tab.key}>
-            {tab.label}
-          </Tab>
-        ))}
-      </TabList>
-    </TabsRoot>
+    <div className="flex gap-1 bg-white/5 rounded-xl p-1">
+      {tabs.map((tab) => (
+        <button
+          key={tab.key}
+          onClick={() => onChange(tab.key)}
+          className={`flex-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+            active === tab.key
+              ? "bg-accent text-white"
+              : "text-muted hover:text-foreground"
+          }`}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
   );
 }

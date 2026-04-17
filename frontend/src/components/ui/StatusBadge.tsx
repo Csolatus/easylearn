@@ -1,10 +1,8 @@
-import { ChipRoot, ChipLabel } from "@heroui/react";
-
-const STATUS_COLORS: Record<string, "default" | "accent" | "success" | "warning" | "danger"> = {
-  active:    "success",
-  invited:   "warning",
-  suspended: "danger",
-  removed:   "default",
+const STATUS_COLORS: Record<string, string> = {
+  active:    "bg-green-500/20 text-green-400",
+  invited:   "bg-yellow-500/20 text-yellow-400",
+  suspended: "bg-red-500/20 text-red-400",
+  removed:   "bg-white/10 text-gray-400",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -20,11 +18,11 @@ type Props = {
 };
 
 export default function StatusBadge({ status, label }: Props) {
-  const color = STATUS_COLORS[status] ?? "default";
+  const colorClass = STATUS_COLORS[status] ?? "bg-white/10 text-gray-400";
   const text = label ?? STATUS_LABELS[status] ?? status;
   return (
-    <ChipRoot color={color} size="sm">
-      <ChipLabel>{text}</ChipLabel>
-    </ChipRoot>
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${colorClass}`}>
+      {text}
+    </span>
   );
 }

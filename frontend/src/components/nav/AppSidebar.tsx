@@ -52,7 +52,7 @@ export default function AppSidebar() {
         <div className="mb-4 px-1">
           <p className="text-xs font-semibold text-muted uppercase tracking-wider px-2 mb-1.5">École active</p>
           <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-background border border-border">
-            <span className="text-xs">🏫</span>
+            <School size={14} className="text-muted shrink-0" />
             <select
               className="flex-1 bg-transparent text-foreground text-xs font-medium focus:outline-none cursor-pointer"
               value={activeSchool?.id ?? ""}
@@ -83,7 +83,7 @@ export default function AppSidebar() {
                 : "text-muted hover:text-foreground hover:bg-surface"
             }`}
           >
-            <span>{item.icon}</span>
+            <item.icon size={16} />
             {item.label}
           </Link>
         ))}

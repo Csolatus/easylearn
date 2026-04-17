@@ -84,12 +84,18 @@ export default function CreateCourseWizard({
         )}
 
         <div className="px-6 py-4 border-t border-border flex justify-between">
-          <button onClick={step === 1 ? onClose : onBack} className="text-sm text-gray-400 hover:text-foreground transition-colors">
-            {step === 1 ? "Annuler" : "← Retour"}
+          <button onClick={step === 1 ? onClose : onBack} className="text-sm text-gray-400 hover:text-foreground transition-colors flex items-center gap-1">
+            {step === 1 ? (
+              "Annuler"
+            ) : (
+              <>
+                <ArrowLeft size={14} /> Retour
+              </>
+            )}
           </button>
           {step === 1 ? (
-            <button onClick={onNext} disabled={!title.trim()} className="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors">
-              Suivant →
+            <button onClick={onNext} disabled={!title.trim()} className="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors flex items-center gap-1">
+              Suivant <ArrowRight size={14} />
             </button>
           ) : (
             <button onClick={onCreate} disabled={submitting} className="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors">
