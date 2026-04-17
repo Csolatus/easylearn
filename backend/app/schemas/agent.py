@@ -16,6 +16,7 @@ class ConversationResponse(BaseModel):
 class ChatRequest(BaseModel):
     student_id: UUID
     message: str
+    exercise_id: UUID | None = None
 
 
 class ChatResponse(BaseModel):

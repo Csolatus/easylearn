@@ -51,8 +51,14 @@ async def chat(
 
     history = await agent_service.getHistory(db, conversation_id)
 
+    instructions = None
+    if request.exercise_id:
+        exercise = await agent_service.getExerciseInstructions(db, request.exercise_id)
+        if exercise:
+            instructions = exercise["instructions"]
+
     try:
-        response_text = await agent_service.askOllama(history, request.message)
+        response_text = await agent_service.askOllama(history, request.message, instructions)
     except httpx.ConnectError:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -85,10 +91,16 @@ async def chatStream(
 
     history = await agent_service.getHistory(db, conversation_id)
 
+    instructions = None
+    if request.exercise_id:
+        exercise = await agent_service.getExerciseInstructions(db, request.exercise_id)
+        if exercise:
+            instructions = exercise["instructions"]
+
     async def event_generator():
         full_response = ""
         try:
-            async for token in agent_service.askOllamaStream(history, request.message):
+            async for token in agent_service.askOllamaStream(history, request.message, instructions):
                 full_response += token
                 yield f"data: {json.dumps({'token': token})}\n\n"
         except (httpx.ConnectError, httpx.HTTPStatusError):

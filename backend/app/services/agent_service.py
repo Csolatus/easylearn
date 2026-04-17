@@ -104,12 +104,18 @@ async def getExerciseInstructions(db: AsyncSession, exercise_id: UUID) -> dict |
     return {"exercise_id": row.id, "instructions": row.instructions}
 
 
-async def askOllama(history: list[dict], user_message: str) -> str:
+def _buildUserMessage(user_message: str, instructions: str | None) -> str:
+    if instructions:
+        return f"CONSIGNE : {instructions}\n\nPROMPT : {user_message}"
+    return user_message
+
+
+async def askOllama(history: list[dict], user_message: str, instructions: str | None = None) -> str:
     messages = []
     if SYSTEM_PROMPT:
         messages.append({"role": "system", "content": SYSTEM_PROMPT})
     messages.extend(history)
-    messages.append({"role": "user", "content": user_message})
+    messages.append({"role": "user", "content": _buildUserMessage(user_message, instructions)})
 
     payload = {"model": MODEL_NAME, "messages": messages, "stream": False}
 
@@ -120,12 +126,12 @@ async def askOllama(history: list[dict], user_message: str) -> str:
     return res.json()["message"]["content"]
 
 
-async def askOllamaStream(history: list[dict], user_message: str) -> AsyncGenerator[str, None]:
+async def askOllamaStream(history: list[dict], user_message: str, instructions: str | None = None) -> AsyncGenerator[str, None]:
     messages = []
     if SYSTEM_PROMPT:
         messages.append({"role": "system", "content": SYSTEM_PROMPT})
     messages.extend(history)
-    messages.append({"role": "user", "content": user_message})
+    messages.append({"role": "user", "content": _buildUserMessage(user_message, instructions)})
 
     payload = {"model": MODEL_NAME, "messages": messages, "stream": True}
 
