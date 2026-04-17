@@ -22,12 +22,12 @@ export default function LessonEditorHeader({ lessonTitle, activeTab, saving, sav
         activeTab === "Théorie" ? (
           <button onClick={onSaveTheory} disabled={saving}
             className={`text-sm font-semibold px-4 py-2 rounded-xl transition-colors ${saved ? "bg-emerald-600 text-white" : "bg-green-600 hover:bg-green-700 text-white"} disabled:opacity-50`}>
-            {saving ? "Sauvegarde..." : saved ? "✓ Sauvegardé" : "Sauvegarder"}
+            {saving ? "Sauvegarde..." : saved ? "Sauvegardé" : "Sauvegarder"}
           </button>
         ) : (
           <button onClick={onSaveQuiz} disabled={savingQuiz}
             className={`text-sm font-semibold px-4 py-2 rounded-xl transition-colors ${quizSaved ? "bg-emerald-600 text-white" : "bg-green-600 hover:bg-green-700 text-white"} disabled:opacity-50`}>
-            {savingQuiz ? "Sauvegarde..." : quizSaved ? "✓ Sauvegardé" : "Sauvegarder le quiz"}
+            {savingQuiz ? "Sauvegarde..." : quizSaved ? "Sauvegardé" : "Sauvegarder le quiz"}
           </button>
         )
       )}

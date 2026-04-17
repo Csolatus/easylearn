@@ -1,4 +1,11 @@
+import { X, Globe, School, Lock, Check } from "lucide-react";
+
 const VISIBILITY_LABEL: Record<string, string> = { public: "Public", school: "École", private: "Privé" };
+const VISIBILITY_ICON: Record<string, React.ReactNode> = {
+  public: <Globe size={18} />,
+  school: <School size={18} />,
+  private: <Lock size={18} />,
+};
 
 type Props = {
   step: number;
@@ -26,7 +33,7 @@ export default function CreateCourseWizard({
             <h2 className="text-sm font-semibold text-white dark:text-gray-900">Nouveau cours</h2>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Étape {step} sur 2</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors text-lg">✕</button>
+          <button onClick={onClose} className="text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors"><X size={18} /></button>
         </div>
 
         <div className="px-6 py-2 flex gap-2">
@@ -62,7 +69,7 @@ export default function CreateCourseWizard({
                     visibility === v ? "border-green-500 bg-green-500/10 text-green-400" : "border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:border-green-500/50"
                   }`}
                 >
-                  <span className="text-lg">{v === "public" ? "🌍" : v === "school" ? "🏫" : "🔒"}</span>
+                  <span>{VISIBILITY_ICON[v]}</span>
                   <div>
                     <p className="text-sm font-medium">{VISIBILITY_LABEL[v]}</p>
                     <p className="text-xs opacity-70">
@@ -86,7 +93,7 @@ export default function CreateCourseWizard({
             </button>
           ) : (
             <button onClick={onCreate} disabled={submitting} className="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors">
-              {submitting ? "Création..." : "✅ Créer le cours"}
+              {submitting ? "Création..." : <span className="flex items-center gap-2"><Check size={14} /> Créer le cours</span>}
             </button>
           )}
         </div>

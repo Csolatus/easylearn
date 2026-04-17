@@ -1,3 +1,5 @@
+import { Users, Library } from "lucide-react";
+
 type CourseAnalytics = { course_id: string; title: string; total_lessons: number; completed_lessons: number; unique_students: number; avg_quiz_score_pct: number };
 
 type Props = { courses: CourseAnalytics[] };
@@ -15,8 +17,8 @@ export default function CourseBreakdownList({ courses }: Props) {
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <p className="font-medium text-white dark:text-gray-900 text-sm">{course.title}</p>
                 <div className="flex gap-4 text-xs text-gray-400 dark:text-gray-500">
-                  <span>👥 {course.unique_students} étudiant{course.unique_students > 1 ? "s" : ""}</span>
-                  <span>📚 {course.total_lessons} leçon{course.total_lessons > 1 ? "s" : ""}</span>
+                  <span className="flex items-center gap-1"><Users size={12} /> {course.unique_students} étudiant{course.unique_students > 1 ? "s" : ""}</span>
+                  <span className="flex items-center gap-1"><Library size={12} /> {course.total_lessons} leçon{course.total_lessons > 1 ? "s" : ""}</span>
                   <span className={`font-medium ${course.avg_quiz_score_pct >= 70 ? "text-green-400" : course.avg_quiz_score_pct >= 50 ? "text-yellow-400" : "text-red-400"}`}>
                     ⌀ quiz {Math.round(course.avg_quiz_score_pct)}%
                   </span>
