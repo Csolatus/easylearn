@@ -18,7 +18,7 @@ async def inviteTeacher(school_id: str, teacher_email: str, db: AsyncSession) ->
     )
     row = user.fetchone()
     if not row or row.role != "teacher":
-        return None
+        return "NOT_FOUND"
 
     # Vérifier qu'il n'est pas déjà invité/actif
     existing = await db.execute(
@@ -29,7 +29,7 @@ async def inviteTeacher(school_id: str, teacher_email: str, db: AsyncSession) ->
         {"school_id": school_id, "teacher_id": str(row.id)},
     )
     if existing.fetchone():
-        return None
+        return "CONFLICT"
 
     result = await db.execute(
         text(

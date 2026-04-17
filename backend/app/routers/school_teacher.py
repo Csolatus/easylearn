@@ -33,10 +33,15 @@ async def inviteTeacher(
     _: dict = Depends(requireRoles("school_admin", "super_admin")),
 ):
     invitation = await school_teacher_service.inviteTeacher(school_id, data.teacher_email, db)
-    if invitation is None:
+    if invitation == "NOT_FOUND":
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Professeur introuvable",
+        )
+    if invitation == "CONFLICT" or invitation is None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Invitation impossible : école introuvable, email invalide, ou prof déjà invité",
+            detail="Prof déjà invité ou école introuvable",
         )
     return invitation
 
