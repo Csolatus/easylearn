@@ -1,7 +1,11 @@
-type Props = { color?: string };
+import { SpinnerRoot } from "@heroui/react";
+import type { ComponentProps } from "react";
 
-export default function Spinner({ color = "border-purple-500" }: Props) {
-  return (
-    <div className={`w-6 h-6 border-2 ${color} border-t-transparent rounded-full animate-spin`} />
-  );
+type SpinnerProps = ComponentProps<typeof SpinnerRoot> & {
+  /** @deprecated Use color prop instead */
+  color?: string;
+};
+
+export default function Spinner({ color, className = "", ...props }: SpinnerProps) {
+  return <SpinnerRoot className={className} {...props} />;
 }

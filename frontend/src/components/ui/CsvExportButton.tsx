@@ -1,5 +1,7 @@
 "use client";
 
+import { ButtonRoot } from "@heroui/react";
+
 type Props = {
   headers: string[];
   rows: (string | number)[][];
@@ -19,11 +21,8 @@ export default function CsvExportButton({ headers, rows, filename }: Props) {
   };
 
   return (
-    <button
-      onClick={handleExport}
-      className="px-4 py-2 text-sm bg-white/5 hover:bg-white/10 text-gray-300 rounded-xl border border-white/10 transition-colors"
-    >
+    <ButtonRoot variant="outline" size="sm" onPress={handleExport}>
       📥 Exporter CSV
-    </button>
+    </ButtonRoot>
   );
 }
