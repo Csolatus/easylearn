@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+/* Tailwind v4 dark mode — driven by the .dark class added by ThemeToggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
