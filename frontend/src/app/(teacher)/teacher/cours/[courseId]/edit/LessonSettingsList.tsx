@@ -1,3 +1,5 @@
+import { FileText, X } from "lucide-react";
+
 type Lesson = { id: string; title: string; docs: string | null; ordre: number };
 
 type Props = {
@@ -34,12 +36,12 @@ export default function LessonSettingsList({
           <div key={lesson.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 dark:bg-gray-50 group">
             <span className="text-gray-500 text-xs w-4">{i + 1}</span>
             <span className="text-sm text-white dark:text-gray-900 flex-1 truncate">{lesson.title}</span>
-            {lesson.docs && <span className="text-xs text-gray-500 hidden group-hover:block truncate max-w-32">📄 docs</span>}
+            {lesson.docs && <span className="hidden group-hover:flex items-center gap-1 text-xs text-gray-500 truncate max-w-32"><FileText size={12} /> docs</span>}
             <button
               onClick={() => onDeleteLesson(lesson.id)}
               disabled={deletingLesson === lesson.id}
-              className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 text-xs transition-all disabled:opacity-30"
-            >✕</button>
+              className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-red-400 transition-all disabled:opacity-30"
+            ><X size={14} /></button>
           </div>
         ))}
       </div>

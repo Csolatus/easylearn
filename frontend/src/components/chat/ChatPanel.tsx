@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { Sparkles } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { api, ApiError } from "@/lib/api";
 import { fetchStream } from "@/lib/sse";
@@ -137,8 +138,8 @@ export default function ChatPanel({ isOpen }: Props) {
     >
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10 dark:border-gray-200 shrink-0">
-        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm shrink-0">
-          ✦
+        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center shrink-0">
+          <Sparkles size={16} className="text-white" />
         </div>
         <div>
           <p className="text-sm font-semibold text-white dark:text-gray-900">Assistant IA</p>

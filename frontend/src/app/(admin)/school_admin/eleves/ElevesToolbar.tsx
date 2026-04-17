@@ -1,5 +1,7 @@
 "use client";
 
+import { Search } from "lucide-react";
+
 const FILTERS = ["Tous", "A-M", "N-Z"];
 
 interface Props {
@@ -13,7 +15,7 @@ export function ElevesToolbar({ search, onSearch, activeFilter, onFilter }: Prop
   return (
     <div className="flex flex-col sm:flex-row gap-3">
       <div className="relative flex-1 max-w-sm">
-        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">🔍</span>
+        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none"><Search size={14} /></span>
         <input
           type="text"
           placeholder="Rechercher un élève..."

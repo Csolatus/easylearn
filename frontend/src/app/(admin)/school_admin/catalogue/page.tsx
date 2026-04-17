@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useSchoolStore } from "@/store/schoolStore";
 import { CatalogueList } from "./CatalogueList";
+import { Search } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -95,7 +96,7 @@ export default function AdminCataloguePage() {
       )}
 
       <div className="relative w-full max-w-sm">
-        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">🔍</span>
+        <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 pointer-events-none"><Search size={14} /></span>
         <input
           type="text"
           placeholder="Rechercher un cours..."

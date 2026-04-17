@@ -1,5 +1,7 @@
 "use client";
 
+import { Download } from "lucide-react";
+
 type TeacherStatus = "active" | "invited" | "suspended";
 
 type Teacher = {
@@ -48,7 +50,7 @@ export function ProfesseursTable({ filtered, isLoading, actionLoading, onSuspend
           onClick={onExport}
           className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium bg-orange-600 hover:bg-orange-700 text-white transition-colors"
         >
-          📥 Exporter CSV
+          <Download size={14} /> Exporter CSV
         </button>
       </div>
       <div className="overflow-x-auto">

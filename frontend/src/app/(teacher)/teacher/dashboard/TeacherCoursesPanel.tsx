@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Users } from "lucide-react";
 import Spinner from "@/components/ui/Spinner";
 
 type CourseAnalytics = {
@@ -38,7 +39,7 @@ export default function TeacherCoursesPanel({ courses, isLoading }: Props) {
             className="flex flex-col gap-2 p-3 rounded-xl bg-white/5 dark:bg-gray-50 hover:bg-white/10 dark:hover:bg-gray-100 transition-colors">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-white dark:text-gray-900">{course.title}</p>
-              <span className="text-xs text-gray-400">👥 {course.unique_students}</span>
+              <span className="flex items-center gap-1 text-xs text-gray-400"><Users size={12} /> {course.unique_students}</span>
             </div>
             <div className="h-1.5 bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
               <div className="h-full bg-green-500 rounded-full" style={{ width: `${pct}%` }} />

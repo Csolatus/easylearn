@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BookOpen } from "lucide-react";
 import Spinner from "@/components/ui/Spinner";
 
 type EnrolledCourse = { id: string; title: string; completed_lessons: number; total_lessons: number; percentage: number };
@@ -29,7 +30,7 @@ export default function ProfileCourseList({ courses, isLoading }: Props) {
       <div className="divide-y divide-white/5 dark:divide-gray-100">
         {!isLoading && inProgress.map((course) => (
           <Link key={course.id} href={`/student/cours/${course.id}`} className="px-6 py-4 flex items-center gap-4 hover:bg-white/5 dark:hover:bg-gray-50 transition-colors">
-            <div className="w-10 h-10 rounded-xl bg-purple-600/20 flex items-center justify-center text-lg shrink-0">📖</div>
+            <div className="w-10 h-10 rounded-xl bg-purple-600/20 flex items-center justify-center text-purple-400 shrink-0"><BookOpen size={18} /></div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white dark:text-gray-900 truncate">{course.title}</p>
               <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{course.completed_lessons}/{course.total_lessons} leçons</p>

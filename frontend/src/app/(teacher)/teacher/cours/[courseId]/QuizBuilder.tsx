@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import Spinner from "@/components/ui/Spinner";
 
 type LocalChoice = { text: string; isCorrect: boolean };
@@ -28,7 +29,7 @@ export default function QuizBuilder({ questions, loading, onAddQuestion, onUpdat
               placeholder="Écrivez votre question..."
               className="flex-1 bg-white/5 dark:bg-white border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
             />
-            <button onClick={() => onRemoveQuestion(qi)} className="text-gray-500 hover:text-red-400 text-sm transition-colors shrink-0" aria-label="Supprimer la question">✕</button>
+            <button onClick={() => onRemoveQuestion(qi)} className="text-gray-500 hover:text-red-400 transition-colors shrink-0" aria-label="Supprimer la question"><X size={16} /></button>
           </div>
           <div className="grid grid-cols-2 gap-2">
             {q.choices.map((choice, ci) => (

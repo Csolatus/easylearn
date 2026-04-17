@@ -21,7 +21,7 @@ export default function LessonHeader({ lessonTitle, courseTitle, isCompleted, on
             : "bg-purple-600 hover:bg-purple-700 text-white"
         }`}
       >
-        {isCompleted ? "✓ Leçon complétée" : "Marquer comme lu"}
+        {isCompleted ? "Leçon complétée" : "Marquer comme lu"}
       </button>
     </div>
   );
