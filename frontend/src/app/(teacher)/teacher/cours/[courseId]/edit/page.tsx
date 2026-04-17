@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { Trash2 } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import Spinner from "@/components/ui/Spinner";
 import CourseInfoForm from "./CourseInfoForm";
@@ -15,7 +16,10 @@ type Course = { id: string; title: string; visibility: "public" | "school" | "pr
 
 export default function CourseEditPage() {
   const { courseId } = useParams<{ courseId: string }>();
+  const router = useRouter();
   const token = useAuthStore((s) => s.token);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,6 +79,17 @@ export default function CourseEditPage() {
     finally { setAddingLesson(false); }
   }
 
+  async function handleDeleteCourse() {
+    setDeleting(true);
+    try {
+      const res = await fetch(`${API}/courses/${courseId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) router.push("/teacher/cours");
+    } finally { setDeleting(false); }
+  }
+
   async function handleDeleteLesson(lessonId: string) {
     setDeletingLesson(lessonId);
     try {
@@ -101,6 +116,30 @@ export default function CourseEditPage() {
         </div>
 
         <CourseInfoForm title={title} visibility={visibility} onTitleChange={setTitle} onVisibilityChange={setVisibility} />
+
+        <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-6 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-red-400">Supprimer le cours</p>
+            <p className="text-xs text-muted mt-0.5">Cette action est irréversible. Toutes les leçons, quiz et exercices seront supprimés.</p>
+          </div>
+          {confirmDelete ? (
+            <div className="flex gap-2 shrink-0">
+              <button onClick={handleDeleteCourse} disabled={deleting}
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white text-xs font-semibold transition-colors">
+                {deleting ? "Suppression..." : "Confirmer"}
+              </button>
+              <button onClick={() => setConfirmDelete(false)}
+                className="px-4 py-2 rounded-xl border border-border text-muted hover:text-foreground text-xs transition-colors">
+                Annuler
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => setConfirmDelete(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl border border-red-500/30 text-red-400 hover:bg-red-500/10 text-xs font-semibold transition-colors shrink-0">
+              <Trash2 size={13} /> Supprimer
+            </button>
+          )}
+        </div>
 
         <LessonSettingsList
           lessons={lessons} deletingLesson={deletingLesson}

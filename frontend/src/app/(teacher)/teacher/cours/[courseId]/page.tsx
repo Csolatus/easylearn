@@ -8,6 +8,7 @@ import LessonEditorSidebar from "./LessonEditorSidebar";
 import LessonEditorHeader from "./LessonEditorHeader";
 import TheoryEditor from "./TheoryEditor";
 import QuizBuilder from "./QuizBuilder";
+import ExerciseEditor from "./ExerciseEditor";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -16,7 +17,7 @@ type Course = { id: string; title: string };
 type LocalChoice = { text: string; isCorrect: boolean };
 type LocalQuestion = { id?: string; statement: string; choices: LocalChoice[] };
 
-const EDITOR_TABS = ["Théorie", "Quiz"] as const;
+const EDITOR_TABS = ["Théorie", "Quiz", "Pratique"] as const;
 type EditorTab = (typeof EDITOR_TABS)[number];
 
 export default function LessonEditorPage() {
@@ -35,6 +36,13 @@ export default function LessonEditorPage() {
   const [quizLoading, setQuizLoading] = useState(false);
   const [savingQuiz, setSavingQuiz] = useState(false);
   const [quizSaved, setQuizSaved] = useState(false);
+  const [exerciseId, setExerciseId] = useState<string | null>(null);
+  const [exerciseInstructions, setExerciseInstructions] = useState("");
+  const [exerciseExpectedOutput, setExerciseExpectedOutput] = useState("");
+  const [exerciseLanguage, setExerciseLanguage] = useState("javascript");
+  const [exerciseLoading, setExerciseLoading] = useState(false);
+  const [savingExercise, setSavingExercise] = useState(false);
+  const [exerciseSaved, setExerciseSaved] = useState(false);
   const [showAddLesson, setShowAddLesson] = useState(false);
   const [newLessonTitle, setNewLessonTitle] = useState("");
   const [addingLesson, setAddingLesson] = useState(false);
@@ -62,6 +70,7 @@ export default function LessonEditorPage() {
   useEffect(() => {
     setMdContent(selectedLesson?.docs ?? "");
     setQuizId(null); setQuestions([]); setSaved(false); setQuizSaved(false);
+    setExerciseId(null); setExerciseInstructions(""); setExerciseExpectedOutput(""); setExerciseSaved(false);
   }, [selectedLesson]);
 
   const loadQuiz = useCallback(async () => {
@@ -81,6 +90,24 @@ export default function LessonEditorPage() {
   }, [selectedId, token]);
 
   useEffect(() => { if (activeTab === "Quiz") loadQuiz(); }, [activeTab, loadQuiz]);
+
+  const loadExercise = useCallback(async () => {
+    if (!selectedId || !token) return;
+    setExerciseLoading(true);
+    try {
+      const res = await fetch(`${API}/lessons/${selectedId}/exercise`, { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = await res.json();
+        setExerciseId(data.id);
+        setExerciseInstructions(data.instructions);
+        setExerciseExpectedOutput(data.expected_output);
+      } else if (res.status === 404) {
+        setExerciseId(null); setExerciseInstructions(""); setExerciseExpectedOutput("");
+      }
+    } catch { /* ignore */ } finally { setExerciseLoading(false); }
+  }, [selectedId, token]);
+
+  useEffect(() => { if (activeTab === "Pratique") loadExercise(); }, [activeTab, loadExercise]);
 
   async function handleSaveTheory() {
     if (!selectedId || !token) return;
@@ -129,6 +156,33 @@ export default function LessonEditorPage() {
       }
       setQuestions(created); setQuizSaved(true); setTimeout(() => setQuizSaved(false), 2000);
     } finally { setSavingQuiz(false); }
+  }
+
+  async function handleSaveExercise() {
+    if (!selectedId || !token) return;
+    setSavingExercise(true);
+    try {
+      const method = exerciseId ? "PATCH" : "POST";
+      const res = await fetch(`${API}/lessons/${selectedId}/exercise`, {
+        method,
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ instructions: exerciseInstructions, expected_output: exerciseExpectedOutput }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setExerciseId(data.id);
+        setExerciseSaved(true); setTimeout(() => setExerciseSaved(false), 2000);
+      }
+    } finally { setSavingExercise(false); }
+  }
+
+  async function handleDeleteExercise() {
+    if (!selectedId || !token || !exerciseId) return;
+    await fetch(`${API}/lessons/${selectedId}/exercise`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setExerciseId(null); setExerciseInstructions(""); setExerciseExpectedOutput("");
   }
 
   async function handleAddLesson() {
@@ -189,6 +243,23 @@ export default function LessonEditorPage() {
 
         {!selectedLesson && <div className="flex-1 flex items-center justify-center"><p className="text-gray-500 text-sm">Sélectionnez ou créez une leçon.</p></div>}
         {selectedLesson && activeTab === "Théorie" && <TheoryEditor content={mdContent} onChange={setMdContent} />}
+        {selectedLesson && activeTab === "Pratique" && (
+          exerciseLoading
+            ? <div className="flex-1 flex items-center justify-center"><p className="text-gray-500 text-sm">Chargement…</p></div>
+            : <ExerciseEditor
+                instructions={exerciseInstructions}
+                expectedOutput={exerciseExpectedOutput}
+                language={exerciseLanguage}
+                hasExercise={!!exerciseId}
+                saving={savingExercise}
+                saved={exerciseSaved}
+                onInstructionsChange={setExerciseInstructions}
+                onExpectedOutputChange={setExerciseExpectedOutput}
+                onLanguageChange={setExerciseLanguage}
+                onSave={handleSaveExercise}
+                onDelete={handleDeleteExercise}
+              />
+        )}
         {selectedLesson && activeTab === "Quiz" && (
           <QuizBuilder
             questions={questions} loading={quizLoading}
