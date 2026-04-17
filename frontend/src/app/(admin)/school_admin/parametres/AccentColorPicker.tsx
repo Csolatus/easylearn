@@ -21,9 +21,9 @@ interface Props {
 
 export function AccentColorPicker({ accentColor, onColorChange, onSave, saving, saved, saveError, disabled }: Props) {
   return (
-    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50">
-        <h2 className="text-sm font-semibold text-white dark:text-gray-900">Couleur d&apos;accent</h2>
+    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-surface shadow-md overflow-hidden">
+      <div className="px-6 py-4 border-b border-border bg-white/5">
+        <h2 className="text-sm font-semibold text-foreground">Couleur d&apos;accent</h2>
       </div>
       <div className="px-6 py-6 flex flex-col gap-5">
         <div className="flex items-center gap-4">
@@ -32,8 +32,8 @@ export function AccentColorPicker({ accentColor, onColorChange, onSave, saving, 
             style={{ backgroundColor: accentColor }}
           />
           <div>
-            <p className="text-sm font-medium text-white dark:text-gray-900">Couleur sélectionnée</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{accentColor}</p>
+            <p className="text-sm font-medium text-foreground">Couleur sélectionnée</p>
+            <p className="text-xs text-muted mt-0.5">{accentColor}</p>
           </div>
           <input
             type="color"

@@ -7,11 +7,11 @@ type Props = { classroom: Classroom; copied: boolean; onCopyCode: () => void };
 export default function ClassDetailHeader({ classroom, copied, onCopyCode }: Props) {
   return (
     <div>
-      <Link href="/teacher/classes" className="text-gray-400 hover:text-white dark:hover:text-gray-900 text-xs transition-colors mb-3 inline-block">
+      <Link href="/teacher/classes" className="text-gray-400 hover:text-foreground text-xs transition-colors mb-3 inline-block">
         ← Retour aux classes
       </Link>
-      <h1 className="text-3xl font-bold text-white dark:text-gray-900">{classroom.name}</h1>
-      <p className="text-gray-400 dark:text-gray-500 text-sm mt-1 flex items-center gap-3">
+      <h1 className="text-3xl font-bold text-foreground">{classroom.name}</h1>
+      <p className="text-muted text-sm mt-1 flex items-center gap-3">
         <span className="font-mono text-green-400">{classroom.invite_code}</span>
         <button onClick={onCopyCode} className="text-xs text-gray-500 hover:text-white transition-colors">
           {copied ? "Copié !" : "Copier"}

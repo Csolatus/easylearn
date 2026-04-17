@@ -6,7 +6,7 @@ type Props = {
 
 export default function LessonTabs({ tabs, activeTab, onTabChange }: Props) {
   return (
-    <div className="flex border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
+    <div className="flex border-b border-border bg-white/5 shrink-0">
       {tabs.map((tab) => (
         <button
           key={tab}
@@ -14,7 +14,7 @@ export default function LessonTabs({ tabs, activeTab, onTabChange }: Props) {
           className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${
             activeTab === tab
               ? "border-purple-500 text-purple-400 dark:text-purple-600"
-              : "border-transparent text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900"
+              : "border-transparent text-muted hover:text-foreground"
           }`}
         >
           {tab}

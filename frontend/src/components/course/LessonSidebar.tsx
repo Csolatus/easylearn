@@ -56,16 +56,16 @@ export default function LessonSidebar({
   const progressValue = lessons.length > 0 ? (doneCount / lessons.length) * 100 : 0;
 
   return (
-    <aside className="w-64 shrink-0 border-r border-white/10 dark:border-gray-200 bg-[#0d0d1a] dark:bg-gray-50 flex flex-col overflow-y-auto">
+    <aside className="w-64 shrink-0 border-r border-border bg-surface flex flex-col overflow-y-auto">
       {/* Header */}
-      <div className="px-4 py-4 border-b border-white/10 dark:border-gray-200">
+      <div className="px-4 py-4 border-b border-border">
         <Link
           href={backHref}
-          className="text-xs text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 transition-colors"
+          className="text-xs text-muted hover:text-foreground transition-colors"
         >
           {backLabel}
         </Link>
-        <p className="text-xs font-semibold text-white dark:text-gray-900 mt-2">
+        <p className="text-xs font-semibold text-foreground mt-2">
           Cours #{courseId}
         </p>
         {courseSubtitle && (
@@ -98,7 +98,7 @@ export default function LessonSidebar({
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
               activeLesson === lesson.id
                 ? ACCENT_ACTIVE[accentColor]
-                : "text-gray-400 dark:text-gray-500 hover:bg-white/5 dark:hover:bg-gray-100"
+                : "text-muted hover:bg-surface"
             }`}
           >
             <span

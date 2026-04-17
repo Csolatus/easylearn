@@ -10,17 +10,17 @@ type Props = {
 
 const components: Components = {
   h1: ({ children }) => (
-    <h1 className="text-2xl font-bold text-white dark:text-gray-900 mt-6 mb-3 pb-2 border-b border-white/10 dark:border-gray-200">
+    <h1 className="text-2xl font-bold text-foreground mt-6 mb-3 pb-2 border-b border-border">
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="text-lg font-bold text-white dark:text-gray-900 mt-5 mb-2">
+    <h2 className="text-lg font-bold text-foreground mt-5 mb-2">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-base font-semibold text-white dark:text-gray-900 mt-4 mb-1.5">
+    <h3 className="text-base font-semibold text-foreground mt-4 mb-1.5">
       {children}
     </h3>
   ),
@@ -28,7 +28,7 @@ const components: Components = {
     <p className="text-gray-300 dark:text-gray-700 mb-3 leading-relaxed">{children}</p>
   ),
   strong: ({ children }) => (
-    <strong className="font-semibold text-white dark:text-gray-900">{children}</strong>
+    <strong className="font-semibold text-foreground">{children}</strong>
   ),
   em: ({ children }) => (
     <em className="italic text-gray-300 dark:text-gray-600">{children}</em>
@@ -65,11 +65,11 @@ const components: Components = {
     <pre className="mb-4 rounded-xl overflow-hidden">{children}</pre>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="border-l-4 border-purple-500 pl-4 my-3 text-gray-400 dark:text-gray-500 italic">
+    <blockquote className="border-l-4 border-purple-500 pl-4 my-3 text-muted italic">
       {children}
     </blockquote>
   ),
-  hr: () => <hr className="border-white/10 dark:border-gray-200 my-5" />,
+  hr: () => <hr className="border-border my-5" />,
   a: ({ href, children }) => (
     <a
       href={href}

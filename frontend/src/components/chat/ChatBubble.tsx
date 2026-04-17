@@ -18,7 +18,7 @@ export default function ChatBubble({ isOpen, onClick, unread = 0 }: Props) {
       }`}
     >
       {isOpen ? (
-        <span className="text-white dark:text-gray-900 text-xl font-bold leading-none">✕</span>
+        <span className="text-foreground text-xl font-bold leading-none">✕</span>
       ) : (
         <>
           <span className="text-2xl">✦</span>

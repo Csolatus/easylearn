@@ -23,12 +23,12 @@ export default function LessonEditorSidebar({
   addingLesson, addLessonError, onSelectLesson, onShowAdd, onHideAdd, onNewTitleChange, onAddLesson,
 }: Props) {
   return (
-    <aside className="w-64 shrink-0 border-r border-white/10 dark:border-gray-200 bg-[#0d0d1a] dark:bg-gray-50 flex flex-col overflow-y-auto">
-      <div className="px-4 py-4 border-b border-white/10 dark:border-gray-200">
-        <Link href="/teacher/cours" className="text-xs text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 transition-colors">
+    <aside className="w-64 shrink-0 border-r border-border bg-surface flex flex-col overflow-y-auto">
+      <div className="px-4 py-4 border-b border-border">
+        <Link href="/teacher/cours" className="text-xs text-muted hover:text-foreground transition-colors">
           ← Retour aux cours
         </Link>
-        <p className="text-xs font-semibold text-white dark:text-gray-900 mt-2 truncate">{courseTitle ?? "Chargement..."}</p>
+        <p className="text-xs font-semibold text-foreground mt-2 truncate">{courseTitle ?? "Chargement..."}</p>
         <Link href={`/teacher/cours/${courseId}/edit`} className="text-xs text-green-400 hover:text-green-300 transition-colors mt-0.5 inline-block">
           ✏️ Paramètres du cours
         </Link>
@@ -42,7 +42,7 @@ export default function LessonEditorSidebar({
             key={lesson.id}
             onClick={() => onSelectLesson(lesson.id)}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors mb-1 ${
-              selectedId === lesson.id ? "bg-green-600/20 text-green-400" : "text-gray-400 dark:text-gray-500 hover:bg-white/5 dark:hover:bg-gray-100"
+              selectedId === lesson.id ? "bg-green-600/20 text-green-400" : "text-muted hover:bg-surface"
             }`}
           >
             <span className="text-xs truncate flex-1">{lesson.title}</span>
@@ -57,7 +57,7 @@ export default function LessonEditorSidebar({
               onKeyDown={(e) => e.key === "Enter" && onAddLesson()}
               placeholder="Titre de la leçon"
               autoFocus
-              className="bg-white/5 dark:bg-white border border-white/20 dark:border-gray-300 text-white dark:text-gray-900 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-green-500 placeholder-gray-600"
+              className="bg-white/5 dark:bg-white border border-white/20 dark:border-gray-300 text-foreground rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-green-500 placeholder-gray-600"
             />
             {addLessonError && <p className="text-xs text-red-400">{addLessonError}</p>}
             <div className="flex gap-2">

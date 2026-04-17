@@ -39,9 +39,9 @@ interface Props {
 
 export function ProfesseursTable({ filtered, isLoading, actionLoading, onSuspend, onRemove, onExport }: Props) {
   return (
-    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-white dark:text-gray-900">
+    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-surface shadow-md overflow-hidden">
+      <div className="px-6 py-4 border-b border-border bg-white/5 flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-foreground">
           {filtered.length} professeur{filtered.length > 1 ? "s" : ""}
         </h2>
         <button
@@ -54,7 +54,7 @@ export function ProfesseursTable({ filtered, isLoading, actionLoading, onSuspend
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 dark:border-gray-200">
+            <tr className="border-b border-border">
               <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Professeur</th>
               <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Classes</th>
               <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
@@ -85,8 +85,8 @@ export function ProfesseursTable({ filtered, isLoading, actionLoading, onSuspend
                         {teacher.name[0].toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium text-white dark:text-gray-900">{teacher.name}</p>
-                        <p className="text-xs text-gray-400 dark:text-gray-500">{teacher.email}</p>
+                        <p className="font-medium text-foreground">{teacher.name}</p>
+                        <p className="text-xs text-muted">{teacher.email}</p>
                       </div>
                     </div>
                   </td>

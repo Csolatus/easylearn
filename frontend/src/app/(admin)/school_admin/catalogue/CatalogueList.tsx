@@ -17,11 +17,11 @@ interface Props {
 
 export function CatalogueList({ courses, whitelist, toggling, hasActiveSchool, whitelistCount, onToggle }: Props) {
   return (
-    <div className="rounded-2xl border border-white/10 dark:border-gray-400 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/10 dark:border-gray-300 flex items-center justify-between bg-white/5 dark:bg-gray-50">
-        <h2 className="text-sm font-semibold text-white dark:text-gray-900">Cours disponibles</h2>
+    <div className="rounded-2xl border border-white/10 dark:border-gray-400 bg-surface shadow-md overflow-hidden">
+      <div className="px-6 py-4 border-b border-white/10 dark:border-gray-300 flex items-center justify-between bg-white/5">
+        <h2 className="text-sm font-semibold text-foreground">Cours disponibles</h2>
         {hasActiveSchool && (
-          <span className="text-xs text-gray-400 dark:text-gray-500">
+          <span className="text-xs text-muted">
             {whitelistCount} cours autorisé{whitelistCount > 1 ? "s" : ""}
           </span>
         )}
@@ -36,14 +36,14 @@ export function CatalogueList({ courses, whitelist, toggling, hasActiveSchool, w
             return (
               <div
                 key={course.id}
-                className="flex items-center gap-4 px-6 py-4 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
+                className="flex items-center gap-4 px-6 py-4 hover:bg-surface transition-colors"
               >
                 <div className="w-9 h-9 rounded-xl bg-orange-600/20 flex items-center justify-center text-lg shrink-0">
                   📖
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white dark:text-gray-900 truncate">{course.title}</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 capitalize">{course.visibility}</p>
+                  <p className="text-sm font-medium text-foreground truncate">{course.title}</p>
+                  <p className="text-xs text-muted mt-0.5 capitalize">{course.visibility}</p>
                 </div>
                 {hasActiveSchool && (
                   <button

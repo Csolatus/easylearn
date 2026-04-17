@@ -130,18 +130,18 @@ export default function ChatPanel({ isOpen }: Props) {
 
   return (
     <div
-      className={`fixed bottom-24 right-6 z-40 w-80 sm:w-96 flex flex-col rounded-2xl border border-white/10 dark:border-gray-200 bg-[#111118] dark:bg-white shadow-2xl transition-all duration-300 origin-bottom-right ${
+      className={`fixed bottom-24 right-6 z-40 w-80 sm:w-96 flex flex-col rounded-2xl border border-border bg-surface shadow-2xl transition-all duration-300 origin-bottom-right ${
         isOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
       }`}
       style={{ maxHeight: "70vh" }}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10 dark:border-gray-200 shrink-0">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-border shrink-0">
         <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-sm shrink-0">
           ✦
         </div>
         <div>
-          <p className="text-sm font-semibold text-white dark:text-gray-900">Assistant IA</p>
+          <p className="text-sm font-semibold text-foreground">Assistant IA</p>
           <p className="text-xs text-gray-500">
             {isStreaming ? (
               <span className="text-purple-400 animate-pulse">En train de répondre...</span>
@@ -184,7 +184,7 @@ export default function ChatPanel({ isOpen }: Props) {
             <button
               key={s}
               onClick={() => sendMessage(s)}
-              className="text-left text-xs px-3 py-2 rounded-xl border border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100 hover:text-white dark:hover:text-gray-900 transition-colors"
+              className="text-left text-xs px-3 py-2 rounded-xl border border-border text-gray-400 dark:text-gray-600 hover:bg-surface hover:text-foreground transition-colors"
             >
               {s}
             </button>
@@ -193,7 +193,7 @@ export default function ChatPanel({ isOpen }: Props) {
       )}
 
       {/* Input */}
-      <div className="px-3 py-3 border-t border-white/10 dark:border-gray-200 flex items-center gap-2 shrink-0">
+      <div className="px-3 py-3 border-t border-border flex items-center gap-2 shrink-0">
         <input
           type="text"
           value={input}
@@ -201,7 +201,7 @@ export default function ChatPanel({ isOpen }: Props) {
           onKeyDown={handleKeyDown}
           placeholder="Pose ta question..."
           disabled={isStreaming}
-          className="flex-1 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-white dark:text-gray-900 placeholder-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
+          className="flex-1 bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-300 text-foreground placeholder-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50"
         />
         <button
           onClick={() => sendMessage(input)}

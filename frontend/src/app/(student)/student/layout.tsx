@@ -11,7 +11,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const [chatOpen, setChatOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#0f0f1a] dark:bg-gray-50 text-white dark:text-gray-900 overflow-x-hidden">
+    <div className="flex min-h-screen bg-background text-foreground overflow-x-hidden">
       <AppSidebar />
       <div className="flex flex-col flex-1 min-w-0">
         <AppHeader role="student" />

@@ -32,7 +32,7 @@ export default function Navbar({
   const initial = user?.email?.[0]?.toUpperCase() ?? "?";
 
   return (
-    <header className="flex items-center justify-between px-6 py-4 border-b border-white/5 dark:border-gray-200 bg-[#0f0f1a] dark:bg-white sticky top-0 z-40">
+    <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-background dark:bg-white sticky top-0 z-40">
       {/* Search */}
       <div className="relative w-full max-w-xs">
         <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">
@@ -41,7 +41,7 @@ export default function Navbar({
         <input
           type="text"
           placeholder={searchPlaceholder}
-          className={`w-full bg-[#1a1a2e] dark:bg-gray-100 text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 ${RING_COLORS[accentColor]}`}
+          className={`w-full bg-surface text-foreground placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 ${RING_COLORS[accentColor]}`}
         />
       </div>
 

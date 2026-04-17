@@ -13,10 +13,10 @@ type Props = {
 
 export default function LessonEditorHeader({ lessonTitle, activeTab, saving, saved, savingQuiz, quizSaved, onSaveTheory, onSaveQuiz }: Props) {
   return (
-    <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 dark:border-gray-200 bg-[#0f0f1a] dark:bg-white shrink-0">
+    <div className="flex items-center justify-between px-6 py-3 border-b border-border bg-background dark:bg-white shrink-0">
       <div>
-        <h1 className="text-sm font-semibold text-white dark:text-gray-900">{lessonTitle ?? "Sélectionnez une leçon"}</h1>
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Édition en cours</p>
+        <h1 className="text-sm font-semibold text-foreground">{lessonTitle ?? "Sélectionnez une leçon"}</h1>
+        <p className="text-xs text-muted mt-0.5">Édition en cours</p>
       </div>
       {lessonTitle && (
         activeTab === "Théorie" ? (

@@ -20,7 +20,7 @@ export function ProfesseursToolbar({ search, onSearch, activeFilter, onFilter }:
           placeholder="Rechercher un professeur..."
           value={search}
           onChange={(e) => onSearch(e.target.value)}
-          className="w-full bg-[#111118] dark:bg-white border-2 border-white/10 dark:border-gray-400 text-white dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-md"
+          className="w-full bg-surface border-2 border-white/10 dark:border-gray-400 text-foreground placeholder-gray-500 dark:placeholder-gray-400 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-md"
         />
       </div>
       <div className="flex gap-2 flex-wrap">

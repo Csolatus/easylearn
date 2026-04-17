@@ -49,7 +49,7 @@ export function CreateSchoolModal({ isOpen, onClose, newName, onNameChange, onCr
             onChange={(e) => onNameChange(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && onCreate()}
             autoFocus
-            className="bg-[#0f0f1a] dark:bg-gray-100 dark:text-gray-900 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="bg-background dark:bg-gray-100 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
           />
         </div>
         {createError && (

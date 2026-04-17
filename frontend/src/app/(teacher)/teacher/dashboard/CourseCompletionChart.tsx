@@ -4,8 +4,8 @@ type Props = { courses: CourseAnalytics[] };
 
 export default function CourseCompletionChart({ courses }: Props) {
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6">
-      <h2 className="font-semibold text-white dark:text-gray-900 mb-6">Complétion par cours</h2>
+    <div className="bg-surface rounded-2xl p-6">
+      <h2 className="font-semibold text-foreground mb-6">Complétion par cours</h2>
       <div className="flex items-end gap-3 h-32">
         {courses.map((course) => {
           const pct = course.total_lessons > 0 ? Math.round((course.completed_lessons / course.total_lessons) * 100) : 0;

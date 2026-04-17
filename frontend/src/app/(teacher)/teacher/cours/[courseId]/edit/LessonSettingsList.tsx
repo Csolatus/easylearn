@@ -21,9 +21,9 @@ export default function LessonSettingsList({
   onShowAdd, onHideAdd, onNewTitleChange, onNewDocsChange, onAddLesson, onDeleteLesson,
 }: Props) {
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
+    <div className="bg-surface rounded-2xl p-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-white dark:text-gray-900">Leçons ({lessons.length})</h2>
+        <h2 className="font-semibold text-foreground">Leçons ({lessons.length})</h2>
         <button onClick={onShowAdd} className="text-green-400 hover:text-green-300 text-xs font-medium transition-colors">+ Ajouter une leçon</button>
       </div>
 
@@ -31,9 +31,9 @@ export default function LessonSettingsList({
 
       <div className="flex flex-col gap-2">
         {lessons.map((lesson, i) => (
-          <div key={lesson.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 dark:bg-gray-50 group">
+          <div key={lesson.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 group">
             <span className="text-gray-500 text-xs w-4">{i + 1}</span>
-            <span className="text-sm text-white dark:text-gray-900 flex-1 truncate">{lesson.title}</span>
+            <span className="text-sm text-foreground flex-1 truncate">{lesson.title}</span>
             {lesson.docs && <span className="text-xs text-gray-500 hidden group-hover:block truncate max-w-32">📄 docs</span>}
             <button
               onClick={() => onDeleteLesson(lesson.id)}
@@ -53,7 +53,7 @@ export default function LessonSettingsList({
               onChange={(e) => onNewTitleChange(e.target.value)}
               placeholder="ex: Introduction aux variables"
               autoFocus
-              className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 text-white dark:text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
+              className="bg-white/5 dark:bg-gray-100 border border-border text-foreground rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500"
             />
           </div>
           <div className="flex flex-col gap-1.5">
@@ -63,7 +63,7 @@ export default function LessonSettingsList({
               onChange={(e) => onNewDocsChange(e.target.value)}
               placeholder="Contenu de la leçon en Markdown..."
               rows={4}
-              className="bg-white/5 dark:bg-gray-100 border border-white/10 dark:border-gray-200 text-white dark:text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500 resize-none"
+              className="bg-white/5 dark:bg-gray-100 border border-border text-foreground rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-500 resize-none"
             />
           </div>
           {lessonError && <p className="text-xs text-red-400 bg-red-500/10 px-3 py-2 rounded-lg">{lessonError}</p>}

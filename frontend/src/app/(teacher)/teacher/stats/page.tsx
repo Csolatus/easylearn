@@ -35,11 +35,11 @@ export default function StatsPage() {
   ] : [];
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
+    <div className="min-h-screen bg-background px-8 py-10">
       <div className="max-w-6xl mx-auto flex flex-col gap-8">
         <div>
-          <h1 className="text-3xl font-bold text-white dark:text-gray-900">Statistiques</h1>
-          <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Vue d&apos;ensemble de la progression de vos étudiants.</p>
+          <h1 className="text-3xl font-bold text-foreground">Statistiques</h1>
+          <p className="text-muted text-sm mt-1">Vue d&apos;ensemble de la progression de vos étudiants.</p>
         </div>
         {isLoading && <div className="flex justify-center py-20"><Spinner color="border-green-500" /></div>}
         {error && <div className="flex justify-center py-20"><p className="text-red-400 text-sm">{error}</p></div>}

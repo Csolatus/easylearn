@@ -83,12 +83,12 @@ export default function EcolesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
+    <div className="min-h-screen bg-background px-8 py-10">
       <div className="max-w-5xl mx-auto flex flex-col gap-8">
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white dark:text-gray-900">Écoles</h1>
-            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+            <h1 className="text-3xl font-bold text-foreground">Écoles</h1>
+            <p className="text-muted text-sm mt-1">
               {isLoading ? "Chargement…" : `${schools.length} établissement${schools.length > 1 ? "s" : ""} enregistré${schools.length > 1 ? "s" : ""}`}
             </p>
           </div>
@@ -107,7 +107,7 @@ export default function EcolesPage() {
             placeholder="Rechercher..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-[#1a1a2e] dark:bg-white dark:text-gray-900 dark:shadow-sm text-white placeholder-gray-500 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full bg-surface dark:shadow-sm text-white placeholder-gray-500 rounded-xl pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
           />
         </div>
 

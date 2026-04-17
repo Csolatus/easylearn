@@ -8,9 +8,9 @@ interface Props {
 
 export function SchoolLogoUpload({ logo, onLogoChange, onLogoRemove }: Props) {
   return (
-    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50">
-        <h2 className="text-sm font-semibold text-white dark:text-gray-900">Logo de l&apos;école</h2>
+    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-surface shadow-md overflow-hidden">
+      <div className="px-6 py-4 border-b border-border bg-white/5">
+        <h2 className="text-sm font-semibold text-foreground">Logo de l&apos;école</h2>
       </div>
       <div className="px-6 py-6 flex items-center gap-6">
         <div className="w-20 h-20 rounded-2xl border-2 border-dashed border-white/20 dark:border-gray-300 bg-white/5 dark:bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
@@ -22,7 +22,7 @@ export function SchoolLogoUpload({ logo, onLogoChange, onLogoRemove }: Props) {
           )}
         </div>
         <div className="flex flex-col gap-3">
-          <p className="text-sm text-gray-400 dark:text-gray-500">
+          <p className="text-sm text-muted">
             Format recommandé : PNG ou SVG, 256x256px minimum
           </p>
           <div className="flex gap-3">
@@ -41,7 +41,7 @@ export function SchoolLogoUpload({ logo, onLogoChange, onLogoRemove }: Props) {
             {logo && (
               <button
                 onClick={onLogoRemove}
-                className="px-4 py-2 rounded-xl text-sm font-medium border border-white/10 dark:border-gray-300 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
+                className="px-4 py-2 rounded-xl text-sm font-medium border border-white/10 dark:border-gray-300 text-gray-400 dark:text-gray-600 hover:bg-surface transition-colors"
               >
                 Supprimer
               </button>

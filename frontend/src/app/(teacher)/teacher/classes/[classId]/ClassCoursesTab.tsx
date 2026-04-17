@@ -11,9 +11,9 @@ type Props = {
 
 export default function ClassCoursesTab({ courses, assignedIds, toggling, onToggle }: Props) {
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
+    <div className="bg-surface rounded-2xl p-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-white dark:text-gray-900">Mes cours</h2>
+        <h2 className="font-semibold text-foreground">Mes cours</h2>
         <span className="text-xs text-gray-400">{assignedIds.size} assigné{assignedIds.size > 1 ? "s" : ""}</span>
       </div>
       <p className="text-xs text-gray-500">Cochez les cours à rendre accessibles à cette classe.</p>
@@ -30,8 +30,8 @@ export default function ClassCoursesTab({ courses, assignedIds, toggling, onTogg
           {courses.map((course) => {
             const isAssigned = assignedIds.has(course.id);
             return (
-              <div key={course.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 dark:bg-gray-50">
-                <span className="text-sm text-white dark:text-gray-900 flex-1 truncate">{course.title}</span>
+              <div key={course.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5">
+                <span className="text-sm text-foreground flex-1 truncate">{course.title}</span>
                 <span className="text-xs text-gray-500 capitalize">{course.visibility}</span>
                 <button
                   onClick={() => onToggle(course.id)}

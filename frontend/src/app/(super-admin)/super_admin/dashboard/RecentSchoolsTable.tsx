@@ -9,9 +9,9 @@ interface Props {
 
 export function RecentSchoolsTable({ schools }: Props) {
   return (
-    <div className="rounded-2xl border border-white/5 dark:border-gray-200 bg-[#111118] dark:bg-white overflow-hidden">
+    <div className="rounded-2xl border border-border bg-surface overflow-hidden">
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 dark:border-gray-100">
-        <h2 className="text-sm font-semibold text-white dark:text-gray-900">Toutes les écoles</h2>
+        <h2 className="text-sm font-semibold text-foreground">Toutes les écoles</h2>
         <Link href="/super_admin/ecoles" className="text-xs text-red-400 hover:text-red-300 transition-colors font-medium">
           Voir tout →
         </Link>
@@ -35,10 +35,10 @@ export function RecentSchoolsTable({ schools }: Props) {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-sm">🏛️</div>
-                      <span className="font-medium text-white dark:text-gray-900">{school.name}</span>
+                      <span className="font-medium text-foreground">{school.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-gray-400 dark:text-gray-500">
+                  <td className="px-6 py-4 text-muted">
                     {school.created_at ? new Date(school.created_at).toLocaleDateString("fr-FR") : "—"}
                   </td>
                   <td className="px-6 py-4">

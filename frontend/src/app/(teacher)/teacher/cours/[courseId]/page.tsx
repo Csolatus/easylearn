@@ -178,10 +178,10 @@ export default function LessonEditorPage() {
           onSaveQuiz={handleSaveQuiz}
         />
 
-        <div className="flex border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
+        <div className="flex border-b border-border bg-white/5 shrink-0">
           {EDITOR_TABS.map((tab) => (
             <button key={tab} onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab ? "border-green-500 text-green-400 dark:text-green-600" : "border-transparent text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900"}`}>
+              className={`px-6 py-3 text-sm font-medium transition-colors border-b-2 ${activeTab === tab ? "border-green-500 text-green-400 dark:text-green-600" : "border-transparent text-muted hover:text-foreground"}`}>
               {tab}
             </button>
           ))}

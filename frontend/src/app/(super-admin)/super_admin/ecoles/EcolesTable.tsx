@@ -10,9 +10,9 @@ interface Props {
 
 export function EcolesTable({ filtered, suspending, onSuspend }: Props) {
   return (
-    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-[#111118] dark:bg-white shadow-md overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-white dark:text-gray-900">
+    <div className="rounded-2xl border border-white/10 dark:border-gray-300 bg-surface shadow-md overflow-hidden">
+      <div className="px-6 py-4 border-b border-border bg-white/5 flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-foreground">
           {filtered.length} école{filtered.length > 1 ? "s" : ""}
         </h2>
       </div>
@@ -23,7 +23,7 @@ export function EcolesTable({ filtered, suspending, onSuspend }: Props) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/10 dark:border-gray-200">
+              <tr className="border-b border-border">
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">École</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Créée le</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Statut</th>
@@ -37,14 +37,14 @@ export function EcolesTable({ filtered, suspending, onSuspend }: Props) {
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-red-600/20 flex items-center justify-center text-sm shrink-0">🏛️</div>
                       <div>
-                        <p className="font-medium text-white dark:text-gray-900">{school.name}</p>
+                        <p className="font-medium text-foreground">{school.name}</p>
                         {school.email && (
                           <p className="text-xs text-gray-500 mt-0.5">{school.email}</p>
                         )}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-gray-400 dark:text-gray-500">
+                  <td className="px-6 py-4 text-muted">
                     {school.created_at ? new Date(school.created_at).toLocaleDateString("fr-FR") : "—"}
                   </td>
                   <td className="px-6 py-4">
