@@ -54,14 +54,14 @@ export default function QuizTab({ questions, onComplete }: Props) {
           </div>
 
           <div className="text-center">
-            <p className="text-white dark:text-gray-900 font-semibold text-lg">
+            <p className="text-foreground font-semibold text-lg">
               {score === questions.length
                 ? "Parfait !"
                 : score >= questions.length / 2
                 ? "Bien joué !"
                 : "À retravailler"}
             </p>
-            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+            <p className="text-muted text-sm mt-1">
               {score} bonne{score > 1 ? "s" : ""} réponse{score > 1 ? "s" : ""} sur{" "}
               {questions.length}
             </p>
@@ -81,7 +81,7 @@ export default function QuizTab({ questions, onComplete }: Props) {
                       : "border-red-500/30 bg-red-500/5"
                   }`}
                 >
-                  <p className="text-sm font-medium text-white dark:text-gray-900 mb-3">
+                  <p className="text-sm font-medium text-foreground mb-3">
                     {q.question}
                   </p>
                   <div className="flex flex-col gap-2">
@@ -137,9 +137,9 @@ export default function QuizTab({ questions, onComplete }: Props) {
         {questions.map((q, qi) => (
           <div
             key={q.id}
-            className="rounded-xl border border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 p-4 flex flex-col gap-3"
+            className="rounded-xl border border-border bg-white/5 p-4 flex flex-col gap-3"
           >
-            <p className="text-sm font-medium text-white dark:text-gray-900">
+            <p className="text-sm font-medium text-foreground">
               <span className="text-gray-500 mr-2">Q{qi + 1}.</span>
               {q.question}
             </p>
@@ -153,7 +153,7 @@ export default function QuizTab({ questions, onComplete }: Props) {
                   className={`text-left text-sm px-4 py-2.5 rounded-xl border transition-colors ${
                     selectedAnswers[q.id] === oi
                       ? "border-purple-500 bg-purple-500/20 text-purple-300 dark:text-purple-700"
-                      : "border-white/10 dark:border-gray-200 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100"
+                      : "border-border text-gray-400 dark:text-gray-600 hover:bg-surface"
                   }`}
                 >
                   <span className="text-gray-500 mr-2">{String.fromCharCode(65 + oi)}.</span>

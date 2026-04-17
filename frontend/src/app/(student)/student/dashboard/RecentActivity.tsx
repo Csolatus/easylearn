@@ -16,26 +16,21 @@ type Props = { activity: ActivityItem[] };
 
 export default function RecentActivity({ activity }: Props) {
   return (
-    <div className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-4">
-      <h2 className="font-semibold text-white dark:text-gray-900">Activité récente</h2>
+    <div className="bg-surface rounded-2xl p-6 flex flex-col gap-4">
+      <h2 className="font-semibold text-foreground">Activité récente</h2>
       {activity.length === 0 && (
         <p className="text-xs text-gray-500 text-center py-4">Aucune activité récente.</p>
       )}
-      {activity.map((item, i) => {
-        const Icon = ACTIVITY_ICONS[item.type] ?? Pin;
-        return (
-          <div key={i} className="flex gap-3">
-            <span className="shrink-0 mt-0.5 text-gray-400">
-              <Icon size={18} />
-            </span>
-            <div>
-              <p className="text-xs text-gray-300 dark:text-gray-700 leading-snug">
-                {ACTIVITY_LABELS[item.type] ?? item.type} — <span className="text-white dark:text-gray-900">{item.lesson_title}</span>
-              </p>
-              <p className="text-xs text-gray-500 mt-0.5">
-                {item.course_title} · {new Date(item.timestamp).toLocaleDateString("fr-FR")}
-              </p>
-            </div>
+      {activity.map((item, i) => (
+        <div key={i} className="flex gap-3">
+          <span className="text-lg shrink-0">{ACTIVITY_ICONS[item.type] ?? "📌"}</span>
+          <div>
+            <p className="text-xs text-gray-300 dark:text-gray-700 leading-snug">
+              {ACTIVITY_LABELS[item.type] ?? item.type} — <span className="text-foreground">{item.lesson_title}</span>
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              {item.course_title} · {new Date(item.timestamp).toLocaleDateString("fr-FR")}
+            </p>
           </div>
         );
       })}

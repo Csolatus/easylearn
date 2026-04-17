@@ -1,4 +1,4 @@
-import { BookOpen } from "lucide-react";
+import { CardRoot, CardContent, ChipRoot, ChipLabel } from "@heroui/react";
 
 const VISIBILITY_LABELS: Record<string, string> = {
   public:  "Public",
@@ -6,10 +6,10 @@ const VISIBILITY_LABELS: Record<string, string> = {
   private: "Privé",
 };
 
-const VISIBILITY_COLORS: Record<string, string> = {
-  public:  "bg-green-900/30 text-green-400",
-  school:  "bg-blue-900/30 text-blue-400",
-  private: "bg-gray-900/30 text-gray-400",
+const VISIBILITY_COLORS: Record<string, "default" | "accent" | "success" | "warning" | "danger"> = {
+  public:  "success",
+  school:  "accent",
+  private: "default",
 };
 
 type Props = {
@@ -22,27 +22,28 @@ type Props = {
 
 export default function CourseCard({ title, visibility, updatedAt, onClick, actions }: Props) {
   return (
-    <div
+    <CardRoot
+      variant="secondary"
       onClick={onClick}
-      className={`bg-[#1a1a2e] dark:bg-white rounded-2xl border border-white/5 dark:border-gray-200 overflow-hidden ${onClick ? "cursor-pointer hover:border-white/10 transition-colors" : ""}`}
+      className={onClick ? "cursor-pointer" : ""}
     >
       <div className="h-20 bg-gradient-to-br from-purple-900/40 to-blue-900/40 flex items-center justify-center text-gray-400">
         <BookOpen size={32} />
       </div>
-      <div className="p-4">
+      <CardContent>
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="font-semibold text-white dark:text-gray-900 text-sm leading-snug">{title}</h3>
-          <span className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${VISIBILITY_COLORS[visibility] ?? VISIBILITY_COLORS.private}`}>
-            {VISIBILITY_LABELS[visibility] ?? visibility}
-          </span>
+          <h3 className="font-semibold text-foreground text-sm leading-snug">{title}</h3>
+          <ChipRoot color={VISIBILITY_COLORS[visibility] ?? "default"} size="sm">
+            <ChipLabel>{VISIBILITY_LABELS[visibility] ?? visibility}</ChipLabel>
+          </ChipRoot>
         </div>
         {updatedAt && (
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted">
             {new Date(updatedAt).toLocaleDateString("fr-FR")}
           </p>
         )}
         {actions && <div className="mt-3">{actions}</div>}
-      </div>
-    </div>
+      </CardContent>
+    </CardRoot>
   );
 }

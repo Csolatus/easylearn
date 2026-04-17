@@ -1,14 +1,15 @@
-import { Chip } from "@heroui/react";
+import { ChipRoot, ChipLabel } from "@heroui/react";
 import type { ComponentProps } from "react";
 
-type BadgeProps = ComponentProps<typeof Chip> & {
+type BadgeProps = ComponentProps<typeof ChipRoot> & {
   children: React.ReactNode;
+  color?: "default" | "accent" | "success" | "warning" | "danger";
 };
 
-export function Badge({ children, color = "default", variant = "primary", size = "sm", className = "", ...props }: BadgeProps) {
+export function Badge({ children, color = "default", className = "", ...props }: BadgeProps) {
   return (
-    <Chip color={color} variant={variant} size={size} className={className} {...props}>
-      <Chip.Label>{children}</Chip.Label>
-    </Chip>
+    <ChipRoot color={color} className={className} {...props}>
+      <ChipLabel>{children}</ChipLabel>
+    </ChipRoot>
   );
 }

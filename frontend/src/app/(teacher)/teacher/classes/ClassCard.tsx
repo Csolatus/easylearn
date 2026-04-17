@@ -10,14 +10,14 @@ export default function ClassCard({ classroom, schools }: Props) {
   return (
     <Link
       href={`/teacher/classes/${classroom.id}`}
-      className="bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 hover:ring-2 hover:ring-green-500/50 transition-all flex flex-col gap-4"
+      className="bg-surface rounded-2xl p-6 hover:ring-2 hover:ring-green-500/50 transition-all flex flex-col gap-4"
     >
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-green-600/20 flex items-center justify-center text-green-400"><School size={18} /></div>
           <div>
-            <p className="font-semibold text-white dark:text-gray-900">{classroom.name}</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 font-mono">Code : {classroom.invite_code}</p>
+            <p className="font-semibold text-foreground">{classroom.name}</p>
+            <p className="text-xs text-muted mt-0.5 font-mono">Code : {classroom.invite_code}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">

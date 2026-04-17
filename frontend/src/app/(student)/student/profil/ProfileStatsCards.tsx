@@ -11,7 +11,7 @@ export default function ProfileStatsCards({ stats }: Props) {
         <div key={stat.label} className={`rounded-2xl border ${stat.border} ${stat.bg} px-5 py-5 flex flex-col gap-2`}>
           <span className={`${stat.text}`}>{stat.icon}</span>
           <p className={`text-2xl font-bold ${stat.text}`}>{stat.value}</p>
-          <p className="text-xs text-gray-400 dark:text-gray-500">{stat.label}</p>
+          <p className="text-xs text-muted">{stat.label}</p>
         </div>
       ))}
     </div>

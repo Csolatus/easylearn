@@ -10,9 +10,9 @@ export default function ProfileCourseList({ courses, isLoading }: Props) {
   const inProgress = courses.filter((c) => c.percentage < 100);
 
   return (
-    <div className="rounded-2xl border border-white/5 dark:border-gray-200 bg-[#111118] dark:bg-white overflow-hidden">
+    <div className="rounded-2xl border border-border bg-surface overflow-hidden">
       <div className="px-6 py-4 border-b border-white/5 dark:border-gray-100 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-white dark:text-gray-900">Cours en cours</h2>
+        <h2 className="text-sm font-semibold text-foreground">Cours en cours</h2>
         <Link href="/student/catalogue" className="text-xs text-purple-400 hover:text-purple-300">Explorer →</Link>
       </div>
 
@@ -32,8 +32,8 @@ export default function ProfileCourseList({ courses, isLoading }: Props) {
           <Link key={course.id} href={`/student/cours/${course.id}`} className="px-6 py-4 flex items-center gap-4 hover:bg-white/5 dark:hover:bg-gray-50 transition-colors">
             <div className="w-10 h-10 rounded-xl bg-purple-600/20 flex items-center justify-center text-purple-400 shrink-0"><BookOpen size={18} /></div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white dark:text-gray-900 truncate">{course.title}</p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{course.completed_lessons}/{course.total_lessons} leçons</p>
+              <p className="text-sm font-medium text-foreground truncate">{course.title}</p>
+              <p className="text-xs text-muted mt-0.5">{course.completed_lessons}/{course.total_lessons} leçons</p>
               <div className="mt-2 h-1.5 w-full bg-white/10 dark:bg-gray-200 rounded-full overflow-hidden">
                 <div className="h-full bg-purple-500 rounded-full" style={{ width: `${course.percentage}%` }} />
               </div>

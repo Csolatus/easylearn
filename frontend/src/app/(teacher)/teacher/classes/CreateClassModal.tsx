@@ -47,12 +47,12 @@ export default function CreateClassModal({
     >
       {createdInviteCode ? (
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-gray-400 dark:text-gray-500">
+          <p className="text-sm text-muted">
             Partagez ce code d&apos;invitation à vos élèves pour qu&apos;ils rejoignent la classe.
           </p>
-          <div className="flex items-center gap-2 bg-[#0f0f1a] dark:bg-gray-100 rounded-xl px-4 py-3">
+          <div className="flex items-center gap-2 bg-background dark:bg-gray-100 rounded-xl px-4 py-3">
             <span className="flex-1 font-mono text-green-400 dark:text-green-600 text-sm tracking-widest font-bold">{createdInviteCode}</span>
-            <button onClick={onCopyCode} className="text-xs text-gray-400 hover:text-white dark:hover:text-gray-900 transition-colors px-2 py-1 rounded-lg hover:bg-white/10 dark:hover:bg-gray-200">
+            <button onClick={onCopyCode} className="text-xs text-gray-400 hover:text-foreground transition-colors px-2 py-1 rounded-lg hover:bg-white/10 dark:hover:bg-gray-200">
               {copied ? "Copié !" : "Copier"}
             </button>
           </div>
@@ -70,7 +70,7 @@ export default function CreateClassModal({
               onChange={(e) => onClassNameChange(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onCreate()}
               autoFocus
-              className="bg-[#0f0f1a] dark:bg-gray-100 dark:text-gray-900 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="bg-background dark:bg-gray-100 text-white placeholder-gray-500 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
           {schools.length > 0 && (
@@ -81,7 +81,7 @@ export default function CreateClassModal({
               <select
                 value={selectedSchoolId}
                 onChange={(e) => onSchoolChange(e.target.value)}
-                className="bg-[#0f0f1a] dark:bg-gray-100 dark:text-gray-900 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none"
+                className="bg-background dark:bg-gray-100 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 appearance-none"
               >
                 <option value="">Classe personnelle</option>
                 {schools.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}

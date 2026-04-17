@@ -1,17 +1,15 @@
-import { Card as HeroCard } from "@heroui/react";
+import { CardRoot, CardContent } from "@heroui/react";
 import type { ComponentProps } from "react";
 
-type CardProps = ComponentProps<typeof HeroCard> & {
+type CardProps = ComponentProps<typeof CardRoot> & {
   children: React.ReactNode;
+  variant?: "default" | "secondary" | "tertiary" | "transparent";
 };
 
-export function Card({ className = "", children, ...props }: CardProps) {
+export function Card({ className = "", children, variant = "default", ...props }: CardProps) {
   return (
-    <HeroCard
-      className={`bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 ${className}`}
-      {...props}
-    >
-      {children}
-    </HeroCard>
+    <CardRoot variant={variant} className={className} {...props}>
+      <CardContent>{children}</CardContent>
+    </CardRoot>
   );
 }

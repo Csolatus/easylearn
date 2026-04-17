@@ -21,7 +21,7 @@ export default function NotificationBell({ count = 0, accentColor = "purple", on
     <button
       onClick={onClick}
       aria-label={`Notifications${count > 0 ? ` (${count})` : ""}`}
-      className="relative text-gray-400 dark:text-gray-500 hover:text-white dark:hover:text-gray-900 transition-colors"
+      className="relative text-muted hover:text-foreground transition-colors"
     >
       <Bell size={18} />
       {count > 0 && (

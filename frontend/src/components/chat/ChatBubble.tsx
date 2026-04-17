@@ -20,7 +20,7 @@ export default function ChatBubble({ isOpen, onClick, unread = 0 }: Props) {
       }`}
     >
       {isOpen ? (
-        <X size={20} className="text-white dark:text-gray-900" />
+        <span className="text-foreground text-xl font-bold leading-none">✕</span>
       ) : (
         <>
           <Sparkles size={24} className="text-white" />

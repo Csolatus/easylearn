@@ -54,8 +54,8 @@ export default function ElevesPage() {
   return (
     <div className="px-6 py-8 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-white dark:text-gray-900">Élèves</h1>
-        <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Élèves</h1>
+        <p className="text-sm text-muted mt-1">
           {isLoading ? "Chargement…" : `${students.length} élève${students.length > 1 ? "s" : ""} actif${students.length > 1 ? "s" : ""}`}
         </p>
       </div>

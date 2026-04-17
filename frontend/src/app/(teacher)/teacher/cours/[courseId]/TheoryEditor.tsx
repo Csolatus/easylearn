@@ -9,7 +9,7 @@ export default function TheoryEditor({ content, onChange }: Props) {
         value={content}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Écrivez le contenu en Markdown..."
-        className="h-full bg-transparent text-white dark:text-gray-900 text-sm font-mono p-5 focus:outline-none resize-none placeholder-gray-600"
+        className="h-full bg-transparent text-foreground text-sm font-mono p-5 focus:outline-none resize-none placeholder-gray-600"
       />
       <div className="h-full overflow-y-auto p-5">
         {content ? <MarkdownRenderer content={content} /> : <p className="text-gray-600 text-sm italic">La prévisualisation apparaîtra ici.</p>}

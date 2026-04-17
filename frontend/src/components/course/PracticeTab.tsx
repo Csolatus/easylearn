@@ -106,7 +106,7 @@ export default function PracticeTab({
   return (
     <div className="flex flex-col h-full">
       {/* Toolbar */}
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-white/10 dark:border-gray-200 bg-white/5 dark:bg-gray-50 shrink-0">
+      <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-white/5 shrink-0">
         <span className="text-xs text-gray-500 mr-1">
           {LANG_DISPLAY[language] ?? language}
         </span>
@@ -121,7 +121,7 @@ export default function PracticeTab({
         <div className="ml-auto flex items-center gap-2">
           <button
             onClick={handleReset}
-            className="text-xs px-3 py-1.5 rounded-lg border border-white/10 dark:border-gray-300 text-gray-400 dark:text-gray-600 hover:bg-white/5 dark:hover:bg-gray-100 transition-colors"
+            className="text-xs px-3 py-1.5 rounded-lg border border-white/10 dark:border-gray-300 text-gray-400 dark:text-gray-600 hover:bg-surface transition-colors"
           >
             Reset
           </button>

@@ -13,9 +13,9 @@ type Props = { courses: EnrolledCourse[]; isLoading: boolean };
 
 export default function StudentCourseProgress({ courses, isLoading }: Props) {
   return (
-    <div className="lg:col-span-2 bg-[#1a1a2e] dark:bg-white dark:shadow-sm rounded-2xl p-6 flex flex-col gap-5">
+    <div className="lg:col-span-2 bg-surface rounded-2xl p-6 flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-white dark:text-gray-900">Mes cours</h2>
+        <h2 className="font-semibold text-foreground">Mes cours</h2>
         <Link href="/student/catalogue" className="text-purple-400 hover:text-purple-300 text-xs">Explorer →</Link>
       </div>
 
@@ -31,9 +31,9 @@ export default function StudentCourseProgress({ courses, isLoading }: Props) {
       )}
 
       {!isLoading && courses.map((course) => (
-        <Link key={course.id} href={`/student/cours/${course.id}`} className="flex flex-col gap-3 p-4 rounded-xl bg-white/5 dark:bg-gray-50 hover:bg-white/10 dark:hover:bg-gray-100 transition-colors">
+        <Link key={course.id} href={`/student/cours/${course.id}`} className="flex flex-col gap-3 p-4 rounded-xl bg-white/5 hover:bg-white/10 dark:hover:bg-gray-100 transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-white dark:text-gray-900">{course.title}</p>
+            <p className="text-sm font-medium text-foreground">{course.title}</p>
             {course.percentage === 100
               ? <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">Terminé</span>
               : <span className="text-xs text-gray-400">{Math.round(course.percentage)}%</span>

@@ -1,6 +1,17 @@
 "use client";
 
-import { Modal as HeroModal, useOverlayState } from "@heroui/react";
+import {
+  ModalRoot,
+  ModalBackdrop,
+  ModalContainer,
+  ModalDialog,
+  ModalHeader,
+  ModalHeading,
+  ModalBody,
+  ModalFooter,
+  ModalCloseTrigger,
+  useOverlayState,
+} from "@heroui/react";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
 
@@ -23,18 +34,18 @@ export function Modal({ isOpen, onClose, title, children, footer, size = "md" }:
   }, [isOpen]);
 
   return (
-    <HeroModal.Root state={state}>
-      <HeroModal.Backdrop isDismissable />
-      <HeroModal.Container size={size}>
-        <HeroModal.Dialog>
-          <HeroModal.Header>
-            {title && <HeroModal.Heading>{title}</HeroModal.Heading>}
-            <HeroModal.CloseTrigger />
-          </HeroModal.Header>
-          <HeroModal.Body>{children}</HeroModal.Body>
-          {footer && <HeroModal.Footer>{footer}</HeroModal.Footer>}
-        </HeroModal.Dialog>
-      </HeroModal.Container>
-    </HeroModal.Root>
+    <ModalRoot state={state}>
+      <ModalBackdrop isDismissable />
+      <ModalContainer size={size}>
+        <ModalDialog>
+          <ModalHeader>
+            {title && <ModalHeading>{title}</ModalHeading>}
+            <ModalCloseTrigger />
+          </ModalHeader>
+          <ModalBody>{children}</ModalBody>
+          {footer && <ModalFooter>{footer}</ModalFooter>}
+        </ModalDialog>
+      </ModalContainer>
+    </ModalRoot>
   );
 }

@@ -68,12 +68,12 @@ export default function ClassesPage() {
   const filtered = classes.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className="min-h-screen bg-[#0f0f1a] dark:bg-gray-50 px-8 py-10">
+    <div className="min-h-screen bg-background px-8 py-10">
       <div className="max-w-5xl mx-auto flex flex-col gap-8">
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white dark:text-gray-900">Mes classes</h1>
-            <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">
+            <h1 className="text-3xl font-bold text-foreground">Mes classes</h1>
+            <p className="text-muted text-sm mt-1">
               {isLoading ? "Chargement…" : `${classes.length} classe${classes.length > 1 ? "s" : ""}`}
             </p>
           </div>
