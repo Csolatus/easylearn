@@ -1,3 +1,5 @@
+import { Search } from "lucide-react";
+
 type Props = {
   value: string;
   onChange: (value: string) => void;
@@ -7,7 +9,9 @@ type Props = {
 export default function SearchInput({ value, onChange, placeholder = "Rechercher..." }: Props) {
   return (
     <div className="relative">
-      <span className="absolute inset-y-0 left-3 flex items-center text-gray-400 text-sm">🔍</span>
+      <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
+        <Search size={14} />
+      </span>
       <input
         type="text"
         value={value}

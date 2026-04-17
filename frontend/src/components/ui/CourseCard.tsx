@@ -1,3 +1,5 @@
+import { BookOpen } from "lucide-react";
+
 const VISIBILITY_LABELS: Record<string, string> = {
   public:  "Public",
   school:  "École",
@@ -24,8 +26,8 @@ export default function CourseCard({ title, visibility, updatedAt, onClick, acti
       onClick={onClick}
       className={`bg-[#1a1a2e] dark:bg-white rounded-2xl border border-white/5 dark:border-gray-200 overflow-hidden ${onClick ? "cursor-pointer hover:border-white/10 transition-colors" : ""}`}
     >
-      <div className="h-20 bg-gradient-to-br from-purple-900/40 to-blue-900/40 flex items-center justify-center text-3xl">
-        📖
+      <div className="h-20 bg-gradient-to-br from-purple-900/40 to-blue-900/40 flex items-center justify-center text-gray-400">
+        <BookOpen size={32} />
       </div>
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
