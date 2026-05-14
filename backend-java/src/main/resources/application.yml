@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: easylearn
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:easylearn}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+    show-sql: false
+    open-in-view: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${SECRET_KEY:change-this-secret-key-in-production-min-32-chars}
+  expiration-minutes: ${JWT_EXPIRE_MINUTES:60}
+
+# Phase 3 — agent IA
+ollama:
+  base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+  model: ${OLLAMA_MODEL:llama3}
+  system-prompt: ${OLLAMA_SYSTEM_PROMPT:}
+
+# Phase 4 — exécution de code
+piston:
+  api-url: ${PISTON_API_URL:http://piston:2000}
